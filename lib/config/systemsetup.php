@@ -17,7 +17,7 @@
  *	beaglelib (core)
  *	classes (user classes)
  *		model (db)
- *		
+ *	views
  *
  */
  
