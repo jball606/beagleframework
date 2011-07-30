@@ -1,0 +1,26 @@
+######This line is needed to figure out where your lib folder is
+php_value include_path ".:/web/beagledev.com/v1/lib"
+
+######If you can't have your apache go directly to your webroot, you can use this redirect
+Options +FollowSymLinks
+#<IfModule mod_rewrite.c>
+#	RewriteEngine on
+#	RewriteBase /
+#	RewriteCond %{REQUEST_URI} !^/htdocs/
+#	RewriteRule ^(.*)$	/htdocs/$1 
+#</IfModule>
+
+######For development
+#php_flag xdebug.default_enable On
+#php_flag display_errors on
+#php_flag log_errors on
+
+#php_value xdebug.profiler_output_dir /web/beagledev.com/v1/profile
+#php_value xdebug.profiler_output_name %t.pro
+#php_value xdebug.profiler_enable 0
+#php_value xdebug.profiler_enable_trigger 1
+
+######8 hour sessions
+php_value session.gc_maxlifetime 28800
+php_value session.gc.probability 1
+php_value session.gc_divisor 1
