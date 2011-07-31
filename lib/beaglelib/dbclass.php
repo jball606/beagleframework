@@ -21,9 +21,12 @@ class dbclass
 	
 	protected function loadDB()
 	{
-		if(isset($GLOBALS['DB']))
+		if($this->db == false)
 		{
-			$this->db = $GLOBALS['DB'];
+			if(isset($GLOBALS['DB']))
+			{
+				$this->db = $GLOBALS['DB'];
+			}
 		}
 		
 		if($this->auditing == true && count($this->auditfields) == 0)
@@ -292,9 +295,9 @@ class dbclass
 	 * @return a hash or array of hashes depending on if you passed a primary key or key/value pairs
 	 * @author Jason Ball
 	 */
-	public function getByKey($val = array())
+	public function getByKey($val = array(),$options = array())
 	{
-		$tmp = $this->get($val);
+		$tmp = $this->get($val,$options);
 		$t2 = array();
 		
 		if($this->pkey)
@@ -480,14 +483,15 @@ class dbclass
 	{
 		
 		$ops = defaultArgs($options, array('single'=>false,
-											'orderby'=>FALSE
+											'orderby'=>FALSE,
+											'printsql'=>false,
 										));
 		
 		$this->loadDB();
 		
 		$tmp = array();
 
-		if(is_array($keys))
+		if(isPoparray($keys))
 		{
 			$tmp = $keys;
 		}
@@ -506,21 +510,21 @@ class dbclass
 		
 		$junk = $this->getWhere($tmp);
 		$SQL = "Select * from ".$this->table;
-		$SQL .= " where ".implode(" and \n ",$junk);
-		
-		if($this->language_id == true && $ops['single'] == true)
+		if(isPopArray($junk))
 		{
-			$user = restoreClass('userclass');
-			$SQL .= " and (language_id = ".$user->getUserData('language_id')."
-							or language_id = 1)
-				order by language_id DESC 
-				limit 1";
-			
-			
+			$SQL .= " where ".implode(" and \n ",$junk);
 		}
-		elseif($ops['orderby'])
+		
+		
+		if($ops['orderby'])
 		{
 			$SQL .= " order by ".$ops['orderby'];	
+		}
+		
+		if($ops['printsql'])
+		{
+			printSQL($SQL);
+			print("<BR/>");
 		}
 		
 		$result = $this->db->query($SQL);
@@ -655,7 +659,7 @@ class dbclass
 		else 
 		{
 			
-			return "'".pg_escape_string($data)."'";
+			return "'".$this->db->escape($data)."'";
 		}
 		
 		return false;

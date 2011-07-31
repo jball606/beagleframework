@@ -3,9 +3,7 @@ class beaglebase
 {
 	protected $error = false;
 	protected $db = false;
-	protected $upid = false;
-	protected $client_id = false;
-	protected $userclass = false;
+
 	
 	public function __construct($db='')
 	{ 
@@ -121,53 +119,6 @@ class beaglebase
 		
 	}
 	
-	/**
-	 * Sets up the user class for the child class
-	 * @param integer $upid
-	 * @param integer $client_id
-	 * @author Jason Ball
-	 */
-	protected function getInternalUser($upid="",$client_id="")
-	{
-		$this->client_id = (!is_numeric($client_id))? $_SESSION['client_id'] : $client_id;
-		
-		if(!is_numeric($this->client_id))
-		{
-			$this->client_id = false;
-		}
-		
-		if(is_numeric($upid))
-		{
-			$this->upid = $upid;
-		}
-		else if (isset($_SESSION['upid']))
-		{
-			$this->upid = $_SESSION['upid'];
-		}
-		else
-		{
-			$this->upid = false;
-		}
-		
-		if($this->upid == false && $this->client_id == false)
-		{
-			return false;
-		}
-	
-		$U = restoreClass('userclass');
-		
-		if(is_object($U) && $this->upid == $U->getUpid())
-		{
-		
-			$this->userclass = $U;
-		}
-		else if(is_numeric($this->upid))
-		{
-			$this->userclass = new userclass(array('upid'=>$this->upid,
-													'client_id'=>$this->client_id));	
-		}
-		return true;
-	}
 	
 	/**
 	 * make the pretty UL fail for good user UI

@@ -1,4 +1,5 @@
 <?php
+include("beaglebase.php");
 class breadcrumbclass extends beaglebase
 {
 	private $breadcrumb_id = false;

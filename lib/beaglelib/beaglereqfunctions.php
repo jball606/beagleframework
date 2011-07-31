@@ -13,7 +13,7 @@ function getView($sheet,$system="",$relitive=false,$clienttest="")
 	}
 	else 
 	{
-		return __DOC_ROOT__."/views/".$system."/".$sheet;
+		return __SYSTEM_ROOT__."/lib/views/".$system."/".$sheet;
 	}
 }
 
@@ -190,6 +190,79 @@ function print_r2($array,$return = false)
 }
 
 /**
+ * Used to get core classes quickly
+ * @param string $class
+ * @return boolian
+ * @author Jason Ball
+ * @copyright 2011-07-30
+ */
+function beagleClasses($class)
+{
+	$rp = __SYSTEM_ROOT__;
+
+	$classname = strToLower($class);
+
+	$root = $rp."/lib/beaglelib/";
+	
+	
+	switch($classname)
+	{
+		case "beaglebase":
+		{
+			include_once $root."beaglebase.php";
+			return true;
+		}
+		case "breadcrumbclass":
+		{
+			include_once $root."breadcrumbclass.php";
+			return true;
+		}
+		case "dbclass":
+		{
+			include_once $root."dbclass.php";
+			return true;
+		}
+		case "excel":
+		{
+			include_once $root."excel.php";
+			return true;
+		}
+		case "listtools":
+		{
+			include_once $root."listtools.php";
+			return true;
+		
+		}
+		case "navigationclass":
+		{
+			include_once $root."navigationclass.php";
+			return true;
+		}
+		case "mydb":
+		{
+			include_once $root."mydb.php";		
+			return true;
+		}
+		case "pgdb":
+		{
+			include_once $root."pgdb.php";
+			return true;
+		}
+		case "searchclass":
+		{
+			include_once $root."searchclass.php";
+			return true;
+		}
+		case "systemaccessclass":
+		{
+			include_once $root."systemaccessclass.php";
+			return true;
+		}
+	
+	}
+}
+
+/**
  * Magic function for loading classes
  * @param string $orig_classname
  */
@@ -207,6 +280,12 @@ function __autoload($orig_classname)
 
 	$classname = strtolower($orig_classname);
 
+	//Used to get core classes quickly
+	if(beagleClasses($classname))
+	{
+		return true;
+	}
+	
 	if(function_exists('regClasses'))
 	{
 		if(regClasses($orig_classname))
@@ -281,6 +360,96 @@ function includeIfExists($file)
 	return false;
 }
 
+function makeParentChildRelations(&$inArray, &$outArray,$parent_id, $child_id, $currentParentId = 0)
+{
+	if(!is_array($inArray)) 
+	{
+		return;
+	}
+
+	if(!is_array($outArray)) 
+	{
+		return;
+	}
+
+	foreach($inArray as $key => $tuple) 
+	{
+		if($tuple[$child_id] == $currentParentId) 
+		{
+			$tuple['children'] = array();
+			makeParentChildRelations($inArray, $tuple['children'], $parent_id,$child_id,$tuple[$parent_id]);
+			$outArray[] = $tuple; 
+		}
+	}
+}
+
+/**
+ * This function will create a JS object out of an array
+ * @param array $array
+ * @param array $ignore
+ */
+function arrayToJSObject($array,$ignore=array())
+{
+	$tmp = array();
+	if(is_array($array))
+	{
+		foreach($array as $vk => $v)
+		{
+			if(!ignoreItem($vk,$ignore))
+			{
+				if(is_array($v))
+				{
+					$tmp[] = $vk.":{".join(",",arrayToObject($v,$ignore))."}";	
+				}
+				else
+				{
+					$tmp[] = $vk.":'".escapeJs($v)."'";
+				}
+				
+			}
+		}
+	}
+	
+	return $tmp;
+}
+
+function ignoreItem($item,$ignore=array())
+{
+	foreach($ignore as $k => $i)
+	{
+		if($item == $i)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+/**
+ * This Function will pull a date value and format it for you
+ * Enter description here ...
+ * @param array $array
+ * @param string $item
+ * @return formatted string
+ * @author Jason Ball
+ */
+function getDateValue($array,$item)
+{
+	$tmp = getValue($array,$item);
+	if($tmp != false and $tmp != 0)
+	{
+		if(is_numeric($tmp))
+		{
+			return date("m/d/Y",$tmp);
+		}
+		else 
+		{
+			return date("m/d/Y",strtotime($tmp));
+		}
+	}
+	
+	return "";
+}
 
 /**
  * part of the __autoload magic function
