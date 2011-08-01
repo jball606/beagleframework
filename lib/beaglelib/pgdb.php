@@ -34,10 +34,26 @@ class pgdb
 		
 		return array_keys(get_object_vars($this));
 	}
-	
+
 	public function __wakeup()
 	{
 		$this->loadDB();
+	}
+	
+	/**
+	 * This function is needed because each DB does this differently
+	 * @param integer $limit
+	 * @param integer $offset
+	 * @return SQL String
+	 * @author Jason Ball
+	 * @copyright 2011-08-01
+	 */
+	public function limitOffset($limit=0,$offset=0)
+	{
+		if(is_numeric($limit) && is_numeric($offset))
+		{
+			return " offset ".$offset." limit ".$limit;
+		}
 	}
 	
 	private function loadDB()

@@ -40,6 +40,22 @@ class mydb
 		$this->loadDB();
 	}
 	
+	/**
+	 * This function is needed because each DB does this differently
+	 * @param integer $limit
+	 * @param integer $offset
+	 * @return SQL String
+	 * @author Jason Ball
+	 * @copyright 2011-08-01
+	 */
+	public function limitOffset($limit=0,$offset=0)
+	{
+		if(is_numeric($limit) && is_numeric($offset))
+		{
+			return " limit ".$limit." offset ".$offset;
+		}
+	}
+	
 	private function loadDB()
 	{
 		if($this->conn['dbname'] != false && $this->conn['user'] != false && $this->conn['password'] != false)
@@ -201,7 +217,7 @@ class myresult
 
 	public function numRows()
 	{
-		return $count = pg_num_rows($this->result);
+		return $count = mysql_num_rows($this->result);
 	}
 }
 

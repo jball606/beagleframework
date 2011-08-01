@@ -4,7 +4,7 @@ if((!isset($result) || count($result['records']) == 0) && $result['showemptyresu
 else 
 {
 
-$list = new listclass();
+//$list = new listclass();
 $dates = array();
 if(isset($result['dates']))
 {
@@ -29,8 +29,8 @@ if(isset($result['edit_pencil']))
 
 
 <table class="dblock">
-	<? include(getView("result_header.php",'general')); ?>
-	<? include(getView("result_titles.php","general")); ?>
+	<? include(getView("result_header.php",'beagleviews')); ?>
+	<? include(getView("result_titles.php","beagleviews")); ?>
 	<? 
 	$x=0;
 	

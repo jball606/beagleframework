@@ -166,6 +166,7 @@ abstract class searchclass extends navigationclass
 											'extrawhere'=>array(),
 											'key'=>array('id'=>false,'name'=>false,'sqlkey'=>false),
 											'all'=>false,
+											'printsql'=>false,
 											));
 											
 											
@@ -227,6 +228,11 @@ abstract class searchclass extends navigationclass
 			return $SQL;
 		}
 	
+		if($args['printsql'])
+		{
+			print("<br/>PRE-SQL <BR>");
+			printSQL($SQL);
+		}
 		$R = $this->db->query($SQL);
 		$result = array();
 		
@@ -235,10 +241,17 @@ abstract class searchclass extends navigationclass
 		
 		if(is_numeric($args['limit']))
 		{
-			$SQL .= " offset ".$args['first']." limit ".$args['limit'];
+			$SQL .= $this->db->limitOffset($args['limit'],$args['first']);
 		}
+
 		$this->location['first'] = $args['first'];
 		$this->location['limit'] = $args['limit'];
+		
+		if($args['printsql'])
+		{
+			print("<br/>POST SQL<BR>");
+			printSQL($SQL);
+		}
 		
 		$R = $this->db->query($SQL);
 		$tmp = array();
@@ -438,7 +451,7 @@ abstract class searchclass extends navigationclass
 		{
 			if($args['page'] == "" || $args['page'] == false)
 			{
-				$args['page'] = getView("resultlist.php",'general');
+				$args['page'] = getView("resultlist.php",'beagleviews');
 			}
 			else 
 			{

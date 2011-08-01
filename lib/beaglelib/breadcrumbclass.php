@@ -129,7 +129,7 @@ class breadcrumbclass extends beaglebase
 			}
 		
 			$B = new beaglebase();
-			print $B->showTemplate(getView('breadcrumbs.php','general'),$lnk);
+			print $B->showTemplate(getView('breadcrumbs.php','beagleviews'),$lnk);
 		}
 		else 
 		{

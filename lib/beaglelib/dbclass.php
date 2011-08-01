@@ -32,9 +32,9 @@ class dbclass
 		if($this->auditing == true && count($this->auditfields) == 0)
 		{
 			
-			if(isset($_SESSION['upid']))
+			if(defined("__USERKEY__") && isset($_SESSION[__USERKEY__]))
 			{
-				$aperson = $_SESSION['upid'];
+				$aperson = $_SESSION[__USERKEY__];
 			}
 			else 
 			{

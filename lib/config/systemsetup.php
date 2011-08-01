@@ -23,7 +23,7 @@
  
 
 define("__WEB_ROOT__",'htdocs');
-
+define("__USERKEY__","user_id");
 error_reporting(-1);
 session_start();
 include_once("beaglelib/beaglereqfunctions.php");
