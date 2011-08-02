@@ -9,7 +9,8 @@ class pgdb
 	private $dbconn = false;
 	private $error = false;
 	private $conn = array();
-	
+	const dbtype = "pgsql";
+	 
 	public function __construct($in_args = array())
 	{
 		$args = $this->defaultArgs($in_args, array('host'=>'localhost',
@@ -54,6 +55,23 @@ class pgdb
 		{
 			return " offset ".$offset." limit ".$limit;
 		}
+	}
+	
+	/**
+	 * This Function is needed due to differences in DB return function
+	 * @param string $key
+	 * @return string
+	 * @author Jason Ball
+	 * @copyright 2011-08-02
+	 */
+	public function getInsertId($key)
+	{
+		return " returning ".$key;
+	}
+	
+	public function getDBType()
+	{
+		return self::dbtype;
 	}
 	
 	private function loadDB()

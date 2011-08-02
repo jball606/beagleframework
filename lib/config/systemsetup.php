@@ -24,6 +24,9 @@
 
 define("__WEB_ROOT__",'htdocs');
 define("__USERKEY__","user_id");
+define("__CREATED__","created");
+define("__MODIFIED__","modified");
+
 error_reporting(-1);
 session_start();
 include_once("beaglelib/beaglereqfunctions.php");
@@ -32,3 +35,6 @@ require_once("db_inc.inc");
 setGlobalVars();
 
 /* System specific code is below */
+include("generalfunctions.php");
+$user = false;
+$user = restoreClass('userclass');

@@ -33,6 +33,19 @@ abstract class searchclass extends navigationclass
 		}
 		return join(", ",$final);
 	}
+
+	/**
+	 * This method will return a clean name of a DB filed name
+	 * @param string $name
+	 * @return string $name
+	 * @author Jason Ball
+	 * @copyright 2011-08-02
+	 */
+	protected function standardTitle($name)
+	{
+		$name = substr($name,strpos($name,'.')+1,strlen($name));
+		return ucwords(str_replace("_"," ",$name));
+	}
 	
 	abstract protected function cleanName($name);
 	
@@ -151,6 +164,10 @@ abstract class searchclass extends navigationclass
 	
 	abstract public function showResultsPage();
 	
+	/** 
+	 * You need to make this method in your class if you want to use the letter system or other 
+	 * @param string $where
+	 */
 	public function loadSubWhere($where)
 	{
 		

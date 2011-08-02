@@ -9,6 +9,7 @@ class mydb
 	private $dbconn = false;
 	private $error = false;
 	private $conn = array();
+	const dbtype = "mysql";
 	
 	public function __construct($in_args = array())
 	{
@@ -54,6 +55,23 @@ class mydb
 		{
 			return " limit ".$limit." offset ".$offset;
 		}
+	}
+	
+	/**
+	 * This Function is needed due to differences in DB return function
+	 * @param string $key
+	 * @return string
+	 * @author Jason Ball
+	 * @copyright 2011-08-02
+	 */
+	public function getInsertId()
+	{
+		return mysql_insert_id($this->dbconn);
+	}
+	
+	public function getDbType()
+	{
+		return self::dbtype;
 	}
 	
 	private function loadDB()
@@ -141,7 +159,28 @@ class mydb
 	
 	public function update($table,$values,$keys)
 	{
-		pg_update($this->dbconn,$table,$values,$keys);
+		$SQL = " update ".$table." set ";
+		$tmp = array();
+		foreach($values as $k => $i)
+		{
+			$tmp[] = $k." = '".$this->escape($i)."'";
+		}
+		$SQL .= implode(",",$tmp);
+		
+		if(isPopArray($keys))
+		{
+			$SQL .= " where ";
+			$tmp = array();
+			foreach($keys as $k => $i)
+			{
+				$tmp[] = $k." = '".$this->escape($i)."'";
+			}
+			$SQL .= implode("and",$tmp);
+		}
+		
+		
+		mysql_query($SQL,$this->dbconn);
+			
 	}
 	
 	public function escape($item = "")

@@ -1,0 +1,117 @@
+@CHARSET "ISO-8859-1";
+
+.up_arrow
+{
+	display:block;
+	background-image: url(/img/icons/arrow_090.png);
+	width:16px;
+	height:16px;
+}
+
+.down_arrow
+{
+	display:block;
+	background-image: url(/img/icons/arrow_270.png);
+	width:16px;
+	height:16px;
+}
+
+div.dblock
+{
+	border-left:solid 1px #637795;
+	border-right:solid 1px #637795;
+	border-bottom:solid 1px #637795;
+	
+	width:100%;
+	
+}
+
+div.dblock_container
+{
+	padding:3px;
+	
+}
+
+.dblock_header
+{
+	background-image:url(/img/datatable.png);
+	background-repeat:repeat-x;
+	padding:3px;
+	background-color:#f15d22;
+	color:#FFF;
+	font-weight:bold;
+	
+}
+
+.dblock_altrow
+{
+	background-color:#e8ebee;
+	color:#000;
+	/* font-weight:bold; */
+}
+
+table.dblock
+{
+	width:100%;
+	border:1px solid #cccccc; 
+	border-collapse:collapse; 
+	margin:0px;
+	padding:0px;
+	
+}
+
+table.dblock th a 
+{
+	color:#005A9C;	
+	text-decoration:none;
+	
+}
+.dblock a 
+{
+	color:#005A9C;	
+	
+}
+
+.dblock_header a 
+{
+	
+	color:#FFF;
+	font-weight:normal;
+
+	text-decoration:none;
+}
+
+#search_nav a
+{
+	text-decoration:none;
+}
+
+
+table.dblock td	
+{
+	border-right:1px solid #cccccc; 
+	border-bottom:1px solid #cccccc; 
+	padding:3px;
+}
+ 
+table.dblock th 
+{
+  background-color : #DCDCDC; 
+  border-right:1px solid #cccccc; 
+  border-bottom:1px solid #cccccc; 
+  padding:3px;
+}
+
+li.link
+{
+	color: #005A9C;
+	
+}
+li.link:hover
+{
+	cursor:pointer;
+}
+.link:hover
+{
+	cursor:pointer;
+}

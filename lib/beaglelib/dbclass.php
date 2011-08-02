@@ -41,10 +41,17 @@ class dbclass
 				$aperson = ucfirst(get_class($this)) . '::add';
 			}
 			
-			$this->auditfields['C']['created_by'] = $aperson;
-			$this->auditfields['U']['updated_by'] = $aperson;
-			$this->auditfields['C']['created_date'] = date($this->dbtimestampformat,time());
-			$this->auditfields['U']['updated_date'] = date($this->dbtimestampformat,time());
+			if(defined("__CREATED__"))
+			{
+				$this->auditfields['C'][__CREATED__.'_by'] = $aperson;
+				$this->auditfields['C'][__CREATED__.'_date'] = date($this->dbtimestampformat,time());
+			}
+			
+			if(defined("__MODIFIED__"))
+			{
+				$this->auditfields['U'][__MODIFIED__.'_by'] = $aperson;
+				$this->auditfields['U'][__MODIFIED__.'_date'] = date($this->dbtimestampformat,time());
+			}
 		}
 			
 		if($this->table == false)
@@ -330,7 +337,15 @@ class dbclass
 		
 	} 
 	
-	public function add($array=array())
+	/**
+	 * Add Data to DB
+	 * @param array $array (data)
+	 * @param array $options (printsql)
+	 * @return error or integer
+	 * @author Jason Ball
+	 * @copyright 2011-04-01
+	 */
+	public function add($array=array(),$options=array())
 	{
 		$this->loadDB();
 		
@@ -376,21 +391,33 @@ class dbclass
 		if(count($fields)>0 && count($values) >0 && count($fields) == count($values))
 		{
 			$SQL = "insert into ".$this->table." (".implode(",",$fields).") values (".implode(",",$values).") ";
-			if($this->pkey !== false)
+			if($this->pkey !== false && $this->db->getDbType() == "pgsql")
 			{
-				$SQL .= " returning ".$this->pkey;
+				$SQL .= $this->db->getInsertId($this->pkey);
 			}
 			
 			$result = $this->db->query($SQL);
 			
+			//Postgres version
 			if($this->pkey !== false)
 			{
-				$tmp = $result->fetchArray();
-				if(isset($tmp[0]))
+				if($this->db->getDbType() == "pgsql")
 				{
-					return $tmp[0];
+					$tmp = $result->fetchArray();
+					if(isset($tmp[0]))
+					{
+						return $tmp[0];
+					}
 				}
+				else
+				{
+					return $this->db->getInsertId();
+				}
+				
 			}
+			
+			//MySQL version
+			
 			
 			return true;
 		}
@@ -479,12 +506,23 @@ class dbclass
 		}
 	}
 	
+	/**
+	 * Use this function to get arrays of data from the DB
+	 * @param array $keys (where items)
+	 * @param array $options (single , orderby, printsql )
+	 * single will only return a single record
+	 * orderby is for ordering your array
+	 * pringsql is for debugging
+	 * fields => array of fields you want
+	 * @return array
+	 */
 	public function get($keys=array(),$options = array())
 	{
 		
 		$ops = defaultArgs($options, array('single'=>false,
 											'orderby'=>FALSE,
 											'printsql'=>false,
+											'fields'=>false,
 										));
 		
 		$this->loadDB();
@@ -509,7 +547,13 @@ class dbclass
 		}
 		
 		$junk = $this->getWhere($tmp);
-		$SQL = "Select * from ".$this->table;
+		$fields = "*";
+		if(isPopArray($ops['fields']))
+		{
+			$fields = implode(",",$ops['fields']);
+		}
+		
+		$SQL = "Select $fields from ".$this->table;
 		if(isPopArray($junk))
 		{
 			$SQL .= " where ".implode(" and \n ",$junk);
@@ -551,9 +595,18 @@ class dbclass
 		return false;
 	}
 	
-	public function getOne($keys)
+	public function getOne($keys,$options=array())
 	{
-		$row = $this->get($keys,array('single'=>true));
+		$opt['single'] = true;
+		if(isPopArray($options))
+		{
+			foreach($options as $k => $i)
+			{
+				$opt[$k] = $i;
+			}
+		}
+		
+		$row = $this->get($keys,$opt);
 		if(is_array($row))
 		{
 			if(isset($row[0]))
@@ -618,7 +671,14 @@ class dbclass
 				{
 					if($j == 'null')
 					{
-						$tmp[] = $k." is null";
+						if(strpos($k,"!")!==false)
+						{
+							$tmp[] = str_replace("!", '', $k)." is not null ";
+						}
+						else 
+						{
+							$tmp[] = $k." is null";
+						}
 					}
 					else 
 					{
@@ -631,8 +691,15 @@ class dbclass
 							$tmp[] = $k ." like ".$j;
 						}
 						else 
-						{						
-							$tmp[] = $k." = ".$j;
+						{	
+							if(strpos($k,"!") !== false)
+							{
+								$tmp[] = $k."= ".$j;
+							}
+							else 
+							{						
+								$tmp[] = $k." = ".$j;
+							}
 						}
 					}
 				}

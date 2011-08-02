@@ -1,5 +1,18 @@
 ######This line is needed to figure out where your lib folder is
-php_value include_path ".:/web/beagledev.com/v1/lib"
+php_value include_path ".:/web/beagledev.com/v1/lib:/usr/share/pear"
+
+##Pear lib are required.  Below is how to install them
+##Install Pear
+
+##wget http://pear.php.net/go-pear.phar
+##php go-pear.phar
+
+##Pear Mail
+##pear install Mail
+
+##Excel
+##pear install OLE-1.0.0RC1
+##pear install Spreadsheet_Excel_Writer-0.9.2
 
 ######If you can't have your apache go directly to your webroot, you can use this redirect
 Options +FollowSymLinks
@@ -19,6 +32,13 @@ Options +FollowSymLinks
 #php_value xdebug.profiler_output_name %t.pro
 #php_value xdebug.profiler_enable 0
 #php_value xdebug.profiler_enable_trigger 1
+
+###### Remote debugging
+#php_value xdebug.remote_enable 1
+#php_value xdebug.remote_mode "req"
+#php_value xdebug.remote_host 192.168.56.1
+#php_value xdebug.remote_port 9000
+#php_value xdebug.remote_handler "dbgp"
 
 ######8 hour sessions
 php_value session.gc_maxlifetime 28800

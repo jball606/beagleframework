@@ -508,6 +508,26 @@ function restoreClass($var)
 }
 
 /**
+ * This function just checks to see if the date pass is a valid date
+ * @param string $date
+ * @return boolian
+ * @author Jason Ball
+ * @copyright 2011-08-02
+ */
+function isValidPopDate(&$date)
+{
+	if(isset($date))
+	{
+		if(is_numeric(strtotime($date)))
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
+/**
  * will check an array if args are in place and if not it will add the default you add
  * @param $in_args
  * @param $defs
