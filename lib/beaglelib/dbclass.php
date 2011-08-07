@@ -17,7 +17,7 @@ class dbclass
 	protected $pkey =false;
 	private $dbtimestampformat = "Y-m-d H:i:s";
 	protected $valid_fields = array();
-	protected $language_id = false;
+	protected $join = false;
 	
 	protected function loadDB()
 	{
@@ -523,6 +523,8 @@ class dbclass
 											'orderby'=>FALSE,
 											'printsql'=>false,
 											'fields'=>false,
+											'limit'=>false,
+											'join'=>false,
 										));
 		
 		$this->loadDB();
@@ -554,6 +556,32 @@ class dbclass
 		}
 		
 		$SQL = "Select $fields from ".$this->table;
+		
+		$join = array();
+		if(isPopArray($this->join))
+		{
+			foreach($this->join as $i)
+			{
+				$join[] = $i;
+			}
+		}
+		
+		if(isPopArray($ops['join']))
+		{
+			foreach($ops['join'] as $i)
+			{
+				$join[] = $i;
+			}
+		}
+		
+		if(isPopArray($join))
+		{
+			foreach($join as $i)
+			{
+				$SQL .= " ".$i;
+			}
+		}
+		
 		if(isPopArray($junk))
 		{
 			$SQL .= " where ".implode(" and \n ",$junk);
@@ -563,6 +591,11 @@ class dbclass
 		if($ops['orderby'])
 		{
 			$SQL .= " order by ".$ops['orderby'];	
+		}
+		
+		if(isSetNum($ops['limit']))
+		{
+			$SQL .= " limit ".$ops['limit'];
 		}
 		
 		if($ops['printsql'])
