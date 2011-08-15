@@ -139,6 +139,21 @@ class pgdb
 		return false;
 	}
 	
+	/**
+	 * Needed becuase mysql and pgsql are different
+	 * Enter description here ...
+	 * @param unknown_type $table
+	 * @param unknown_type $field
+	 * @param unknown_type $value
+	 * @return string
+	 * @author Jason Ball
+	 * @copyright 8/14/2011
+	 */
+	public function getDbWhere($table,$field,$value)
+	{
+		return "upper(cast(".$table.".".$field." as text)) like upper(cast('".$this->escape(trim($value))."' as text)) and ";	
+	}
+	
 	public function getAll($SQL)
 	{
 		$tmp = array();

@@ -34,17 +34,27 @@
 						}			
 					?>
 						<?
-							if(isset($order[$k]))
+							if($result['allowsort'] == true)
 							{ 
-								if($order[$k] == 1)
-								{ ?><img style="float:right" class="up_arrow"/> <? }
-								elseif($order[$k] == 2)
-								{ ?><img style="float:right" class="down_arrow"/><? } 
+								if(isset($order[$k]))
+								{ 
+									if($order[$k] == 1)
+									{ ?><img style="float:right" class="up_arrow"/> <? }
+									elseif($order[$k] == 2)
+									{ ?><img style="float:right" class="down_arrow"/><? } 
+								}
 							}
 								
 						
-						?>
-						<a href="#" onclick="<?=$result['lib'];?>.searchResult(0,'<?=$k;?>',<?=$o?>); return false;"><?=$i;?></a>
+						if($result['allowsort'] == true)
+						{
+							?>
+							<a href="#" onclick="<?=$result['lib'];?>.searchResult(0,'<?=$k;?>',<?=$o?>); return false;"><?=$i;?></a>
+					<? 
+						}
+						else 
+						{ print($i); } ?>
+							
 					</th>
 					<? 
 					}

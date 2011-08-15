@@ -256,7 +256,7 @@ class listtools extends beaglebase
 			{ 
 				if($output == "P")
 				{
-					$xml .= '<option value = "'.$row[$key].'">'.hs($row[$field])."</option>\n";
+					$xml .= '<option value = "'.$row[$key].'">'.htmlspecialchars($row[$field])."</option>\n";
 				}
 				
 			}

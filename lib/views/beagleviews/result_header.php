@@ -102,12 +102,12 @@
 				foreach($result['lettermenu']['list'] as $k => $i)
 				{ 
 					if(is_numeric($i) && $i >0)
-					{?><a href="#" <? if($result['lettermenu']['sel'] == strtoupper($k)) { ?>style="font-weight:bold"<? } ?> onclick="<?=$result['lib'];?>.searchResult(0,'','','','<?=strtoupper($k);?>'); return false;"><?=strtoupper($k);?></a> <? }
+					{?><a class="lettermenu" href="#" <? if($result['lettermenu']['sel'] == strtoupper($k)) { ?>style="font-weight:bold"<? } ?> onclick="<?=$result['lib'];?>.searchResult(0,'','','','<?=strtoupper($k);?>'); return false;"><?=strtoupper($k);?></a> <? }
 					else 
 					{ print(strtoupper($k))." "; }
 				}
 			?>
-			<a href="#" onclick="<?=$result['lib'];?>.searchResult(0,'','','','all'); return false;">all</a>
+			<a href="#" class="lettermenu" onclick="<?=$result['lib'];?>.searchResult(0,'','','','all'); return false;">all</a>
 		]
 		<? 
 		}

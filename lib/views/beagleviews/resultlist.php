@@ -51,7 +51,7 @@ if(isset($result['edit_pencil']))
 			<? foreach($i as $key => $v)
 				{ 
 					//print_r2($v);
-					if($key != "edit_pencil" && ($key != $result['editaccess']['field']))
+					if($key != "edit_pencil" && ($key != $result['editaccess']['field']) && !isset($result['hiddenrows'][$key]))
 					{
 						if(is_array($v))
 						{

@@ -352,7 +352,9 @@ abstract class searchclass extends navigationclass
 											'showcount'=>true,
 											'extra'=>array(),
 											'editaccess'=>false, //Used to give you the popup to select who can and can not see your information
-											));
+											'allowsort'=>true, //Allow the user to sort a row
+											'hiddenrows'=>array(),	
+										));
 											
 											
 											
@@ -382,6 +384,24 @@ abstract class searchclass extends navigationclass
 			}
 		}
 		
+		if(isPopArray($args['hiddenrows']))
+		{
+			$tmp = array();
+			foreach($args['hiddenrows'] as $k => $i)
+			{
+				if(is_numeric($k))
+				{
+					$tmp[$i] = $i;
+				}
+				else 
+				{
+					$tmp[$k] = $i;
+				}
+				
+			}
+			$args['hiddenrows'] = $tmp;
+		}
+		
 		if($args['first'] === false && isset($this->location['first']))
 		{
 			$args['first'] = $this->location['first'];
@@ -406,6 +426,8 @@ abstract class searchclass extends navigationclass
 		$result['headers'] = $this->getHeaders($this->viewitems);
 		$result['limit'] = $args['limit'];
 		$result['editaccess'] = $args['editaccess'];
+		$result['allowsort'] = $args['allowsort'];
+		$result['hiddenrows'] = $args['hiddenrows'];
 		
 		$result['first'] = $args['first'];
 		$result['dates'] = $args['dates'];
@@ -662,7 +684,9 @@ abstract class searchclass extends navigationclass
 						}
 						else
 						{
-							$clause .= "upper(cast(".$table.".".$field." as text)) like upper(cast('".$this->db->escape(trim($v))."' as text)) and ";	
+							
+							$clause .= $this->db->getDbWhere($table,$field,$v);
+								
 							
 						}
 						

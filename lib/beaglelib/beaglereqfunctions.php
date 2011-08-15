@@ -7,6 +7,12 @@ function getView($sheet,$system="",$relitive=false,$clienttest="")
 		return getViewOverride($sheet,$system,$relitive,$clienttest);
 	}
 	
+	//If you don't pass any extention we will try and default php
+	if(strpos($sheet,'.') ===false)
+	{
+		$sheet = $sheet.".php";
+	}
+	
 	if($relitive == true)
 	{
 		return "/views/".$system."/".$sheet;
