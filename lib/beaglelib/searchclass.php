@@ -43,7 +43,11 @@ abstract class searchclass extends navigationclass
 	 */
 	protected function standardTitle($name)
 	{
-		$name = substr($name,strpos($name,'.')+1,strlen($name));
+		if(strpos($name,'.')!==false)
+		{
+			$name = substr($name,strpos($name,'.')+1,strlen($name));
+		}
+		
 		return ucwords(str_replace("_"," ",$name));
 	}
 	

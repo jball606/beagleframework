@@ -425,7 +425,7 @@ class dbclass
 		 
 	}
 	
-	public function update($keys=array(), $values = array())
+	public function update($keys=array(), $values = array(),$printsql=false)
 	{
 		$this->loadDB();
 			
@@ -476,7 +476,7 @@ class dbclass
 		
 		}
 		
-		$this->db->update($this->table,$values,$keys);
+		$this->db->update($this->table,$values,$keys,$printsql);
 		
 		
 		

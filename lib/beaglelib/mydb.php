@@ -172,7 +172,7 @@ class mydb
 		return $tmp;
 	}
 	
-	public function update($table,$values,$keys)
+	public function update($table,$values,$keys,$printsql=false)
 	{
 		$SQL = " update ".$table." set ";
 		$tmp = array();
@@ -188,12 +188,28 @@ class mydb
 			$tmp = array();
 			foreach($keys as $k => $i)
 			{
-				$tmp[] = $k." = '".$this->escape($i)."'";
+				if(is_array($i))
+				{
+					$j = array();
+					foreach($i as $v)
+					{
+						$j[] = $this->escape($v);
+					}
+					
+					$tmp[] = " ".$k." in ('".implode("','",$j)."');";
+				}
+				else 
+				{
+					$tmp[] = " ".$k." = '".$this->escape($i)."'";
+				}
 			}
 			$SQL .= implode("and",$tmp);
 		}
 		
-		
+		if($printsql == true)
+		{
+			printSQL($SQL);
+		}
 		mysql_query($SQL,$this->dbconn);
 			
 	}

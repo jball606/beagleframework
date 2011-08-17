@@ -556,3 +556,37 @@ function defaultArgs($in_args, $defs)
 
 	return $out_args;
 }
+
+/**
+ * This menthod is used to remove empty elements. $type is optional if you want to validate the data as well
+ * @param array $array
+ * @param string $type 
+ * @return Array
+ * @author Jason Ball
+ * @copyright 8/16/2011
+ */
+function removeEmptyElements($array,$type="")
+{
+	if(isPopArray($array))
+	{
+		$tmp = array();
+		foreach($array as $k => $i)
+		{
+			if($type == "numeric")
+			{
+				if(is_numeric($i))
+				{
+					$tmp[$k] = $i;
+				}
+			}
+			else if($i != "")
+			{
+				$tmp[$k] = $i;
+			}
+			
+		}
+		
+		return $tmp;
+	}
+	
+}
