@@ -33,6 +33,23 @@ if(isset($info['id']))
 			}
 			break;		
 		}
+		case "selectedoptions":
+		{
+			if($S = breadcrumbclass::restoreBcSession($search))
+			{	
+				$sel = $S->getSelected();
+				if($sel == false)
+				{
+					print json_encode(array('count'=>0));
+				}
+				else 
+				{
+					print json_encode(array('count'=>1));
+				}
+				//breadcrumbclass::storeBcSession($search,$S);
+			}
+			break;		
+		}
 		case "allcheck":
 		{
 			if($S = breadcrumbclass::restoreBcSession($search))
