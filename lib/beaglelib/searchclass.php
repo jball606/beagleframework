@@ -1,4 +1,9 @@
 <?php
+/**
+ * This Class is used to create the search query for a specific controller
+ * @author Jason Ball
+ *
+ */
 abstract class searchclass extends navigationclass
 {
 	protected $lists;
@@ -53,7 +58,20 @@ abstract class searchclass extends navigationclass
 	
 	abstract protected function cleanName($name);
 	
-
+	/**
+	 * This Method will set the where clause of the SQL
+	 * @param array $in_args
+	 * @return void
+	 * @author Jason Ball
+	 */
+	public function setWhere($in_args)
+	{
+		if(isPopArray($in_args))
+		{
+			$this->whereitems = $in_args;
+		}	
+		
+	}
 	
 	protected function globalCleanName($name)
 	{
@@ -141,6 +159,12 @@ abstract class searchclass extends navigationclass
 		return $done;
 	}
 	
+	/**
+	 * This method is used to clean up the view data so it works in the SQL statement
+	 * @param array $array
+	 * @return array $array
+	 * @author Jason Ball
+	 */
 	protected function stringClean($array)
 	{
 		$f[] = 'date_s__';
@@ -158,7 +182,12 @@ abstract class searchclass extends navigationclass
 			foreach($array as $k => $i)
 			{
 				$tmp[$k] = str_replace($f,$r,$i);
+				if($tmp[$k] == "")
+				{
+					$tmp[$k] = $k;
+				}
 			}
+			
 			return $tmp;
 		}
 		

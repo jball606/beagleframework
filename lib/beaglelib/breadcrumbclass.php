@@ -13,6 +13,7 @@ class breadcrumbclass extends beaglebase
 	public function __construct($name)
 	{
 		$this->url = "http://".$_SERVER['HTTP_HOST']."/".$_SERVER['PHP_SELF'];
+		$this->url = str_replace("/htdocs/", "", $this->url);
 		if(!$this->lastIsNow($name,$this->url))
 		{
 			

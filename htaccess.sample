@@ -7,9 +7,6 @@ php_value include_path ".:/web/beagledev.com/v1/lib:/usr/share/pear"
 ##wget http://pear.php.net/go-pear.phar
 ##php go-pear.phar
 
-##Pear Mail
-##pear install Mail
-
 ##Excel
 ##pear install OLE-1.0.0RC1
 ##pear install Spreadsheet_Excel_Writer-0.9.2

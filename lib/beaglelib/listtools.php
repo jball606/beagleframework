@@ -153,7 +153,7 @@ class listtools extends beaglebase
 		return $this->_SelectedGen($key, $field, $result, $old, $default, $output);
 	}
 
-	/*
+	/**
 	 * see SelectedGen docs
 	 */
 	protected function SelectedGenArray($key, $field, $result, $old="", $default="", $output="P", $type="", $name="", $multiple=0, $size=0)
@@ -240,7 +240,7 @@ class listtools extends beaglebase
 							
 				if($output == "P")
 				{
-					$xml .= '<option value = "'.$row[$key].'" '.$this->Selector($old,$row[$key]).'>'.hs($row[$field])."</option>\n";
+					$xml .= '<option value = "'.$row[$key].'" '.$this->Selector($old,$row[$key]).'>'.htmlentities($row[$field])."</option>\n";
 				}
 				
 			}

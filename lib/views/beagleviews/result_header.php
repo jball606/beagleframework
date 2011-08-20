@@ -5,7 +5,7 @@
 		
 		
 	<?
-		if(getValue($result,'showperpage'))
+		if(getValue($result,'showperpage') && $result['total_records'] > 10)
 		{ ?>
 			Items per Page:
 			&nbsp;&nbsp;
@@ -88,10 +88,13 @@
 			{
 			 ?><a href="#" onclick="<?=$result['lib'];?>.searchResult(<?=($result['total_records']-$perpage);?>,''); return false;">... <?=$pages;?></a> <? 
 			}
+			if($pages > 5)
+			{
 		?>
 			&nbsp; | Go to Page <input type="text" id="gotobox" style="width:30px; border:1px solid #CCC"/> <input type="button" style="font-size:10px" value="GO" onClick="var val = $('#gotobox').val(); if(val) { <?=$result['lib'];?>.searchResult(((val-1)*<?=$perpage;?>)); return false; } else { alert('No page number selected'); }"/> 				
 				
 		<?
+			}
 		}
 				 
 		if(isset($result['lettermenu']))

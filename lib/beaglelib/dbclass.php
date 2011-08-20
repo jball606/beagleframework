@@ -1,7 +1,7 @@
 <?php
 /**
  * The Dbclass is my way of standarizing the db setup
- * It is influnced by the MNL db class but I don't use MBD2 so I re wrote it to use the base DB functons
+ * It is influnced by the Media Net Link db class but I don't use MBD2 so I re wrote it to use the base DB functons
  * @author Jason Ball
  *
  */
@@ -19,11 +19,20 @@ class dbclass
 	protected $valid_fields = array();
 	protected $join = false;
 	
-	protected function loadDB()
+	/**
+	 * This Method is Used to load DB variables
+	 * @param resouce DB
+	 * @return void
+	 */
+	protected function loadDB($db="")
 	{
 		if($this->db == false)
 		{
-			if(isset($GLOBALS['DB']))
+			if(is_resource($db))
+			{
+				$this->db = $db;
+			}
+			elseif(isset($GLOBALS['DB']))
 			{
 				$this->db = $GLOBALS['DB'];
 			}
@@ -322,11 +331,13 @@ class dbclass
 		return false;
 	}
 	
+	/**
+	 * Method used to validate Email
+	 * @param string $email
+	 */
 	private function isValidEmail($email)
 	{
-		require_once 'Mail/RFC822.php';
-		$mail_rfc = new Mail_RFC822();
-		if(!$mail_rfc->isValidInetAddress($email, true))
+		if($this->isValidEmailAddress($email, true))
 		{
 			return false;
 		}
@@ -337,6 +348,32 @@ class dbclass
 		
 	} 
 	
+	/**
+     * This is a email validating function that simply validates whether 
+     * an email is of the common internet form: <user>@<domain>.
+     * This can be sufficient for most people. 
+     * Optional stricter mode restricts
+     * mailbox characters allowed to alphanumeric, full stop, hyphen
+     * and underscore.
+     *
+     * @param  string  $data   Address to check
+     * @param  boolean $strict Optional stricter mode
+     * @return mixed           False if it fails, an indexed array
+     *                         
+     */
+    private function isValidEmailAddress($data, $strict = false)
+    {
+        $regex = $strict ? '/^([.0-9a-z_+-]+)@(([0-9a-z-]+\.)+[0-9a-z]{2,})$/i' : '/^([*+!.&#$|\'\\%\/0-9a-z^_`{}=?~:-]+)@(([0-9a-z-]+\.)+[0-9a-z]{2,})$/i';
+        if (preg_match($regex, trim($data), $matches)) 
+        {
+            return array($matches[1], $matches[2]);
+        }
+        else 
+        {
+            return false;
+        }
+    }
+    
 	/**
 	 * Add Data to DB
 	 * @param array $array (data)
@@ -654,6 +691,12 @@ class dbclass
 		}
 	}
 	
+	/**
+	 * This Method is used to do a standard CRUD delete for a single table
+	 * @param array $keys
+	 * @return boolian
+	 * @author Jason Ball
+	 */
 	public function delete($keys)
 	{
 		$this->loadDB();
