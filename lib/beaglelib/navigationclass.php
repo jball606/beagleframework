@@ -1,4 +1,10 @@
 <?php
+/**
+ * navigationclass
+ * This Class is for the result list navigation
+ * @author Jason Ball
+ *
+ */
 class navigationclass extends beaglebase
 {
 	
@@ -6,17 +12,29 @@ class navigationclass extends beaglebase
 	protected $allcheck = false;
 	protected $checkdir = true; //true means only checked, fall means checked as only not checked
 	
+	/**
+	 * This method creates the letter menu for a result list
+	 * @param string $SQL
+	 * @param string $key (column you want to search)
+	 * @return array letters
+	 */
 	protected function createLetterMenu($SQL,$key)
 	{
 		$tmp = array();
 		if($key != "")
 		{
+			$nsql = $this->stripSQL($SQL);
+			
+			/*
 			$SQL = "select lower(substr(".$key.",1,1)) as letter,
 					count(*) as cnt
 					from ( ".$SQL." ) as foo
 					group by  lower(substr(".$key.",1,1))
 					order by  lower(substr(".$key.",1,1));";
-			
+			*/
+			$SQL = "select lower(substr(".$key.",1,1)) as letter, 1 as cnt ".$nsql."
+					group by lower(substr(".$key.",1,1)) 
+					order by lower(substr(".$key.",1,1)); "; 	
 			
 			$result = $this->db->query($SQL);
 			while($row = $result->fetchRow())
@@ -43,6 +61,26 @@ class navigationclass extends beaglebase
 		return $res;
 	}
 	
+	/**
+	 * This method is used to strip the SQL statement down so we can make a quick letter query
+	 * @param string $SQL
+	 * @return string $SQL
+	 */
+	private function stripSQL($SQL)
+	{
+		$tmpSQL = trim(substr($SQL,strpos($SQL,"from "),strlen($SQL)));
+		
+		if(strpos($tmpSQL,"group by")!== false)
+		{
+			$junk = trim(substr($tmpSQL,0,strrpos($tmpSQL,"group by")));
+		}
+		else 
+		{
+			$junk = $tmpSQL;
+		}
+		return $junk;
+		
+	}
 	private function createLetterResults ($have)
 	{
 		$tmp = array('_' => 0);
@@ -138,7 +176,7 @@ class navigationclass extends beaglebase
 				$value = $array[$key1][$key2];
 				if($value == "_")
 				{
-					$this->subwhere['letter'] = $this->letterCheck($key1.".".$key2)." !~'[A-Z]'";
+					$this->subwhere['letter'] = $this->letterCheck($key1.".".$key2).$this->db->navNoLetter();
 					$this->letterval = $value;	
 				}
 				elseif($value == "all")
@@ -174,6 +212,13 @@ class navigationclass extends beaglebase
 		}
 	}
 	
+	/**
+	 * Use this method to reset the checked items in the class
+	 * @author Jason Ball
+	 * @param void
+	 * @return void
+	 * @copyright 05/01/2011
+	 */
 	public function resetCheck()
 	{
 		$this->allcheck = false;

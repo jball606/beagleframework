@@ -1,4 +1,9 @@
 <?php
+/**
+ * The Beagle Base class is so you don't have to write the same methods over and over again
+ * @author Jason Ball
+ *
+ */
 class beaglebase
 {
 	protected $error = false;
@@ -21,6 +26,11 @@ class beaglebase
 		$this->loadSystemDB();
 	}
 	
+	/**
+	 * Use this method to remove any falses in an arg list
+	 * @param array $args
+	 * @return array $args
+	 */
 	protected function clearArgs($args =array())
 	{
 		if(!is_array($args))
@@ -40,6 +50,11 @@ class beaglebase
 		return $tmp;
 	}
 	
+	/**
+	 * Unset the database settings in case you need to serialize the class
+	 * @param void
+	 * @return void
+	 */
 	public function closeBase()
 	{
 		if(isset($this->db))
@@ -48,6 +63,12 @@ class beaglebase
 		}
 	}
 	
+	/**
+	 * This method returns the 3 letter extention of a file
+	 * @param string $name
+	 * @return string or null
+	 * @author Jason Ball
+	 */
 	protected function getFileType($name)
 	{
 		$type = substr($name,strlen($name)-4,4);
@@ -59,7 +80,15 @@ class beaglebase
 		
 	}
 	
-	protected function getClassData($array, $item)
+	/**
+	 * This Method is used to find a specific key in the data array of the child class, 'all' is a special word for giving you the entire array
+	 * @param array $array
+	 * @param string $item
+	 * @param boolian $allowall
+	 * @return string, array or false
+	 * @author Jason Ball
+	 */
+	protected function getClassData($array, $item,$allowall = true)
 	{
 		if($this->error)
 		{
@@ -92,7 +121,7 @@ class beaglebase
 		{
 			return $array[$item];
 		}
-		elseif($item == "all")
+		elseif($item == "all" && $allowall == true)
 		{
 			return $array;
 		}
@@ -100,6 +129,12 @@ class beaglebase
 		return false;
 	}
 	
+	/**
+	 * Use this method to load the db object, if you don't pass one, the default is used in GLOBALS[DB]
+	 * @param resource $db
+	 * @return void
+	 * @author Jason Ball
+	 */
 	public function loadSystemDB($db='')
 	{ 
 	
@@ -115,6 +150,10 @@ class beaglebase
 			$this->db = $db;
 			
 			
+		}
+		else if(!$this->db && $db != '')
+		{
+			$this->db = $db;
 		}
 		
 	}
@@ -135,6 +174,12 @@ class beaglebase
 		
 	}
 	
+	/**
+	 * This Method is used to render a view page and allow you to pass data or a class to that view page
+	 * @param string $filename
+	 * @param object/array $result
+	 * @author Jason Ball
+	 */
 	public function showTemplate($filename,$result=false)
 	{
 		if($this->error)

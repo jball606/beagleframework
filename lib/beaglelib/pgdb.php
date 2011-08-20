@@ -104,6 +104,7 @@ class pgdb
 				return new pgresult($res);
 			}
 			print("Invalid SQL Statement \n");
+			printSQL($SQL."<BR/>");
 			print $this->cleanBackTrace();
 			exit;
 		}
@@ -171,6 +172,14 @@ class pgdb
 		}
 		
 		return $tmp;
+	}
+	
+	/**
+	 * Have to have this method because PGSQL and MYSQL are different
+	 */
+	public function navNoLetter()
+	{
+		return " !~'[A-Z]'  ";
 	}
 	
 	public function update($table,$values,$keys)

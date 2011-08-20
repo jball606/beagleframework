@@ -103,9 +103,18 @@ class mydb
 				return true;
 			}
 			print("Invalid SQL Statement \n");
+			printSQL($SQL."<BR>");
 			print $this->cleanBackTrace();
 			exit;
 		}
+	}
+	
+	/**
+	 * Have to have this method because PGSQL and MYSQL are different
+	 */
+	public function navNoLetter()
+	{
+		return " not REGEXP '[A-Z]' ";
 	}
 	
 	private function defaultArgs($in_args, $defs) 

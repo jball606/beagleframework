@@ -433,7 +433,7 @@ class dbclass
 		{
 			if(!$this->pkey)
 			{
-				print "Invalid update keys";
+				print "Invalid update keys <br/>";
 				print $this->cleanBackTrace();
 				exit;
 				return false;
@@ -445,7 +445,7 @@ class dbclass
 		
 		if(!is_array($values))
 		{
-			print "Invalid update Values";
+			print "Invalid update Values <br/>";
 			print $this->cleanBackTrace();
 			exit;
 			return false;
@@ -539,7 +539,7 @@ class dbclass
 		{
 			if($this->pkey == false)
 			{
-				print("Invalid search");
+				print("Invalid search <BR/>");
 				print $this->cleanBackTrace();
 				exit;
 			}
@@ -661,7 +661,7 @@ class dbclass
 		{
 			if($this->pkey == false)
 			{
-				print("Invalid Values");
+				print("Invalid Values <br/>");
 				print $this->cleanBackTrace();
 				exit;
 			}

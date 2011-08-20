@@ -249,15 +249,17 @@ abstract class searchclass extends navigationclass
 			return $SQL;
 		}
 	
+		//May be the most correct but slower $PRE_SQL = "select sum(c) from (select count(*) as c ".$SQL_F." ".$SQL_W." ".$SQL_G.") as foo";
+		$PRE_SQL = "select count(*) as c ".$SQL_F." ".$SQL_W;
 		if($args['printsql'])
 		{
 			print("<br/>PRE-SQL <BR>");
-			printSQL($SQL);
+			printSQL($PRE_SQL);
 		}
-		$R = $this->db->query($SQL);
+		$R = $this->db->getOne($PRE_SQL);
 		$result = array();
 		
-		$result['total_records'] = $R->numRows();
+		$result['total_records'] = $R;
 
 		
 		if(is_numeric($args['limit']))
@@ -653,7 +655,10 @@ abstract class searchclass extends navigationclass
 							}
 						}
 						
-						
+						elseif(strpos($v,"!null") !== false)
+						{
+							$clause .= "(".$table.".".$field." != '' and ".$table.".".$field." is not null) and ";
+						} 
 						elseif(strpos($v,"!")!==false)
 						{
 							$clause .= "(".$table.".".$field." ".$v." or ".$table.".".$field." is null) and ";
