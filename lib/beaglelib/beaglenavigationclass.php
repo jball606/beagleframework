@@ -82,6 +82,7 @@ class beagleNavigationClass extends beagleSearchClass
 		return $junk;
 		
 	}
+	
 	private function createLetterResults ($have)
 	{
 		$tmp = array('_' => 0);
@@ -105,6 +106,11 @@ class beagleNavigationClass extends beagleSearchClass
 		return $tmp;
 	}
 	
+	/**
+	 * Method to return user selected options or all if everything was selected
+	 * @return mix (array or string, or false)
+	 * @author Jason Ball
+	 */
 	public function getSelected()
 	{
 		if($this->allcheck == true)

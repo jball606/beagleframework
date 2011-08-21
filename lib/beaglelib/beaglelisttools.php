@@ -151,7 +151,7 @@ class beagleListTools extends beaglebase
 	/**
 	 * see SelectedGen docs
 	 */
-	protected function SelectedGenArray($key, $field, $result, $old="", $default="", $output="P", $type="", $name="", $multiple=0, $size=0)
+	public function SelectedGenArray($key, $field, $result, $old="", $default="", $output="P", $type="", $name="", $multiple=0, $size=0)
 	{
 		# you better skip any header records yourself or add a flag to this function
 		return $this->_SelectedGen($key, $field, $result, $old, $default, $output, $type, $name, $multiple, $size);

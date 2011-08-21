@@ -102,7 +102,7 @@ class mydb
 			{
 				return true;
 			}
-			print("Invalid SQL Statement \n");
+			print("Invalid SQL Statement <br/>\n");
 			printSQL($SQL."<BR>");
 			print $this->cleanBackTrace();
 			exit;
@@ -241,19 +241,31 @@ class mydb
 		}
 	}
 	
+	/**
+ 	* Method to return a nice clean backtrace of data
+ 	* @author Brad Dutton
+ 	* @author Jason Ball
+ 	*/
 	private function cleanBackTrace()
 	{
+		$return = "\n";
 		$error = '';
+		if(!is_cli())
+		{
+			$return = "<br/>";
+			$error = "<br/>";
+		}
+		
+		
 		foreach (debug_backtrace() as $i)
 		{
 	    	if (isset($i['file']) && $i['function'] != 'cleanBackTrace')
 	    	{
-	      		$error .= $i['function'].'() at '.$i['file'].' line '.$i['line'] . "\n";
+	      		$error .= $i['function'].'() at '.$i['file'].' line '.$i['line'] . $return;
 	    	}
 		}
 	
 		return $error;
-		
 	}
 }
 

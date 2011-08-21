@@ -47,34 +47,46 @@ if(isset($result['edit_pencil']))
 						<input type="checkbox" onclick="<?=$result['lib'];?>.checkThis(this.value,this.checked);" name="<?=$result['sel']['name'];?>[]" <? if(isset($result['check'][$oldvalue])) { ?>checked<? } ?> class="<?=$result['lib'];?>" value="<?=$result['orgdata'][$row][$result['sel']['key']];?>"/>
 					</td>
 			<? } ?>
-					
+				
 			<? foreach($i as $key => $v)
 				{ 
-					//print_r2($v);
 					if($key != "edit_pencil" && ($key != $result['editaccess']['field']) && !isset($result['hiddenrows'][$key]))
 					{
-						if(is_array($v))
+						if(isPopArray($result['editsystem']) && isset($result['editsystem'][$key]))
 						{
-							
-							?><td <? if(is_numeric($v['value'])) { ?>class="ac"<? } ?>>
-								<a href="#" onclick="<?=$result['lib'];?>.openLink('<?=$key?>','<?=implode("','",$v['params']);?>'); return false;"><?=$v['value'];?></a>
-							</td> <? 
+							$es = $result['editsystem'][$key];
+							?>
+							<td>
+								<?=$es->showFormElement($i[$result['editkey']],$v);?>
+							</td>
+							<? 
 						}
 						else 
 						{
-					?>
-						<td <?if(is_numeric($v)) { ?>class="ac"<? } ?>>
-						<? 
-						if(isset($dates[$key]))
-						{
-							print(date($dates[$key],strtotime($v)));
-						}
-						else 
-						{
-							print($v);
-						} ?></td>
+							if(is_array($v))
+							{
+								
+								?><td <? if(is_numeric($v['value'])) { ?>class="ac"<? } ?>>
+									<a href="#" onclick="<?=$result['lib'];?>.openLink('<?=$key?>','<?=implode("','",$v['params']);?>'); return false;"><?=$v['value'];?></a>
+								</td> <? 
+							}
+							else 
+							{
+						?>
+							<td <?if(is_numeric($v)) { ?>class="ac"<? } ?>>
+							<? 
+							if(isset($dates[$key]))
+							{
+								print(date($dates[$key],strtotime($v)));
+							}
+							else 
+							{
+								print($v);
+							} 
+						?></td>
 					
-					<? } 
+					<? 		} 
+						}
 					}
 					
 					if($key == "edit_pencil")

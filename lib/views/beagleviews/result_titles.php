@@ -13,7 +13,9 @@
 			}
 			foreach($result['headers'] as $k => $i)
 			{
-				if(strpos($i,$result['editaccess']['field']) === false)
+				
+				$field = substr($k,strpos($k,".")+1,strlen($k));
+				if(strpos($i,$result['editaccess']['field']) === false && !isset($result['hiddenrows'][$field]))
 				{
 					?>
 					<th id="<?=$k;?>" class="ac">

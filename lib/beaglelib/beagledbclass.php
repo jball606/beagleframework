@@ -875,12 +875,14 @@ class beagleDbClass
 	private function cleanBackTrace()
 	{
 		$return = "\n";
+		$error = '';
 		if(!is_cli())
 		{
 			$return = "<br/>";
+			$error = "<br/>";
 		}
 		
-		$error = '';
+		
 		foreach (debug_backtrace() as $i)
 		{
 	    	if (isset($i['file']) && $i['function'] != 'cleanBackTrace')

@@ -1,5 +1,11 @@
 <?php
-
+/**
+ * This function will find the view page and give you the file path or relitive path if you pass a flag.  Returns false if it can't find the file
+ * @param string $sheet			file or subsystem/file
+ * @param sring $system			primary folder under view filder
+ * @param boolean $relitive		is this for a web page (css,js,ext) or you need the full path for PHP
+ * @param $clienttest			blank
+ */
 function getView($sheet,$system="",$relitive=false,$clienttest="")
 {
 	if(function_exists('getViewOverride'))
@@ -25,8 +31,6 @@ function getView($sheet,$system="",$relitive=false,$clienttest="")
 
 /**
  * This will do a lot of the relitive stuff for me
- * Enter description here ...
- * @param unknown_type $webroot
  */
 function setGlobalVars()
 {
@@ -53,7 +57,7 @@ function setGlobalVars()
 /**
  * I often have to make sure this is an array and it is > 0
  * @param array $array
- * @return true/false
+ * @return boolean
  * @author Jason Ball
  */
 function isPopArray(&$array)
@@ -115,11 +119,14 @@ function getValue(&$array,$item)
 	return false;
 }
 
+/**
+ * Are you in CLI mode, 
+ * @return boolean
+ */
 function is_cli()
 {
     return php_sapi_name() === 'cli';
 }
-
 
 /**
  * Function to return a nice clean backtrace of data
@@ -394,7 +401,7 @@ function includeIfExists($file)
 
 /**
  * 
- * Enter description here ...
+ * create a parent child array from a single array with parent child connectors
  * @param array $inArray		What you have
  * @param array $outArray		array to pass child relationship to
  * @param mixed $parent_id
@@ -544,7 +551,6 @@ function findFile($path,$file)
 	
 	$_SESSION[$var] = base64_encode(serialize(clone($class)));	
 }
-
 
 /**
  * This function will return a stored object to you in object form or return false if not found

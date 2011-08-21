@@ -1,7 +1,7 @@
 <?php
 abstract class beagleResultClass extends beagleNavigationClass
 {
-	private $nav = false;
+	protected $editclass = array(); 
 	
 	/**
 	 * This method will return a clean name of a DB filed name
@@ -20,11 +20,24 @@ abstract class beagleResultClass extends beagleNavigationClass
 		return ucwords(str_replace("_"," ",$name));
 	}
 	
-	
+	/**
+	 * Abstract method needed to make sure result titles have a clean name.  Special to each controller.  
+	 * You can make the function to just use standardTitle if you want
+	 * @param string $name
+	 * 
+	 */
 	abstract protected function cleanName($name);
 	
+	/**
+	 * abstract method needed by each controller to pass seetings to runResultPage
+	 * @see beagleResultClass::runResultPage()
+	 */
 	abstract public function showResultsPage();
 	
+	/**
+	 * abstract method that is used to run a search with search criteria needed
+	 * @see beagleSearchClass::executeSearch()
+	 */
 	abstract protected function run_Search();
 	
 	/**
@@ -50,7 +63,8 @@ abstract class beagleResultClass extends beagleNavigationClass
 	 * extra =>				array(),
 	 * editaccess =>		false, 		Used to give you the popup to select who can and can not see your information
 	 * allowsort =>			true, 		Allow the user to sort a row
-	 * hiddenrows =>		array(),	array of columns of data in a result set that you have to have but don't want the user to see	
+	 * hiddenrows =>		array(),	array of columns of data in a result set that you have to have but don't want the user to see
+	 * edit =>				false,		This flag is for telling the system that it should try to use the edit results system, pass the row's primary key 	
 	 *  )
 	 *  
 	 *  @author Jason Ball
@@ -77,6 +91,7 @@ abstract class beagleResultClass extends beagleNavigationClass
 											'editaccess'=>false, //Used to give you the popup to select who can and can not see your information
 											'allowsort'=>true, //Allow the user to sort a row
 											'hiddenrows'=>array(),	
+											'edit'=>false, //this flag is for telling the system that it should try to use the edit results system
 										));
 											
 											
@@ -164,7 +179,13 @@ abstract class beagleResultClass extends beagleNavigationClass
 		$result['showperpage'] = $args['showperpage'];
 		$result['showcount'] = $args['showcount'];
 		$result['showemptyresult'] = $args['showemptyresult'];
-			
+		
+		if($args['edit'])
+		{
+			$result['editsystem'] = $this->editclass;
+			$result['editkey'] = $args['edit'];
+		}
+		
 		if(isset($args['lettermenu']['name']))
 		{
 			$result['lettermenu']['name'] = $args['lettermenu']['name'];

@@ -6,6 +6,7 @@
  * @version 1.0
  * @copyright 08/21/2011
  *
+ *
  */
 class beagleResultEditHtmlClass extends beaglebase
 {
@@ -13,7 +14,7 @@ class beagleResultEditHtmlClass extends beaglebase
 	 * This array is for quick reference to what HTML type we want, 
 	 * @var array $htmltypes
 	 */
-	private $htmltypes = array('Text','TextArea','CheckBox','Select','Radios');
+	private $htmltypes = array(1=>'Text',2=>'TextArea',3=>'CheckBox',4=>'Select',5=>'Radio');
 	
 	/**
 	 * This array is for the settings neede for the generic system
@@ -24,29 +25,29 @@ class beagleResultEditHtmlClass extends beaglebase
 	 *	listvalues = array values of a checkbox, select or radio if needed [OPTIONAL]
 	 *	js = JS code if you want array [js action][code] if you put <?=$id;?> then the id will be passed [OPTIONAL]
 	 *	size = Size of text box [OPTIONAL]
-	 * @var unknown_type
+	 *  multiple = boolean for if you want your select item to be multiple or not [OPTIONAL]
+	 * @var array
 	 */
 	private $settings = array();
 
 	public function __construct($in_args)
 	{
-		$args = defaultArgs($in_args, array('
-											table'=>false,
+		$args = defaultArgs($in_args, array('table'=>false,
 											'field'=>false,
 											'htmltype'=>FALSE,
 											'listvalues'=>array(),
 											'js'=>array(),
 											'size'=>false,
+											'multiple'=>false
 											));
-		
 		$this->settings = $args;
 	}
 	
-	public function showFormEdlement($id,$value="")
+	public function showFormElement($id,$value="")
 	{
 		if(isPopArray($this->settings))
 		{
-			$need =  array('table,field,htmltype');
+			$need =  array('table','field','htmltype');
 			
 			foreach($need as $i)
 			{
@@ -69,6 +70,15 @@ class beagleResultEditHtmlClass extends beaglebase
 					$size = $this->settings['size'];
 					return $this->getTextField($table,$field,$id,$value,$size);
 				}
+				if($set == 2 || strtolower($set) == "textarea")
+				{
+					return $this->getTextArea($table,$field,$id,$value);
+				}
+				if($set == 4 || strtolower($set) == "select")
+				{
+					return $this->getSelectField($table, $field, $id,$value,$this->settings['multiple'],$this->settings['size']);	
+					
+				}
 			}
 			else 
 			{
@@ -77,6 +87,57 @@ class beagleResultEditHtmlClass extends beaglebase
 		}
 
 		return $this->prettyFail($this->error);
+	}
+	
+	/**
+	 * This method will return a textarea field for you
+	 * @param string $table
+	 * @param string $field
+	 * @param mixed (string/integer) $id
+	 * @param mixed $value
+	 * @return string
+	 * @author Jason Ball
+	 * @copyright 08/21/2011
+	 */
+	private function getTextArea($table,$field,$id,$value="")
+	{
+		$ta = '<textarea name="resultedit['.$table.']['.$field.']['.$id.']" id="'.$table.'_'.$field.'_'.$id.'">'.$value."</textarea>\n";
+		return $ta;
+	}
+	
+	/**
+	 * This method will return a select option field for you
+	 * @param string $table
+	 * @param string $field
+	 * @param mixed (string/integer) $id
+	 * @param mixed $value
+	 * @param boolean $multiple
+	 * @param integer $size
+	 * @return string
+	 * @author Jason Ball
+	 * @copyright 08/21/2011
+	 */
+	private function getSelectField($table,$field,$id,$value="",$multiple=false,$size=false)
+	{
+		$l = new beagleListTools();
+		
+		$select = '<select name="resultedit['.$table.']['.$field.']['.$id.']';
+		if($multiple)
+		{
+			$select .= '[] multiple ';
+		}
+		if($size)
+		{
+			$select .= ' size="'.$size.'" ';
+		}
+		
+		$select .= ' id="'.$table.'_'.$field.'_'.$id.'" >';
+		
+		$select .= $l->SelectedGenArray('id', 'value', $this->settings['listvalues'],$value);
+		
+		
+		$select .= "</select>\n";
+		return $select;
 	}
 	
 	/**
@@ -91,7 +152,6 @@ class beagleResultEditHtmlClass extends beaglebase
 	 * @copyright 08/21/2011
 	 * 
 	 */
-	
 	private function getTextField($table,$field,$id,$value="",$size=false)
 	{
 		$text = '<input type="text" name="resultedit['.$table.']['.$field.']['.$id.']" id="'.$table."_".$field."_".$id.'" value="'.$value.'" ';
