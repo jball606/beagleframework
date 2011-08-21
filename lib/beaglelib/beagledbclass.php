@@ -1,22 +1,50 @@
 <?php
 /**
- * The Dbclass is my way of standarizing the db setup
- * It is influnced by the Media Net Link db class but I don't use MBD2 so I re wrote it to use the base DB functons
+ * The beagleDbClass is my way of standarizing the db setup
+ * It is influnced by the Media Net Link db class but I don't use MBD2 so I had to do a complete re-write to use the base DB functons
+ * You must create a model class that extends off this that will pass the proper variables
  * @author Jason Ball
  *
  */
-class dbclass
+class beagleDbClass
 {
 	public $error = false;
 	protected $db = false;
 	protected $auditfields = array();
+	
+	/**
+	 * Table Name for model
+	 * @var string
+	 */
 	protected $table = false;
+	
+	/**
+	 * Does the table have standard auditing fields
+	 * @example created_by, updadated_by, created_date, updated_date
+	 * @var boolean
+	 */
 	protected $auditing = false;
 	protected $sequence = false;
 	protected $no_empty_string_columns = array(); // columns that should be converted to null if empty string is present
+	
+	/**
+	 * Primary key of model
+	 * @var string
+	 */
 	protected $pkey =false;
 	private $dbtimestampformat = "Y-m-d H:i:s";
+	
+	/**
+	 * array of fields to validate on
+	 * @var array
+	 * @see beagleDbClass::validate()
+	 */
 	protected $valid_fields = array();
+	
+	/**
+	 * array of tables to join on
+	 * @var array
+	 */
 	protected $join = false;
 	
 	/**
@@ -72,6 +100,12 @@ class dbclass
 			
 	}
 	
+	/**
+	 * Method to find the preset in the model and pass them to any db action if needed
+	 * @param array $want
+	 * @param array $have
+	 * @return array
+	 */
 	public function getPresets($want=array(),$have=array())
 	{
 		
@@ -303,6 +337,7 @@ class dbclass
 		return true;
 	}
 
+	
 	/**
 	 * Use to return an array of data where the primary key is the hash key
 	 * @param $val mixed a primary key of a record to return or an any of key/value pairs used to generate a where clause
@@ -348,6 +383,7 @@ class dbclass
 		
 	} 
 	
+	
 	/**
      * This is a email validating function that simply validates whether 
      * an email is of the common internet form: <user>@<domain>.
@@ -359,7 +395,9 @@ class dbclass
      * @param  string  $data   Address to check
      * @param  boolean $strict Optional stricter mode
      * @return mixed           False if it fails, an indexed array
-     *                         
+     * @author      Richard Heyes <richard@phpguru.org>
+ 	 * @author      Chuck Hagenbuch <chuck@horde.org   
+ 	 * @copyright   2001-2010 Richard Heyes                
      */
     private function isValidEmailAddress($data, $strict = false)
     {
@@ -374,6 +412,7 @@ class dbclass
         }
     }
     
+	
 	/**
 	 * Add Data to DB
 	 * @param array $array (data)
@@ -462,6 +501,12 @@ class dbclass
 		 
 	}
 	
+	/**
+	 * This Method is used to update a record based on passed keys
+	 * @param array $keys 			for the where clause array(field=>value, field=>value)
+	 * @param array $values			for the update clause array(field=value, field=>value)
+	 * @param boolian $printsql		for debug, will show the SQL clause
+	 */
 	public function update($keys=array(), $values = array(),$printsql=false)
 	{
 		$this->loadDB();
@@ -519,6 +564,11 @@ class dbclass
 		
 	}
 	
+	/**
+	 * Method to figure out if you need something added or updated and does so
+	 * @param array $keys 			for the where clause array(field=>value, field=>value)
+	 * @param array $values			for the update clause array(field=value, field=>value)
+	 */
 	public function addOrUpdate($keys,$values)
 	{
 		if(!is_array($keys) || !is_array($keys))
@@ -546,11 +596,12 @@ class dbclass
 	/**
 	 * Use this function to get arrays of data from the DB
 	 * @param array $keys (where items)
-	 * @param array $options (single , orderby, printsql )
-	 * single will only return a single record
-	 * orderby is for ordering your array
-	 * pringsql is for debugging
-	 * fields => array of fields you want
+	 * @param array $options (single , orderby, printsql,fields,limit,join )
+	 * single =>	Boolian		will only return a single record
+	 * orderby => 	string		is for ordering your array
+	 * pringsql => 	false		debugging, will print out SQL
+	 * fields => 	array		fields you want
+	 * limit =>		integer		limit result
 	 * @return array
 	 */
 	public function get($keys=array(),$options = array())
@@ -665,6 +716,12 @@ class dbclass
 		return false;
 	}
 	
+	/**
+	 * Method to return a single row and not put it in an enumerated array but just return the values into a key/value pair array
+	 * @param array $keys 			for the where clause array(field=>value, field=>value)
+	 * @param array $options
+	 * @see beagleDbClass::get
+	 */
 	public function getOne($keys,$options=array())
 	{
 		$opt['single'] = true;
@@ -727,6 +784,7 @@ class dbclass
 		
 	}
 	
+	
 	private function getWhere($array=array())
 	{
 		$tmp = array();
@@ -784,6 +842,7 @@ class dbclass
 		return $tmp;
 	}
 	
+	
 	private function escapeChar($data)
 	{
 	
@@ -808,18 +867,30 @@ class dbclass
 		return false;
 	}
 	
+	/**
+ 	* Method to return a nice clean backtrace of data
+ 	* @author Brad Dutton
+ 	* @author Jason Ball
+ 	*/
 	private function cleanBackTrace()
 	{
+		$return = "\n";
+		if(!is_cli())
+		{
+			$return = "<br/>";
+		}
+		
 		$error = '';
 		foreach (debug_backtrace() as $i)
 		{
 	    	if (isset($i['file']) && $i['function'] != 'cleanBackTrace')
 	    	{
-	      		$error .= $i['function'].'() at '.$i['file'].' line '.$i['line'] . "\n";
+	      		$error .= $i['function'].'() at '.$i['file'].' line '.$i['line'] . $return;
 	    	}
 		}
 	
 		return $error;
-		
 	}
+
 }
+?>

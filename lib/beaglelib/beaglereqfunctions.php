@@ -115,14 +115,30 @@ function getValue(&$array,$item)
 	return false;
 }
 
+function is_cli()
+{
+    return php_sapi_name() === 'cli';
+}
+
+
+/**
+ * Function to return a nice clean backtrace of data
+ * @author Brad Dutton
+ */
 function cleanBackTrace()
 {
+	$return = "\n";
+	if(!is_cli())
+	{
+		$return = "<br/>";
+	}
+	
 	$error = '';
 	foreach (debug_backtrace() as $i)
 	{
     	if (isset($i['file']) && $i['function'] != 'cleanBackTrace')
     	{
-      		$error .= $i['function'].'() at '.$i['file'].' line '.$i['line'] . "\n";
+      		$error .= $i['function'].'() at '.$i['file'].' line '.$i['line'] . $return;
     	}
 	}
 
@@ -223,9 +239,9 @@ function beagleClasses($class)
 			include_once $root."breadcrumbclass.php";
 			return true;
 		}
-		case "dbclass":
+		case "beagledbclass":
 		{
-			include_once $root."dbclass.php";
+			include_once $root."beagledbclass.php";
 			return true;
 		}
 		case "excel":
@@ -233,15 +249,15 @@ function beagleClasses($class)
 			include_once $root."excel.php";
 			return true;
 		}
-		case "listtools":
+		case "beaglelisttools":
 		{
-			include_once $root."listtools.php";
+			include_once $root."beaglelisttools.php";
 			return true;
 		
 		}
-		case "navigationclass":
+		case "beaglenavigationclass":
 		{
-			include_once $root."navigationclass.php";
+			include_once $root."beaglenavigationclass.php";
 			return true;
 		}
 		case "mydb":
@@ -254,9 +270,9 @@ function beagleClasses($class)
 			include_once $root."pgdb.php";
 			return true;
 		}
-		case "searchclass":
+		case "beaglesearchclass":
 		{
-			include_once $root."searchclass.php";
+			include_once $root."beaglesearchclass.php";
 			return true;
 		}
 		case "systemaccessclass":
@@ -264,7 +280,17 @@ function beagleClasses($class)
 			include_once $root."systemaccessclass.php";
 			return true;
 		}
-	
+		case "beagleresultclass":
+		{
+			include_once $root."beagleresultclass.php";
+			return true;
+		}
+		case "beagleresultedithtmlclass":
+		{
+			include_once $root."beagleresultedithtmlclass.php";
+			return true;
+		}
+		
 	}
 }
 
@@ -366,6 +392,15 @@ function includeIfExists($file)
 	return false;
 }
 
+/**
+ * 
+ * Enter description here ...
+ * @param array $inArray		What you have
+ * @param array $outArray		array to pass child relationship to
+ * @param mixed $parent_id
+ * @param mixed $child_id
+ * @param mixed $currentParentId
+ */
 function makeParentChildRelations(&$inArray, &$outArray,$parent_id, $child_id, $currentParentId = 0)
 {
 	if(!is_array($inArray)) 
@@ -498,12 +533,25 @@ function findFile($path,$file)
 	return false;
 }
 
-function storeClass($var,$class)
+/**
+ * This function will store a class in a session variable so it can be passed from page to page
+ * @param string $var		array element name
+ * @param object $class		Class Object
+ * @author Jason Ball
+ */
+ function storeClass($var,$class)
 {
 	
 	$_SESSION[$var] = base64_encode(serialize(clone($class)));	
 }
 
+
+/**
+ * This function will return a stored object to you in object form or return false if not found
+ * @param string $var		name of array element
+ * @return mixed (object or false)
+ * @author Jason Ball
+ */
 function restoreClass($var)
 {
 	if(isset($_SESSION[$var]))

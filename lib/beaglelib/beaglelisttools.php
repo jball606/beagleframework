@@ -4,7 +4,7 @@
  * @author Jason Ball
  * 11/25/2010
  */
-class listtools extends beaglebase
+class beagleListTools extends beaglebase
 {
 		
 	public function loadListDB($db="")
@@ -107,11 +107,6 @@ class listtools extends beaglebase
 		return $xml;	
 	}
 
-	protected function SingleValue($SQL)
-	{
-		 return $this->db->queryOne($SQL); 
-	}
-
 	protected function OldCheck($old)
 	{
 		if($old == "" || $old == "null")
@@ -132,7 +127,7 @@ class listtools extends beaglebase
 	 * @param $SQL the sql query to run to produce the list
 	 * @param $old
 	 * @param $default a default value to return
-	 * @param $output P returns html option tags around values, S returns just the selected value (plain text), B both
+	 * @param $output P returns html option tags around values, S returns just the selected value (plain text), B both, A for Array
 	 * @param $list list_id of values to fetch
 	 * @param $single P{ulldown} returns html option tags around values, S{ingle} returns just the selected value (plain text), B{oth} return both items
 	 * @param $type the type of list to be created {radio,select,checkbox}
@@ -140,8 +135,8 @@ class listtools extends beaglebase
 	 * @param $multiselect if true make a multiselect list
 	 * @param $size The size of the pick list for multiselect fields
 	 * @access public
-	 * @return XML of field values for contacts
-	 * @author jasonb
+	 * @return mixed variable
+	 * @author Jason Ball
 	 */
 	protected function SelectedGen($key, $field, $SQL, $old="", $default="", $output="P", $type="", $name="", $multiple=0, $size=0)
 	{
@@ -162,7 +157,7 @@ class listtools extends beaglebase
 		return $this->_SelectedGen($key, $field, $result, $old, $default, $output, $type, $name, $multiple, $size);
 	}
 
-	/*
+	/**
 	 * see SelectedGen docs
 	 */
 	private function _SelectedGen($key, $field, $result, $old="", $default="", $output="P")
@@ -277,56 +272,6 @@ class listtools extends beaglebase
 			$info[2] = $value;
 			return $info;
 		}
-	}
-
-	public function Wherealizer($where,$key="and",$loc="B",$bracketin="or")
-	{
-		if($key == "")
-		{
-			 return false; 
-		}
-		if($bracketin == "")
-		{
-			 return false; 
-		}
-		if($loc != "B" and $loc != "F")
-		{
-			 return false; 
-		}
-					
-		$fwhere = "";
-		for($a=0;$a<count($where);$a++)
-		{
-			if($loc == "F")
-			{
-				 $fwhere .= " $key "; 
-			}
-			if(is_array($where[$a]))
-			{
-				$tmpwhere = "(";
-				for($b=0;$b<count($where[$a]);$b++)
-				{
-					$tmpwhere .= $where[$a][$b]." $bracketin ";
-									
-				}
-				$tmpwhere = trim(substr($tmpwhere,0,(strlen($tmpwhere) - strlen($bracketin))-1));
-				$fwhere .= $tmpwhere.")";
-			}
-			else
-			{
-				 $fwhere .= $where[$a]; 
-			}
-					
-			if($loc == "B")
-			{
-				 $fwhere .= " $key "; 
-			}
-		}
-		if($loc == "B")
-		{
-			 $fwhere = trim(substr($fwhere,0,(strlen($fwhere) - strlen($key))-1)); 
-		}
-		return $fwhere;
 	}
 
 	public function reverseList($in_args = array())

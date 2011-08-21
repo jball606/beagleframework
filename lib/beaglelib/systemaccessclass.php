@@ -1,5 +1,5 @@
 <?php
-class systemaccessclass extends dbclass
+class systemaccessclass extends beagledbclass
 {
 	protected $access_key = false;
 	

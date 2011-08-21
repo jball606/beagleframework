@@ -1,11 +1,10 @@
 <?php
 /**
- * navigationclass
  * This Class is for the result list navigation
  * @author Jason Ball
  *
  */
-class navigationclass extends beaglebase
+class beagleNavigationClass extends beagleSearchClass
 {
 	
 	protected $check = array();
@@ -17,6 +16,7 @@ class navigationclass extends beaglebase
 	 * @param string $SQL
 	 * @param string $key (column you want to search)
 	 * @return array letters
+	 * @author Jason Ball
 	 */
 	protected function createLetterMenu($SQL,$key)
 	{
@@ -26,6 +26,7 @@ class navigationclass extends beaglebase
 			$nsql = $this->stripSQL($SQL);
 			
 			/*
+			 * May be better SQL but slow, want to try to make this work without it
 			$SQL = "select lower(substr(".$key.",1,1)) as letter,
 					count(*) as cnt
 					from ( ".$SQL." ) as foo

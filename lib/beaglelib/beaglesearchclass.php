@@ -4,22 +4,40 @@
  * @author Jason Ball
  *
  */
-abstract class searchclass extends navigationclass
+class beagleSearchClass extends beaglebase
 {
 	protected $lists;
+	/**
+	 * This is the array we store the where clasues array[table][field] = want
+	 * @var array
+	 */
 	protected $whereitems = array();
+	/**
+	 * This is the array we store view items array[table.field] = table.field or sql clause in select statement
+	 * @var array
+	 */
 	protected $viewitems = array();
+	
 	protected $order = array();
 	protected $location = array();
 	protected $subwhere = array();
 	protected $letterval = false;  
 	protected $page = false;
-	
+	 
+	/**
+	 * Method to get the right DB resorce
+	 */
 	protected function loadSearch()
 	{
 		$this->loadSystemDB();
 	}
 	
+	/**
+	 * Method to clean up the order array and view array so you don't try to order something that doesn't exist
+	 * @param string $order
+	 * @param array $view
+	 * @return string
+	 */
 	protected  function badOrder($order,$view)
 	{
 		$tmp = explode(",",$order);
@@ -40,25 +58,6 @@ abstract class searchclass extends navigationclass
 	}
 
 	/**
-	 * This method will return a clean name of a DB filed name
-	 * @param string $name
-	 * @return string $name
-	 * @author Jason Ball
-	 * @copyright 2011-08-02
-	 */
-	protected function standardTitle($name)
-	{
-		if(strpos($name,'.')!==false)
-		{
-			$name = substr($name,strpos($name,'.')+1,strlen($name));
-		}
-		
-		return ucwords(str_replace("_"," ",$name));
-	}
-	
-	abstract protected function cleanName($name);
-	
-	/**
 	 * This Method will set the where clause of the SQL
 	 * @param array $in_args
 	 * @return void
@@ -73,25 +72,6 @@ abstract class searchclass extends navigationclass
 		
 	}
 	
-	protected function globalCleanName($name)
-	{
-		if($name == "users.email")
-		{
-			return "Email";
-		}
-		if($name == "company.company_name")
-		{
-			return "Company Name";
-		}
-		
-		if($name == "account_contact.first_name, account_contact.last_name")
-		{
-			return "Account Team Contact";
-		}
-		
-		return $name;	
-	}
-
 	/**
 	 * 
 	 * make the array needed to pass a open link
@@ -193,10 +173,6 @@ abstract class searchclass extends navigationclass
 		
 	}
 	
-	abstract protected function run_Search();
-	
-	abstract public function showResultsPage();
-	
 	/** 
 	 * You need to make this method in your class if you want to use the letter system or other 
 	 * @param string $where
@@ -206,6 +182,19 @@ abstract class searchclass extends navigationclass
 		
 	}
 	
+	/**
+	 * Actual method that creates the search array and gets you all the data
+	 * @param array $in_args
+	 * @example in_args(
+	 * first =>			0,			Begining of the search page
+	 * limit =>			20,			Number of results on the page
+	 * excel =>			FALSE,		Do you want this as an excel item.  Actually just returns the full SQL statement to be used by the excel clas
+	 * SQL_F =>			false,		The from section of yoru SQL statement
+	 * extrawhere =>	array(),	array of extra where clasues that may not fix the standard array system
+	 * key =>			array()		primary key of search exapmle :('id'=>false,'name'=>false,'sqlkey'=>false)
+	 * all =>			false,		return all records, skips first and limit
+	 * printsql =>		false,		for debugging, this will show you the exact SQL statement
+	 */
 	protected function executSearch($in_args = array())
 	{
 		
@@ -324,8 +313,10 @@ abstract class searchclass extends navigationclass
 		return $result;
 	}
 	
-	
-	protected function createOrder()
+	/**
+	 * Method to create order clause of search statemnt
+	 */
+	private function createOrder()
 	{
 		$tmp = array();
 		foreach($this->order as $k => $i)
@@ -346,7 +337,7 @@ abstract class searchclass extends navigationclass
 		return false;
 	}
 	
-	protected function mergeSubWhere($wh)
+	private function mergeSubWhere($wh)
 	{
 		if(count($this->subwhere)>0)
 		{
@@ -364,180 +355,11 @@ abstract class searchclass extends navigationclass
 		return $wh;
 	}
 	
-	
-	
-	protected function runResultPage($in_args = array())
-	{
-		
-		$args = defaultArgs($in_args,array('first'=>false, //Start of result list
-											'limit'=>false, //How many per page
-											'orderby'=>false, //Order field
-											'orderdir'=>false, //Order Dir 1 (ASC) 2 (DESC)
-											'page'=>'',
-											'title'=>false, //Title on header bar
-											'dates'=>array(),	//Date fields that need formatting example 'dates'=>array('created_date'=>"m/d/Y"),
-											'link'=>array(), 	//Link Array' exmpale array(0 => array('field'=>'email','key'=>'upid')),
-											'edit_pencil'=>array(),
-											'bottommenu'=>false, //If you want links at the bottom
-											'lib'=>'search',	//Javascript class name
-											'sel'=>false,	//Do you need select bcxes for the row? false or array(name,key) of box
-											'lettermenu'=>array(), //name = title and key = dbid
-											'showemptyresult'=>false,
-											'showperpage'=>true,
-											'showcount'=>true,
-											'extra'=>array(),
-											'editaccess'=>false, //Used to give you the popup to select who can and can not see your information
-											'allowsort'=>true, //Allow the user to sort a row
-											'hiddenrows'=>array(),	
-										));
-											
-											
-											
-		if($args['orderby'])
-		{
-			if(isPopArray($args['orderby']) && isPopArray($args['orderdir']))
-			{
-				foreach($args['orderby'] as $k => $i)
-				{
-					$this->order[$i] = $args['orderdir'][$k];
-				}
-			}
-			
-			if(is_numeric($args['orderdir']) && $args['orderdir'] !== false)
-			{
-				if($args['orderdir'] == 1 || $args['orderdir'] == 2)
-				{
-					$this->order[$args['orderby']] = $args['orderdir'];
-				}
-				else 
-				{
-					if(isset($this->order[$args['orderby']]))
-					{
-						unset($this->order[$args['orderby']]);
-					}
-				}
-			}
-		}
-		
-		if(isPopArray($args['hiddenrows']))
-		{
-			$tmp = array();
-			foreach($args['hiddenrows'] as $k => $i)
-			{
-				if(is_numeric($k))
-				{
-					$tmp[$i] = $i;
-				}
-				else 
-				{
-					$tmp[$k] = $i;
-				}
-				
-			}
-			$args['hiddenrows'] = $tmp;
-		}
-		
-		if($args['first'] === false && isset($this->location['first']))
-		{
-			$args['first'] = $this->location['first'];
-		}
-		elseif(!$args['first']) 
-		{
-			$args['first'] = 0;
-		}
-	
-		if(!$args['limit'] && isset($this->location['limit']))
-		{
-			$args['limit'] = $this->location['limit'];
-		}
-		elseif(!$args['limit']) 
-		{
-			$args['limit'] = 10;
-		}
-		
-		$result = $this->run_Search($args['first'],$args['limit']);
-
-		$result['title'] = $args['title'];
-		$result['headers'] = $this->getHeaders($this->viewitems);
-		$result['limit'] = $args['limit'];
-		$result['editaccess'] = $args['editaccess'];
-		$result['allowsort'] = $args['allowsort'];
-		$result['hiddenrows'] = $args['hiddenrows'];
-		
-		$result['first'] = $args['first'];
-		$result['dates'] = $args['dates'];
-		if(isPopArray($args['edit_pencil']))
-		{
-			$result['edit_pencil'] = true;
-			
-		}
-		$result['order'] = $this->order;
-		$result['lib'] = $args['lib'];
-		$result['showperpage'] = $args['showperpage'];
-		$result['showcount'] = $args['showcount'];
-		$result['showemptyresult'] = $args['showemptyresult'];
-			
-		if(isset($args['lettermenu']['name']))
-		{
-			$result['lettermenu']['name'] = $args['lettermenu']['name'];
-			$result['lettermenu']['list'] = $this->createLetterMenu($this->run_search($args['first'],$args['limit'],true,true),$args['lettermenu']['key']);
-			$result['lettermenu']['sel'] = $this->letterval;
-		}
-		
-		if($args['sel'] !== false)
-		{
-			$result['sel'] = $args['sel'];
-			$result['check'] = $this->check;
-		}
-		$result['bottommenu'] = $args['bottommenu'];
-		
-		$result['orgdata'] = $result['records'];
-		if(isPopArray($args['extra']))
-		{
-			foreach($args['extra'] as $k => $i)
-			{
-				$result[$k] = $i;
-			}
-		}
-		
-		$junk = array();
-		
-		if((isPopArray($args['link'])) || (isset($args['edit_pencil']) && isPopArray($args['edit_pencil'])))
-		{
-			foreach($result['orgdata'] as $k => $i)
-			{
-				if(isset($args['edit_pencil']) && isPopArray($args['edit_pencil']))
-				{
-					$i['edit_pencil'] = '';
-					$args['link']['field'] = 'edit_pencil';
-					$args['link']['key'] = $args['edit_pencil']['key'];
-					
-				}
-				
-				$junk[$k] = $this->makeLinkArray($i, $args['link']['field'], $args['link']['key']);
-				
-			}
-			$result['records'] = $junk;
-		}
-		
-		
-		if($this->page == false)
-		{
-			if($args['page'] == "" || $args['page'] == false)
-			{
-				$args['page'] = getView("resultlist.php",'beagleviews');
-			}
-			else 
-			{
-				$this->page = $args['page'];
-			}
-		}
-	
-		return $this->showTemplate($args['page'],$result);
-		
-	}
-	
-	protected function getGroupData($array=array())
+	/**
+	 * Get the group by part of the search SQL string
+	 * @param array $array	Passing the view data to get the group by clause
+	 */
+	private function getGroupData($array=array())
 	{
 		$tmp = array();
 		if(is_array($array))
@@ -581,20 +403,6 @@ abstract class searchclass extends navigationclass
 		return $this->getClassData($this->whereitems, $item);
 	}
 	
-	protected function getHeaders($array=array())
-	{
-		if(is_array($array))
-		{
-			$tmp = array();
-
-			foreach($array as $k => $i)
-			{
-				$tmp[$k] = $this->cleanName($k);	
-			}
-		}
-		
-		return $tmp;
-	}
 	
 	protected function setAnd($and,$info)
 	{
@@ -636,7 +444,17 @@ abstract class searchclass extends navigationclass
 		
 	}
 	
-	protected function getWhere($info)
+	/**
+	 * Takes the where array and converts it into an array of properly executledable where staements
+	 * @param array $info
+	 * @return array
+	 * @example Clauses
+	 * !null = 	is not null and != ''
+	 * isnull = is null
+	 * null =	not null
+	 * !(item)	!= item 
+	 */
+	private function getWhere($info)
 	{
 		$clause = "";
 		foreach($info as $table => $i)
@@ -755,31 +573,7 @@ abstract class searchclass extends navigationclass
 		return $tmp;
 	}
 
-	protected function excel($SQL,$views)
-	{
-		$tmp = array();
-		foreach($views as $k => $i)
-		{
-			$tmp[0][] = $this->cleanName($k,$i);
-		}
-		$result = $this->db->query($SQL);
-		while($row = $result->fetchRow())
-		{
-			foreach($row as $k => $i)
-			{
-				if(strpos(strtolower($k),"date")!==false && $i != '' && is_numeric($i))
-				{
-					$row[$k] = date("m/d/Y",$i);
-				}
-				if(strpos(strtolower($k),"deadline") !== false && $i != '')
-				{
-					$row[$k] = date("m/d/Y",$i);
-				}
-			}
-			$tmp[] = $row;	
-		}
-		return $tmp;
-	}
+	
 
 	
 }
