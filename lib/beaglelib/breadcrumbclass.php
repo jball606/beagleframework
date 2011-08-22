@@ -1,5 +1,19 @@
 <?php
 include("beaglebase.php");
+/**
+ * The Breadcrumb class saves page specific data
+ * 
+ * The Bread crumb class does more then just make breadcrumbs for a page,
+ * it also stores page specific data so that if you go back to a page, you don't
+ * loose anything
+ * 
+ * 
+ * @author Jason Ball
+ * @copyright 05/01/2011
+ * @package beagleframework
+ * @subpackage classes
+ *
+ */
 class breadcrumbclass extends beaglebase
 {
 	private $breadcrumb_id = false;
@@ -71,6 +85,13 @@ class breadcrumbclass extends beaglebase
 		$this->child = $child;
 	}
 	
+	/**
+	 * Store classes that you will use for this page
+	 * @param string $search = array element
+	 * @param object $session = class you want to save
+	 * 
+	 * @author Jason Ball 
+	 */
 	public static function storeBCSession($search, $session)
 	{
 		$tab = breadcrumbclass::getLastBC();

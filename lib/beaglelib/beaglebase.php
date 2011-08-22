@@ -2,7 +2,8 @@
 /**
  * The Beagle Base class is so you don't have to write the same methods over and over again
  * @author Jason Ball
- *
+ * @package beagleframework
+ * @subpackage classes
  */
 class beaglebase
 {
@@ -28,6 +29,7 @@ class beaglebase
 	
 	/**
 	 * Use this method to remove any falses in an arg list
+	 * 
 	 * @param array $args
 	 * @return array $args
 	 */
@@ -52,6 +54,7 @@ class beaglebase
 	
 	/**
 	 * Unset the database settings in case you need to serialize the class
+	 * 
 	 * @param void
 	 * @return void
 	 */
@@ -65,6 +68,7 @@ class beaglebase
 	
 	/**
 	 * This method returns the 3 letter extention of a file
+	 * 
 	 * @param string $name
 	 * @return string or null
 	 * @author Jason Ball
@@ -82,6 +86,7 @@ class beaglebase
 	
 	/**
 	 * This Method is used to find a specific key in the data array of the child class, 'all' is a special word for giving you the entire array
+	 * 
 	 * @param array $array
 	 * @param string $item
 	 * @param boolian $allowall
@@ -131,6 +136,7 @@ class beaglebase
 	
 	/**
 	 * Use this method to load the db object, if you don't pass one, the default is used in GLOBALS[DB]
+	 * 
 	 * @param resource $db
 	 * @return void
 	 * @author Jason Ball

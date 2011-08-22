@@ -4,7 +4,8 @@
  * It is influnced by the Media Net Link db class but I don't use MBD2 so I had to do a complete re-write to use the base DB functons
  * You must create a model class that extends off this that will pass the proper variables
  * @author Jason Ball
- *
+ * @package beagleframework
+ * @subpackage classes
  */
 class beagleDbClass
 {
@@ -220,10 +221,12 @@ class beagleDbClass
 	
 	/**
 	* Validate Class
+	* 
 	* Pass an array that you want to add or edit and this class will the protected fields varable and 
 	* Do a backend validate for you.  Currently I am using the simple R822 for email validatetion,
 	* but that is really outdated and something else will be needed.  I just want to try and make this 
 	* self containted.
+	* <pre>
 	* examples 
 		$val = array('name'=>array('type'=>'varchar',
 					'size'=>255,
@@ -235,9 +238,10 @@ class beagleDbClass
 			  'country'=>array('type'=>'varchar',
 							   'size'=>2),
 			  'testdate'=>array('type'=>'date'));
+	</pre>
 
 	* @author Jason Ball
-	
+	* 	
 	*/
 	public function validate($fields,$type="edit")
 	{
@@ -386,6 +390,7 @@ class beagleDbClass
 	
 	/**
      * This is a email validating function that simply validates whether 
+     * 
      * an email is of the common internet form: <user>@<domain>.
      * This can be sufficient for most people. 
      * Optional stricter mode restricts
@@ -597,11 +602,13 @@ class beagleDbClass
 	 * Use this function to get arrays of data from the DB
 	 * @param array $keys (where items)
 	 * @param array $options (single , orderby, printsql,fields,limit,join )
+	 * <pre>
 	 * single =>	Boolian		will only return a single record
 	 * orderby => 	string		is for ordering your array
 	 * pringsql => 	false		debugging, will print out SQL
 	 * fields => 	array		fields you want
 	 * limit =>		integer		limit result
+	 * </pre>
 	 * @return array
 	 */
 	public function get($keys=array(),$options = array())

@@ -5,6 +5,8 @@
  * @author Jason Ball
  * @version 1.0
  * @copyright 08/21/2011
+ * @package beagleframework
+ * @subpackage classes
  *
  *
  */
@@ -18,7 +20,7 @@ class beagleResultEditHtmlClass extends beaglebase
 	
 	/**
 	 * This array is for the settings neede for the generic system
-	 * keys:
+	 * <pre>keys:
 	 * 	table = table the value goes into
 	 * 	field = field the value goes into
 	 * 	htmltype = What html type is the field supose to be, use either the key or name from $this->htmltypes	
@@ -26,6 +28,7 @@ class beagleResultEditHtmlClass extends beaglebase
 	 *	js = JS code if you want array [js action][code] if you put <?=$id;?> then the id will be passed [OPTIONAL]
 	 *	size = Size of text box [OPTIONAL]
 	 *  multiple = boolean for if you want your select item to be multiple or not [OPTIONAL]
+	 *  </pre>
 	 * @var array
 	 */
 	private $settings = array();

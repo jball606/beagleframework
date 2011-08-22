@@ -1,8 +1,11 @@
 <?
 /**
  * Tools used for list pulldowns
+ * 
  * @author Jason Ball
- * 11/25/2010
+ * @copyright 11/25/2010
+ * @package beagleframework
+ * @subpackage classes
  */
 class beagleListTools extends beaglebase
 {
@@ -120,7 +123,7 @@ class beagleListTools extends beaglebase
 	}
 	
 	/**
-	 * This function returns XML of field values for contacts matching the provided parameters.
+	 * This function returns html of field values for contacts matching the provided parameters.
 	 *
 	 * @param $key the column to be used as the unique value
 	 * @param $field the name column to be used in the display part of the list item

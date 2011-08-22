@@ -2,7 +2,8 @@
 /**
  * This Class is used to create the search query for a specific controller
  * @author Jason Ball
- *
+ * @package beagleframework
+ * @subpackage classes
  */
 class beagleSearchClass extends beaglebase
 {
@@ -185,7 +186,7 @@ class beagleSearchClass extends beaglebase
 	/**
 	 * Actual method that creates the search array and gets you all the data
 	 * @param array $in_args
-	 * @example in_args(
+	 * <pre> in_args = array (
 	 * first =>			0,			Begining of the search page
 	 * limit =>			20,			Number of results on the page
 	 * excel =>			FALSE,		Do you want this as an excel item.  Actually just returns the full SQL statement to be used by the excel clas
@@ -194,6 +195,7 @@ class beagleSearchClass extends beaglebase
 	 * key =>			array()		primary key of search exapmle :('id'=>false,'name'=>false,'sqlkey'=>false)
 	 * all =>			false,		return all records, skips first and limit
 	 * printsql =>		false,		for debugging, this will show you the exact SQL statement
+	 * ) </pre>
 	 */
 	protected function executSearch($in_args = array())
 	{
@@ -449,10 +451,12 @@ class beagleSearchClass extends beaglebase
 	 * @param array $info
 	 * @return array
 	 * @example Clauses
+	 * <pre>
 	 * !null = 	is not null and != ''
 	 * isnull = is null
 	 * null =	not null
-	 * !(item)	!= item 
+	 * !(item)	!= item
+	 * </pre> 
 	 */
 	private function getWhere($info)
 	{

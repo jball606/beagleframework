@@ -156,7 +156,7 @@ function cleanBackTrace()
 /**
  * Function to check if a variable is set and is numeric
  * @param unknown_type $val
- * @return boolian
+ * @return boolean
  * @author Jason Ball
  */
 function isSetNum(&$val)
@@ -221,7 +221,7 @@ function print_r2($array,$return = false)
 /**
  * Used to get core classes quickly
  * @param string $class
- * @return boolian
+ * @return boolean
  * @author Jason Ball
  * @copyright 2011-07-30
  */
@@ -386,7 +386,7 @@ function __autoload($orig_classname)
 /**
  * part of the __autoload magic function
  * @param string $file
- * @return boolian
+ * @return boolean
   */
 function includeIfExists($file)
 {
@@ -503,7 +503,7 @@ function getDateValue($array,$item)
  * part of the __autoload magic function
  * @param $path
  * @param $file
- * @return boolian
+ * @return boolean
  * @author Brad Dutton
  */
 function findFile($path,$file)
@@ -570,7 +570,7 @@ function restoreClass($var)
 /**
  * This function just checks to see if the date pass is a valid date
  * @param string $date
- * @return boolian
+ * @return boolean
  * @author Jason Ball
  * @copyright 2011-08-02
  */
@@ -589,9 +589,10 @@ function isValidPopDate(&$date)
 
 /**
  * will check an array if args are in place and if not it will add the default you add
- * @param $in_args
- * @param $defs
+ * @param array $in_args
+ * @param array $defs
  * @author Brad Dutton
+ * @return array 
  */
 function defaultArgs($in_args, $defs) 
 {

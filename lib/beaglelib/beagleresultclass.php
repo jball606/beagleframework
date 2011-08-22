@@ -1,4 +1,11 @@
 <?php
+/**
+ * This class is used to create the results you see on screen
+ * @author Jason Ball
+ * @package beagleframework
+ * @subpackage classes
+ * @copyright 08/21/2011
+ */
 abstract class beagleResultClass extends beagleNavigationClass
 {
 	protected $editclass = array(); 
@@ -42,11 +49,12 @@ abstract class beagleResultClass extends beagleNavigationClass
 	
 	/**
 	 * This is the function that creates the result list based on passed criteria
-	 * @param array $in_args
-	 * @example in_args (
+	 * @param array $in_args <br/>
+	 * <pre>
+	 * in_args  = array( 
 	 * first => 			false 		Start of result list
 	 * limit =>	 			false, 		How many per page
-	 * orderby =>			false,		Order field
+	 * orderby =>			false,		Order field 
 	 * orderdir	=>			false, 		Order Dir 1 (ASC) 2 (DESC)
 	 * page	=>	'',				
 	 * title =>				false, 		Title on header bar
@@ -65,7 +73,7 @@ abstract class beagleResultClass extends beagleNavigationClass
 	 * allowsort =>			true, 		Allow the user to sort a row
 	 * hiddenrows =>		array(),	array of columns of data in a result set that you have to have but don't want the user to see
 	 * edit =>				false,		This flag is for telling the system that it should try to use the edit results system, pass the row's primary key 	
-	 *  )
+	 *  ) </pre>
 	 *  
 	 *  @author Jason Ball
 	 */
