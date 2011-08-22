@@ -5,7 +5,7 @@
  * You must create a model class that extends off this that will pass the proper variables
  * @author Jason Ball
  * @package beagleframework
- * @subpackage classes
+ * 
  */
 class beagleDbClass
 {
@@ -227,19 +227,18 @@ class beagleDbClass
 	* but that is really outdated and something else will be needed.  I just want to try and make this 
 	* self containted.
 	* <pre>
-	* examples 
-		$val = array('name'=>array('type'=>'varchar',
-					'size'=>255,
-					'null'=>false),
-			 'contact_email'=>array('type'=>'email',
-									 'null'=>false),
-			  'state'=>array('type'=>'integer',
-							 'size'=>2),
-			  'country'=>array('type'=>'varchar',
-							   'size'=>2),
-			  'testdate'=>array('type'=>'date'));
-	</pre>
-
+	* examples
+	*  $val = array('name'=>array('type'=>'varchar',
+	*  					'size'=>255,
+	*  					'null'=>false),
+	*  			 'contact_email'=>array('type'=>'email',
+	*  									 'null'=>false),
+	*  			  'state'=>array('type'=>'integer',
+	*  							 'size'=>2),
+	*  			  'country'=>array('type'=>'varchar',
+	*							   'size'=>2),
+	*			  'testdate'=>array('type'=>'date'));
+	*	</pre>
 	* @author Jason Ball
 	* 	
 	*/

@@ -3,7 +3,7 @@
  * This class is used to create the results you see on screen
  * @author Jason Ball
  * @package beagleframework
- * @subpackage classes
+ * 
  * @copyright 08/21/2011
  */
 abstract class beagleResultClass extends beagleNavigationClass

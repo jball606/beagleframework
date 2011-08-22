@@ -3,7 +3,7 @@
  * This Class is used to create the search query for a specific controller
  * @author Jason Ball
  * @package beagleframework
- * @subpackage classes
+ * 
  */
 class beagleSearchClass extends beaglebase
 {
@@ -448,9 +448,10 @@ class beagleSearchClass extends beaglebase
 	
 	/**
 	 * Takes the where array and converts it into an array of properly executledable where staements
+	 * 
 	 * @param array $info
 	 * @return array
-	 * @example Clauses
+	 * 
 	 * <pre>
 	 * !null = 	is not null and != ''
 	 * isnull = is null

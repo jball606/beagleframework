@@ -1,4 +1,15 @@
 <?php
+/**
+ * This page is for the result search page
+ * 
+ * This Page deals with all the result page fixes, including sorting,
+ * records per page, and letter menu .  All projects will use this page if 
+ * they use the beagleResults.js file
+ * 
+ * @author Jason Ball
+ * @copyright 05/01/2011
+ * 
+ */
 $ajax_page="Y";
 
 include_once("config/systemsetup.php");

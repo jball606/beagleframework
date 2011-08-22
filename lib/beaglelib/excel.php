@@ -1,4 +1,8 @@
 <?
+/**
+ * @package beagleframework
+ * @subpackage helpers
+ */
 require_once 'Spreadsheet/Excel/Writer.php';
 //Reader Docs at http://sourceforge.net/project/downloading.php?group_id=99160&use_mirror=superb-west&filename=phpExcelReader.zip&6033788
 class excel

@@ -6,7 +6,7 @@
  * @version 1.0
  * @copyright 08/21/2011
  * @package beagleframework
- * @subpackage classes
+ * 
  *
  *
  */

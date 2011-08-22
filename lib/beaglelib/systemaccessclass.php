@@ -1,4 +1,10 @@
 <?php
+/**
+ * @package beagleframework
+ * @subpackage helpers
+ * @author jball
+ *
+ */
 class systemaccessclass extends beagledbclass
 {
 	protected $access_key = false;

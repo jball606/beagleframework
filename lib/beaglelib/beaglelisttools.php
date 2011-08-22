@@ -5,7 +5,7 @@
  * @author Jason Ball
  * @copyright 11/25/2010
  * @package beagleframework
- * @subpackage classes
+ * 
  */
 class beagleListTools extends beaglebase
 {
@@ -125,10 +125,10 @@ class beagleListTools extends beaglebase
 	/**
 	 * This function returns html of field values for contacts matching the provided parameters.
 	 *
-	 * @param $key the column to be used as the unique value
-	 * @param $field the name column to be used in the display part of the list item
-	 * @param $SQL the sql query to run to produce the list
-	 * @param $old
+	 * @param string $key the column to be used as the unique value
+	 * @param string $field the name column to be used in the display part of the list item
+	 * @param string $SQL the sql query to run to produce the list
+	 * @param string $old 
 	 * @param $default a default value to return
 	 * @param $output P returns html option tags around values, S returns just the selected value (plain text), B both, A for Array
 	 * @param $list list_id of values to fetch
