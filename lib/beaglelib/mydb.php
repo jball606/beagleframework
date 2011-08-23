@@ -82,7 +82,18 @@ class mydb
 		if($this->conn['dbname'] != false && $this->conn['user'] != false && $this->conn['password'] != false)
 		{
 			$this->dbconn = mysql_connect($this->conn['host'],$this->conn['user'],$this->conn['password'],true);
-			mysql_select_db($this->conn['dbname'],$this->dbconn);
+			if($this->dbconn == false)
+			{
+				print("Can not connect to server ");
+				exit;
+			}
+		
+			$check = mysql_select_db($this->conn['dbname'],$this->dbconn);
+			if($check == false)
+			{
+				print("Can't find database");
+				exit;
+			}
 				
 		}
 	}
@@ -297,7 +308,7 @@ class myresult
 	
 	public function fetchArray()
 	{
-		return pg_fetch_array($this->result);	
+		return mysql_fetch_array($this->result);	
 	}
 	
 	public function getAll()
