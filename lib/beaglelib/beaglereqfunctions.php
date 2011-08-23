@@ -194,7 +194,14 @@ function writeLog($item)
  */
 function printSQL($SQL)
 {
-	print(nl2br($SQL));
+	if(is_cli())
+	{
+		print(nl2br($SQL));
+	}
+	else 
+	{
+		print($SQL);
+	}
 }
 
 /**
