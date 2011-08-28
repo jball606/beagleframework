@@ -548,6 +548,45 @@ function findFile($path,$file)
 }
 
 /**
+ * This function is a short cut for breadcrumbclass::storeBCSession
+ * 
+ * I got tired of typing
+ * 
+ * @param string $name
+ * @param object $class
+ * @return void
+ * @author Jason Ball
+ * @copyright 08/28/2011
+ */
+function storePageClass($name,$class)
+{
+	if($name != "" && is_object($class))
+	{
+		breadcrumbclass::storeBCSession($name,$class);
+	}	
+}
+
+/**
+ * This function is a short cut for breadcrumbclass::restoreBCSession
+ * 
+ * I got tired of typing
+ * 
+ * @param string $name
+ * @param object $class
+ * @return void
+ * @author Jason Ball
+ * @copyright 08/28/2011
+ */
+function restorePageClass($name)
+{
+	if($name != "")
+	{
+		return breadcrumbclass::restoreBcSession($name);
+	}
+	return false;	
+}
+
+/**
  * This function will store a class in a session variable so it can be passed from page to page
  * @param string $var		array element name
  * @param object $class		Class Object
@@ -577,7 +616,7 @@ function restoreClass($var)
 /**
  * This function just checks to see if the date pass is a valid date
  * @param string $date
- * @return boolean
+ * @reWturn boolean
  * @author Jason Ball
  * @copyright 2011-08-02
  */

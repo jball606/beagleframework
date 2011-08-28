@@ -467,7 +467,11 @@ class beagleDbClass
 		}
 		
 		
-	
+		if(method_exists($this, 'dataLog'))
+		{
+			$this->dataLog(array(),$array,$action="add");
+		}
+		
 		if(count($fields)>0 && count($values) >0 && count($fields) == count($values))
 		{
 			$SQL = "insert into ".$this->table." (".implode(",",$fields).") values (".implode(",",$values).") ";
@@ -555,11 +559,19 @@ class beagleDbClass
 		
 		foreach($values as $k => $i)
 		{
-			if(trim($i) == "")
+			if(!is_array($i))
 			{
-				$values[$k] = null;
+				if(trim($i) == "")
+				{
+					$values[$k] = null;
+				}
 			}
 		
+		}
+		
+		if(method_exists($this, 'dataLog'))
+		{
+			$this->dataLog($keys,$values,$action="update");
 		}
 		
 		$this->db->update($this->table,$values,$keys,$printsql);
@@ -781,6 +793,11 @@ class beagleDbClass
 		
 		if(count($junk)>0)
 		{
+			if(method_exists($this, 'dataLog'))
+			{
+				$this->dataLog($keys,array(),'delete');
+			}
+		
 			$SQL = "delete from ".$this->table." where ".implode(" and \n ",$junk);
 			$this->db->query($SQL);
 			return true;
@@ -824,7 +841,14 @@ class beagleDbClass
 					{
 						if(is_array($j))
 						{
-							$tmp[] = $k." in ('".implode("','",$j)."')";
+							if(isset($j['database_field_name']))
+							{
+								$tmp[] = $k." = ".$j['database_field_name']." ";
+							}
+							else 
+							{
+								$tmp[] = $k." in ('".implode("','",$j)."')";
+							}
 						}
 						else if(strpos($j,"%")!==false)
 						{

@@ -13,7 +13,8 @@ class mydb
 	private $error = false;
 	private $conn = array();
 	const dbtype = "mysql";
-	
+	private $keywords = array('table'=>'table','action'=>'action','key'=>'key','archive'=>'archive');
+	 
 	public function __construct($in_args = array())
 	{
 		$args = $this->defaultArgs($in_args, array('host'=>'localhost',
@@ -201,7 +202,29 @@ class mydb
 		$tmp = array();
 		foreach($values as $k => $i)
 		{
-			$tmp[] = $k." = '".$this->escape($i)."'";
+			if(isset($this->keywords[strtolower(trim($k))]))
+			{
+				$k = $table.".".$k;
+			}
+			
+			if($i == null)
+			{
+				$tmp[] = $k." = null ";
+			}
+			else 
+			{
+				if(isPopArray($i))
+				{
+					if(isset($i['database_field_name']))
+					{
+						$tmp[] = $k." = ".$i['database_field_name']." ";
+					}
+				}
+				else 
+				{
+					$tmp[] = $k." = '".$this->escape($i)."'";
+				}
+			}
 		}
 		$SQL .= implode(",",$tmp);
 		
@@ -219,7 +242,15 @@ class mydb
 						$j[] = $this->escape($v);
 					}
 					
-					$tmp[] = " ".$k." in ('".implode("','",$j)."');";
+					if(isset($i['database_field_name']))
+					{
+						$tmp[] = $k." = ".$i['database_field_name']." ";
+					}
+					else 
+					{
+						$tmp[] = $k." in ('".implode("','",$j)."') ";
+					}
+					//$tmp[] = " ".$k." in ('".implode("','",$j)."');";
 				}
 				else 
 				{
