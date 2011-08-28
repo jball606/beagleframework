@@ -68,6 +68,7 @@ abstract class beagleResultClass extends beagleNavigationClass
 	 * showemptyresult =>	false,		If you want an empty result list instead of the (no records found) error message
 	 * showperpage =>		true,		Show the how many records on that result you want to see
 	 * showcount =>			true,		Show the total number of records from the search
+	 * all =>				false,		Show all records, reality is it show the first 1000000
 	 * extra =>				array(),
 	 * editaccess =>		false, 		Used to give you the popup to select who can and can not see your information
 	 * allowsort =>			true, 		Allow the user to sort a row
@@ -168,7 +169,7 @@ abstract class beagleResultClass extends beagleNavigationClass
 		}
 		elseif($args['all'] == true)
 		{
-			$args['limit'] = '100000';
+			$args['limit'] = '1000000';
 		}
 		
 		$result = $this->run_Search($args['first'],$args['limit']);
