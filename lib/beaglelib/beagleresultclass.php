@@ -96,6 +96,7 @@ abstract class beagleResultClass extends beagleNavigationClass
 											'showperpage'=>true,
 											'showcount'=>true,
 											'extra'=>array(),
+											'all'=>false,
 											'editaccess'=>false, //Used to give you the popup to select who can and can not see your information
 											'allowsort'=>true, //Allow the user to sort a row
 											'hiddenrows'=>array(),	
@@ -161,9 +162,13 @@ abstract class beagleResultClass extends beagleNavigationClass
 		{
 			$args['limit'] = $this->location['limit'];
 		}
-		elseif(!$args['limit']) 
+		elseif(!$args['limit'] && $args['all'] == false) 
 		{
 			$args['limit'] = 10;
+		}
+		elseif($args['all'] == true)
+		{
+			$args['limit'] = '100000';
 		}
 		
 		$result = $this->run_Search($args['first'],$args['limit']);

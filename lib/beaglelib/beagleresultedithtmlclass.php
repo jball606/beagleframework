@@ -104,7 +104,7 @@ class beagleResultEditHtmlClass extends beaglebase
 	 */
 	private function getTextArea($table,$field,$id,$value="")
 	{
-		$ta = '<textarea name="resultedit['.$table.']['.$field.']['.$id.']" id="'.$table.'_'.$field.'_'.$id.'">'.$value."</textarea>\n";
+		$ta = '<textarea name="resultedit['.$table.']['.$id.']['.$field.']" id="'.$table.'_'.$id.'_'.$field.'">'.$value."</textarea>\n";
 		return $ta;
 	}
 	
@@ -124,7 +124,7 @@ class beagleResultEditHtmlClass extends beaglebase
 	{
 		$l = new beagleListTools();
 		
-		$select = '<select name="resultedit['.$table.']['.$field.']['.$id.']';
+		$select = '<select name="resultedit['.$table.']['.$id.']['.$field.']';
 		if($multiple)
 		{
 			$select .= '[] multiple ';
@@ -134,7 +134,7 @@ class beagleResultEditHtmlClass extends beaglebase
 			$select .= ' size="'.$size.'" ';
 		}
 		
-		$select .= ' id="'.$table.'_'.$field.'_'.$id.'" >';
+		$select .= ' id="'.$table.'_'.$id.'_'.$field.'" >';
 		
 		$select .= $l->SelectedGenArray('id', 'value', $this->settings['listvalues'],$value);
 		
@@ -157,7 +157,7 @@ class beagleResultEditHtmlClass extends beaglebase
 	 */
 	private function getTextField($table,$field,$id,$value="",$size=false)
 	{
-		$text = '<input type="text" name="resultedit['.$table.']['.$field.']['.$id.']" id="'.$table."_".$field."_".$id.'" value="'.$value.'" ';
+		$text = '<input type="text" name="resultedit['.$table.']['.$id.']['.$field.']" id="'.$table."_".$id."_".$field.'" value="'.$value.'" ';
 		
 		if($size != false)
 		{
