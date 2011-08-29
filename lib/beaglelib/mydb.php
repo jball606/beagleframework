@@ -13,7 +13,7 @@ class mydb
 	private $error = false;
 	private $conn = array();
 	const dbtype = "mysql";
-	private $keywords = array('table'=>'table','action'=>'action','key'=>'key','archive'=>'archive');
+	private $keywords = array('table'=>'table','action'=>'action','key'=>'key','archive'=>'archive','default'=>'default');
 	 
 	public function __construct($in_args = array())
 	{
