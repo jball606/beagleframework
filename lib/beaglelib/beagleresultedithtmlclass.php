@@ -28,6 +28,7 @@ class beagleResultEditHtmlClass extends beaglebase
 	 *	js = JS code if you want array [js action][code] if you put <?=$id;?> then the id will be passed [OPTIONAL]
 	 *	size = Size of text box [OPTIONAL]
 	 *  multiple = boolean for if you want your select item to be multiple or not [OPTIONAL]
+	 *  check = value to check the box too [OPTIONAL]
 	 *  </pre>
 	 * @var array
 	 */
@@ -41,9 +42,24 @@ class beagleResultEditHtmlClass extends beaglebase
 											'listvalues'=>array(),
 											'js'=>array(),
 											'size'=>false,
-											'multiple'=>false
+											'multiple'=>false,
+											'check'=>false,
+											
 											));
 		$this->settings = $args;
+	}
+	
+	/**
+	 * Method to get HTML ID
+	 * 
+	 * @param void
+	 * @return integer
+	 * @author Jason Ball
+	 * @copyright 08/28/2011
+	 */
+	public function getHtmlType()
+	{
+		return $this->settings['htmltype'];
 	}
 	
 	public function showFormElement($id,$value="")
@@ -77,6 +93,10 @@ class beagleResultEditHtmlClass extends beaglebase
 				{
 					return $this->getTextArea($table,$field,$id,$value);
 				}
+				if($set == 3 || strtolower($set) == "checkbox")
+				{
+					return $this->getCheckBox($table, $field, $id,$value);
+				}
 				if($set == 4 || strtolower($set) == "select")
 				{
 					return $this->getSelectField($table, $field, $id,$value,$this->settings['multiple'],$this->settings['size']);	
@@ -90,6 +110,33 @@ class beagleResultEditHtmlClass extends beaglebase
 		}
 
 		return $this->prettyFail($this->error);
+	}
+	
+	/**
+	 * This method will return a textarea field for you
+	 * @param string $table
+	 * @param string $field
+	 * @param mixed (string/integer) $id
+	 * @param mixed $value
+	 * @return string
+	 * @author Jason Ball
+	 * @copyright 08/21/2011
+	 */
+	private function getCheckBox($table,$field,$id,$value="")
+	{
+		$string = '<input type="checkbox" name="resultedit['.$table.']['.$id.']['.$field.']" id="'.$table.'_'.$id.'_'.$field.'"';
+		
+		if(isset($this->settings['check']))
+		{
+			$ck = $this->settings['check'];
+			$string .= ' value="'.$ck.'" ';
+			if($value == $ck)
+			{
+				$string .= ' CHECKED ';
+			}
+		}
+		$string .= "/>";
+		return $string;
 	}
 	
 	/**

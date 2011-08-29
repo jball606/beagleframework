@@ -56,7 +56,7 @@ if(isset($result['edit_pencil']))
 						{
 							$es = $result['editsystem'][$key];
 							?>
-							<td>
+							<td <? if($es->getHTMLType() == 3) { print('class = "ac" '); } ?>>
 								<?=$es->showFormElement($i[$result['editkey']],$v);?>
 							</td>
 							<? 
