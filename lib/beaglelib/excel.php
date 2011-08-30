@@ -1,6 +1,6 @@
 <?
 /**
- * @package beagleframework
+ \* @package Beagleframework
  * @subpackage helpers
  */
 require_once 'Spreadsheet/Excel/Writer.php';

@@ -2,7 +2,7 @@
 /**
  * This Class is used to create the search query for a specific controller
  * @author Jason Ball
- * @package beagleframework
+ \* @package Beagleframework
  * 
  */
 class beagleSearchClass extends beaglebase

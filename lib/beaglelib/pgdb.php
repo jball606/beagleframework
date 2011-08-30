@@ -3,7 +3,7 @@
  * Like MDB2 but much leaner
  * @author Jason Ball
  * @copyright 03/01/2011
- * @package beagleframework
+ \* @package Beagleframework
  * @subpackage Database Classes
  *
  */

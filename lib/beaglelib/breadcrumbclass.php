@@ -10,7 +10,7 @@ include("beaglebase.php");
  * 
  * @author Jason Ball
  * @copyright 05/01/2011
- * @package beagleframework
+ \* @package Beagleframework
  * 
  *
  */

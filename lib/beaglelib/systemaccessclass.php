@@ -1,6 +1,6 @@
 <?php
 /**
- * @package beagleframework
+ \* @package Beagleframework
  * @subpackage helpers
  * @author jball
  *

@@ -2,7 +2,7 @@
 /**
  * The Beagle Base class is so you don't have to write the same methods over and over again
  * @author Jason Ball
- * @package beagleframework
+ \* @package Beagleframework
  * 
  */
 class beaglebase

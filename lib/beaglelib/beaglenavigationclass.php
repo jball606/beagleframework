@@ -2,7 +2,7 @@
 /**
  * This Class is for the result list navigation
  * @author Jason Ball
- * @package beagleframework
+ \* @package Beagleframework
  * 
  */
 class beagleNavigationClass extends beagleSearchClass

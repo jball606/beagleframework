@@ -2,7 +2,7 @@
 /**
  * This class is used to create the results you see on screen
  * @author Jason Ball
- * @package beagleframework
+ \* @package Beagleframework
  * 
  * @copyright 08/21/2011
  */

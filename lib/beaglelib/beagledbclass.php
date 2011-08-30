@@ -4,7 +4,7 @@
  * It is influnced by the Media Net Link db class but I don't use MBD2 so I had to do a complete re-write to use the base DB functons
  * You must create a model class that extends off this that will pass the proper variables
  * @author Jason Ball
- * @package beagleframework
+ \* @package Beagleframework
  * 
  */
 class beagleDbClass

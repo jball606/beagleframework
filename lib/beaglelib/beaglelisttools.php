@@ -4,7 +4,7 @@
  * 
  * @author Jason Ball
  * @copyright 11/25/2010
- * @package beagleframework
+ \* @package Beagleframework
  * 
  */
 class beagleListTools extends beaglebase
