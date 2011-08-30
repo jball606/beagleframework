@@ -7,7 +7,7 @@
  * of the classical sence of Object Oriented programming then the PHP implementation of it.
  * 
  * @author Jason Ball
- * @package Beagleframework Examples
+ * @package Beagleframework_Examples
  * @subpackage Classes
  *
  */

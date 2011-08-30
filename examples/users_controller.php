@@ -6,7 +6,7 @@
  * 
  * 
  * @author Jason Ball
- * @package Beagleframework Examples
+ * @package Beagleframework_Examples
  * @subpackage Controllers
  *
  */
