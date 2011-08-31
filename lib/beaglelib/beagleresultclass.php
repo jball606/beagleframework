@@ -72,7 +72,7 @@ abstract class beagleResultClass extends beagleNavigationClass
 	 * extra =>				array(),
 	 * editaccess =>		false, 		Used to give you the popup to select who can and can not see your information
 	 * allowsort =>			true, 		Allow the user to sort a row
-	 * hiddenrows =>		array(),	array of columns of data in a result set that you have to have but don't want the user to see
+	 * hiddencols =>		array(),	array of columns of data in a result set that you have to have but don't want the user to see
 	 * edit =>				false,		This flag is for telling the system that it should try to use the edit results system, pass the row's primary key 	
 	 *  ) </pre>
 	 *  
@@ -100,7 +100,7 @@ abstract class beagleResultClass extends beagleNavigationClass
 											'all'=>false,
 											'editaccess'=>false, //Used to give you the popup to select who can and can not see your information
 											'allowsort'=>true, //Allow the user to sort a row
-											'hiddenrows'=>array(),	
+											'hiddencols'=>array(),	
 											'edit'=>false, //this flag is for telling the system that it should try to use the edit results system
 										));
 											
@@ -132,10 +132,10 @@ abstract class beagleResultClass extends beagleNavigationClass
 			}
 		}
 		
-		if(isPopArray($args['hiddenrows']))
+		if(isPopArray($args['hiddencols']))
 		{
 			$tmp = array();
-			foreach($args['hiddenrows'] as $k => $i)
+			foreach($args['hiddencols'] as $k => $i)
 			{
 				if(is_numeric($k))
 				{
@@ -147,7 +147,7 @@ abstract class beagleResultClass extends beagleNavigationClass
 				}
 				
 			}
-			$args['hiddenrows'] = $tmp;
+			$args['hiddencols'] = $tmp;
 		}
 		
 		if($args['first'] === false && isset($this->location['first']))
@@ -179,7 +179,7 @@ abstract class beagleResultClass extends beagleNavigationClass
 		$result['limit'] = $args['limit'];
 		$result['editaccess'] = $args['editaccess'];
 		$result['allowsort'] = $args['allowsort'];
-		$result['hiddenrows'] = $args['hiddenrows'];
+		$result['hiddencols'] = $args['hiddencols'];
 		
 		$result['first'] = $args['first'];
 		$result['dates'] = $args['dates'];

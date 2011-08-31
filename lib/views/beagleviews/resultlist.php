@@ -50,7 +50,7 @@ if(isset($result['edit_pencil']))
 				
 			<? foreach($i as $key => $v)
 				{ 
-					if($key != "edit_pencil" && ($key != $result['editaccess']['field']) && !isset($result['hiddenrows'][$key]))
+					if($key != "edit_pencil" && ($key != $result['editaccess']['field']) && !isset($result['hiddencols'][$key]))
 					{
 						if(isPopArray($result['editsystem']) && isset($result['editsystem'][$key]))
 						{

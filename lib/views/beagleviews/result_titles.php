@@ -15,7 +15,7 @@
 			{
 				
 				$field = substr($k,strpos($k,".")+1,strlen($k));
-				if(strpos($i,$result['editaccess']['field']) === false && !isset($result['hiddenrows'][$field]))
+				if(strpos($i,$result['editaccess']['field']) === false && !isset($result['hiddencols'][$field]))
 				{
 					?>
 					<th id="<?=$k;?>" class="ac">
