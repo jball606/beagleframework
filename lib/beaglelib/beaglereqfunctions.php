@@ -38,7 +38,7 @@ function setGlobalVars()
 	{
 		$root = __CLI_ROOT__;
 		$getcwd = getcwd();
-		$_SERVER['SCRIPT_FILENAME'] = $getcwd."/".$root."/cli.php";
+		$_SERVER['SCRIPT_FILENAME'] = $getcwd."/cli.php";
 	}
 	else 
 	{
@@ -48,6 +48,7 @@ function setGlobalVars()
 	
 	if (preg_match('/^(.*)\/'.$root.'\//', $_SERVER['SCRIPT_FILENAME'], $m)) 
 	{
+		
 		define("__DOC_ROOT__", $m[1]."/".$root);
 		define("__SYSTEM_ROOT__",$m[1]);
 	}

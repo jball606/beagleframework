@@ -30,7 +30,12 @@ define("__CREATED__","created");
 define("__MODIFIED__","modified");
 
 error_reporting(-1);
-session_start();
+
+if(!isset($killsession))
+{
+	session_start();
+}
+
 include_once("beaglelib/beaglereqfunctions.php");
 include_once("beaglelib/breadcrumbclass.php");
 require_once("db_inc.inc");
