@@ -19,7 +19,7 @@ function goToBC(id)
 	if(!isNaN(id))
 	{
 		$.ajax({
-				url:"/ajax/global_ajax.php",
+				url:"/ajax/breadcrumb_ajax.php",
 				data:{id:'breadcrumb',bcid:id},
 				success:function(json)
 				{
