@@ -36,6 +36,3 @@ require_once("db_inc.inc");
 setGlobalVars();
 
 /* System specific code is below */
-include("generalfunctions.php");
-$user = false;
-$user = restoreClass('userclass');
