@@ -16,7 +16,8 @@
  *lib
  *	beaglelib (core)
  *	classes (user classes)
- *		model (db)
+ *	controllers (group classes)
+ *	model (db)
  *	views
  *
  */
