@@ -46,6 +46,19 @@ class mydb
 	}
 	
 	/**
+	 * Because mySQL has bad keyword management
+	 *
+	 * @param string $word
+	 * @return boolean
+	 */
+	public function checkKeyWord($word)
+	{
+		if(isset($this->keywords[strtolower(trim($word))]))
+		{
+			return true;
+		}
+	}
+	/**
 	 * This function is needed because each DB does this differently
 	 * @param integer $limit
 	 * @param integer $offset
@@ -202,7 +215,7 @@ class mydb
 		$tmp = array();
 		foreach($values as $k => $i)
 		{
-			if(isset($this->keywords[strtolower(trim($k))]))
+			if($this->checkKeyWord($k))
 			{
 				$k = $table.".".$k;
 			}

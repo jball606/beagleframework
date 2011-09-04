@@ -807,17 +807,53 @@ class beagleDbClass
 		
 	}
 	
-	
+	/**
+	 * This method tries to create the where clause based on your array
+	 * 
+	 * @param array $array
+	 * <pre>
+	 * or => array(fieldname => array(one, two)
+	 * database_field_name => element(name) so if you need to copy one field to another you can use this array system [database_field_name] = uesr
+	 * array[item] = array(value, value) use this for "in" feature
+	 * </pre>
+	 * @return array
+	 */
 	private function getWhere($array=array())
 	{
 		$tmp = array();
 		foreach($array as $k => $i)
 		{
-			if(!is_array($i) && trim(strtolower($i)) == "null")
+			if($this->db->checkKeyWord($k))
+			{
+				$k = $this->table.".".$k;
+			}
+			
+			if($k == 'or')
+			{
+				$otmp = array();
+				foreach($i as $fieldname => $v)
+				{
+					foreach($v as $line)
+					{
+						$otmp[] = $this->getWhere(array($fieldname=>$line));
+					}
+				}	
+				$oftmp = array();
+				foreach($otmp as $ori)
+				{
+					foreach($ori as $j)
+					{
+						$oftmp[] = $j;
+					}
+				}
+				
+				$tmp[] = "(".implode(" or ",$oftmp).")";
+			}
+			elseif(!is_array($i) && trim(strtolower($i)) == "null")
 			{
 				$tmp[] = $k." is null";
 			}
-			if(!is_array($i) && trim(strtolower($i)) == "is not null")
+			elseif(!is_array($i) && trim(strtolower($i)) == "is not null")
 			{
 				$tmp[] = $k." is not null";
 			}

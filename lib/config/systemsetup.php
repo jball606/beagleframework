@@ -23,6 +23,7 @@
  
 
 define("__WEB_ROOT__",'htdocs');
+define("__CLI_ROOT__",'bin');
 define("__USERKEY__","user_id");
 define("__CREATED__","created");
 define("__MODIFIED__","modified");

@@ -12,6 +12,7 @@ class pgdb
 	private $dbconn = false;
 	private $error = false;
 	private $conn = array();
+	private $keywords = array('table'=>'table','action'=>'action','key'=>'key','default'=>'default');
 	const dbtype = "pgsql";
 	 
 	public function __construct($in_args = array())
@@ -42,6 +43,20 @@ class pgdb
 	public function __wakeup()
 	{
 		$this->loadDB();
+	}
+	
+/**
+	 * Because mySQL has bad keyword management
+	 *
+	 * @param string $word
+	 * @return boolean
+	 */
+	public function checkKeyWord($word)
+	{
+		if(isset($this->keywords[strtolower(trim($word))]))
+		{
+			return true;
+		}
 	}
 	
 	/**

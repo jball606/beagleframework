@@ -34,16 +34,26 @@ function getView($sheet,$system="",$relitive=false,$clienttest="")
  */
 function setGlobalVars()
 {
+	if(is_cli())
+	{
+		$root = __CLI_ROOT__;
+		$getcwd = getcwd();
+		$_SERVER['SCRIPT_FILENAME'] = $getcwd."/".$root."/cli.php";
+	}
+	else 
+	{
+		$root = __WEB_ROOT__;
+	}
 	if(defined('__DOC_ROOT__')) { return false; }
 	
-	if (preg_match('/^(.*)\/'.__WEB_ROOT__.'\//', $_SERVER['SCRIPT_FILENAME'], $m)) 
+	if (preg_match('/^(.*)\/'.$root.'\//', $_SERVER['SCRIPT_FILENAME'], $m)) 
 	{
-		define("__DOC_ROOT__", $m[1]."/".__WEB_ROOT__);
+		define("__DOC_ROOT__", $m[1]."/".$root);
 		define("__SYSTEM_ROOT__",$m[1]);
 	}
-	elseif(preg_match('/^(.*)\/bin/', $_SERVER['PHP_SELF'], $m))
+	elseif(preg_match('/^(.*)\/'.$root.'/', $_SERVER['PHP_SELF'], $m))
 	{
-		define("__DOC_ROOT__", $m[1]."/".__WEB_ROOT__);
+		define("__DOC_ROOT__", $m[1]."/".$root);
 		define("__SYSTEM_ROOT__",$m[1]);
 	}
 	else
@@ -173,7 +183,7 @@ function isSetNum(&$val)
 }
 
 /**
- * Nice logging feature to debug stuff with
+  * Nice logging feature to debug stuff with.  The log is at /tmp/beagle.log
   * @param anything $item
   * @return void
   * @author Jason Ball
@@ -182,7 +192,7 @@ function isSetNum(&$val)
 function writeLog($item)
 {
 	$h = fopen("/tmp/beagle.log","a");
-	fwrite($h,print_r($item,true));
+	fwrite($h,print_r($item,true)."\n");
 	fclose($h);
 }
 
@@ -690,4 +700,22 @@ function removeEmptyElements($array,$type="")
 		return $tmp;
 	}
 	
+}
+/**
+ * Quick way to show money format
+ * @param float number
+ * @param integer round
+ * @return string
+ * @author Jason Ball
+ */
+function moneyFormat($number,$round = 2)
+{
+	
+	$num =  money_format('%i', round($number,$round));
+	
+	if (round($number,$round) == 0)
+	{
+		$num = money_format('%i',0);
+	}
+	return $num;	
 }
