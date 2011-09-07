@@ -720,3 +720,137 @@ function moneyFormat($number,$round = 2)
 	}
 	return $num;	
 }
+
+/**
+ * This method will convert standard objects into an array
+ * 
+ * @param object $obj
+ * @return array
+ */
+function objectToArray($obj) 
+{
+	$arr = array();
+		
+	if(is_object($obj))
+	{
+		foreach (get_object_vars($obj) as $k => $v)
+		{
+			if(is_object($v))
+			{
+				$tmp = objectToArray($v);
+				if(is_array($tmp))
+				{
+					$arr[$k] = objectToArray($tmp);
+				}
+				else
+				{
+					$arr[$k] = $tmp;
+				}
+			}
+			else if(is_array($v))
+			{
+				$tmp = array();
+				foreach($v as $m => $d)
+				{
+					if(is_object($d))
+					{
+						$tmp[$m] = objectToArray($d);
+					}
+					else
+					{
+						$tmp[$m] = $d;
+					}
+				}
+				$arr[$k] = $tmp;
+			}
+			else
+			{
+				$arr[$k] = $v;
+			}
+		} 
+		return $arr;
+	}
+	else if(is_array($obj))
+	{
+		$tmp = array();
+		foreach($obj as $m => $d)
+		{
+			if(is_object($d))
+			{
+				$tmp[$m] = objectToArray($d);
+			}
+			else
+			{
+				$tmp[$m] = $d;
+			}
+		}
+		return $tmp;
+	}
+	else
+	{
+		return $obj;
+	}
+		
+}
+
+/**
+ * recursive function for creating a XML string from an array
+ * @param array $array
+ * @return xml string
+ * @author Jason Ball
+ */
+function arrayToNode($array)
+{
+	$xml = "";
+		
+	foreach($array as $k => $i)
+	{
+		if(is_array($i))
+		{
+			if(is_numeric($k))
+			{
+				$xml .= "<Node>\n";
+			}
+			else
+			{
+				$xml .= "<".$k.">\n";
+			}
+				
+			$xml .= arrayToNode($i);
+				
+			if(is_numeric($k))
+			{
+				$xml .= "</Node>\n";
+			}
+			else
+			{
+				$xml .= "</".$k.">\n";
+			}
+			
+		}
+		else
+		{
+			if(is_numeric($k))
+			{
+				$xml .= "<Node>";
+			}
+			else 
+			{
+				$xml .= "<".$k.">";
+			}
+			
+			$xml .= "<![CDATA[".$i."]]>";
+			
+			if(is_numeric($k))
+			{
+				$xml .= "</Node>";
+			}
+			else 
+			{
+				$xml .= "</".$k.">";
+			}
+			
+		}
+	}
+	return $xml;
+}
