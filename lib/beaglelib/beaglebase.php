@@ -201,7 +201,15 @@ class beaglebase
 		
 	}
 	
-	
+	/**
+	 * Simple method to see if an error already exist.
+	 * @param void
+	 * @return mixed (false or string)
+	 */
+	public function getError()
+	{
+		return $this->error;
+	}
 	
 	
 	
