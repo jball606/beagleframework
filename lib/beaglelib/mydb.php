@@ -14,6 +14,7 @@ class mydb
 	private $conn = array();
 	const dbtype = "mysql";
 	private $keywords = array('table'=>'table','action'=>'action','key'=>'key','archive'=>'archive','default'=>'default');
+	private $transaction = false;
 	 
 	public function __construct($in_args = array())
 	{
@@ -113,6 +114,36 @@ class mydb
 	}
 	
 	/**
+	 * Used for starting transactions
+	 * 
+	 */
+	public function begin()
+	{
+		$this->query("BEGIN");
+		$this->transaction = true;	
+	}
+	
+	/**
+	 * Used for rolling back transactions
+	 * 
+	 */
+	public function rollback()
+	{
+		$this->query("ROLLBACK");
+		$this->transaction = false;	
+	}
+	
+	/**
+	 * Used to commit transactions
+	 * 
+	 */
+	public function commit()
+	{
+		$this->query("COMMIT");
+		$this->transaction = false;
+	}
+	
+	/**
 	 * Run a basic query and then return a result class if working or false if not
 	 * @param string $SQL
 	 * @return result class
@@ -130,6 +161,12 @@ class mydb
 			{
 				return true;
 			}
+			
+			if($this->transaction)
+			{
+				$this->rollback();
+			}
+			
 			print("Invalid SQL Statement <br/>\n");
 			printSQL($SQL."<BR>");
 			print $this->cleanBackTrace();
