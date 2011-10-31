@@ -144,6 +144,16 @@ class mydb
 	}
 	
 	/**
+	 * Query Wrapper
+	 * 
+	 * @param string $SQL
+	 */
+	public function execute($SQL="")
+	{
+		return $this->query($SQL);
+	}
+	
+	/**
 	 * Run a basic query and then return a result class if working or false if not
 	 * @param string $SQL
 	 * @return result class
