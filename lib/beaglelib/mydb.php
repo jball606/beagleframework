@@ -402,6 +402,10 @@ class myresult
 		return mysql_fetch_array($this->result);	
 	}
 	
+	/**
+	 * Return all records in the form of an associative array
+	 * 
+	 */
 	public function getAll()
 	{
 		$tmp = array();	
@@ -409,6 +413,7 @@ class myresult
 		{
 			$tmp[] = $row;
 		}
+		return $tmp;
 	}
 
 	public function numRows()
