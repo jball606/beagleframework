@@ -52,6 +52,12 @@ function setGlobalVars()
 		define("__DOC_ROOT__", $m[1]."/".$root);
 		define("__SYSTEM_ROOT__",$m[1]);
 	}
+	elseif (defined('__SYSTEM_ROOT__')) 
+	{
+		
+		define("__DOC_ROOT__", __SYSTEM_ROOT__."/htdocs");
+		//define("__SYSTEM_ROOT__",$m[1]);
+	}
 	elseif(preg_match('/^(.*)\/'.$root.'/', $_SERVER['PHP_SELF'], $m))
 	{
 		define("__DOC_ROOT__", $m[1]."/".$root);
@@ -190,9 +196,21 @@ function isSetNum(&$val)
   * @author Jason Ball
   * @copyright 2011-07-19
  */
-function writeLog($item)
+function writeLog($item,$location="")
 {
-	$h = fopen("/tmp/beagle.log","a");
+	if(defined("__LOG_LOCATION__"))
+	{
+		$h = fopen(__LOG_LOCATION__."/beagle.log","a");
+	}
+	else if($location == "")
+	{
+		$h = fopen("/tmp/beagle.log","a");
+	}
+	else
+	{
+		$h = fopen($location."\beagle.log","a");
+	}
+	
 	fwrite($h,print_r($item,true)."\n");
 	fclose($h);
 }
@@ -369,7 +387,6 @@ function __autoload($orig_classname)
 
 	$found = findFile($root,$classname.'.php');
 	
-	
 	if($found == true)
 	{
 		return $found;
@@ -526,7 +543,14 @@ function getDateValue($array,$item)
  */
 function findFile($path,$file)
 {
-	$files  = scandir($path);
+	if(is_readable($path))
+	{
+		$files  = scandir($path);
+	}
+	else
+	{
+		return false; // if folder is not readable return false.
+	}
 	
 	if(includeIfExists($path.'/'.$file))
 	{
