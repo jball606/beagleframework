@@ -107,6 +107,7 @@ class mydb
 			if($check == false)
 			{
 				print("Can't find database");
+				print("<BR>".mysql_error());
 				exit;
 			}
 				
