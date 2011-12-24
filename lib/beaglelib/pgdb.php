@@ -103,7 +103,12 @@ class pgdb
 			}
 			
 			
-			$this->dbconn = pg_connect($string);	
+			$this->dbconn = pg_connect($string);
+			if($this->dbconn == false)
+			{
+				print("Can not connect to server");
+				exit;
+			}	
 		}
 	}
 	
@@ -279,6 +284,10 @@ class pgresult
 		return pg_fetch_array($this->result);	
 	}
 	
+	/**
+	 * Return all record in the form of an assocciative array
+	 * 
+	 */
 	public function getAll()
 	{
 		$tmp = array();	
@@ -286,6 +295,8 @@ class pgresult
 		{
 			$tmp[] = $row;
 		}
+		
+		return $tmp;
 	}
 
 	public function numRows()
