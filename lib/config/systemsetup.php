@@ -28,7 +28,7 @@ define("__CLI_ROOT__",'bin');
 define("__USERKEY__","user_id");
 define("__CREATED__","created");
 define("__MODIFIED__","modified");
-
+//defined("__LOG_LOCATION__","location for beagle log /tmp for default");
 error_reporting(-1);
 
 if(!isset($killsession))
