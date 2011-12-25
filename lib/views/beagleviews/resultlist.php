@@ -93,7 +93,7 @@ if(isset($result['edit_pencil']))
 					{ 
 						?>
 						<td class="ac">
-							<div class="link edit" onclick="<?=$result['lib'];?>.openLink('<?=$key?>','<?=implode("','",$v['params']);?>'); return false;"></img>
+							<div class="link edit" onclick="<?=$result['lib'];?>.openLink('<?=$key?>','<?=implode("','",$v['params']);?>'); return false;"></div>
 						</td>
 				<? 		
 					}
@@ -106,11 +106,11 @@ if(isset($result['edit_pencil']))
 					<? 
 						if($i[$result['editaccess']['field']] != "")
 						{
-							?><div class="link lock" onclick="<?=$result['lib'];?>.accessFunction(<?= $result['orgdata'][$row][$result['editaccess']['key']];?>); return false;"/><? 
+							?><div class="link lock" onclick="<?=$result['lib'];?>.accessFunction(<?= $result['orgdata'][$row][$result['editaccess']['key']];?>); return false;"></div><? 
 						}
 						else 
 						{
-							?><div class="link unlock" onclick="<?=$result['lib'];?>.accessFunction(<?= $result['orgdata'][$row][$result['editaccess']['key']];?>); return false;"/><? 
+							?><div class="link unlock" onclick="<?=$result['lib'];?>.accessFunction(<?= $result['orgdata'][$row][$result['editaccess']['key']];?>); return false;"></div><? 
 						}	
 						
 					?>			
