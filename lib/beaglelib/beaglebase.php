@@ -143,12 +143,16 @@ class beaglebase
 	 */
 	public function loadSystemDB($db='')
 	{ 
-	
+		$db = "";
 		if(!$this->db && $db == '')
 		{
+			
 			if (!$db || !is_resource($db))
 			{
-				$db = $GLOBALS['DB'];
+				if(is_resource($GLOBALS['DB']))
+				{
+					$db = $GLOBALS['DB'];
+				}
 					
 			}
 			$this->db = $db;
