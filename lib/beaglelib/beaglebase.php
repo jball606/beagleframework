@@ -149,7 +149,7 @@ class beaglebase
 			
 			if (!$db || !is_resource($db))
 			{
-				if(is_resource($GLOBALS['DB']))
+				if(isset($GLOBALS['DB']) && is_resource($GLOBALS['DB']))
 				{
 					$db = $GLOBALS['DB'];
 				}
