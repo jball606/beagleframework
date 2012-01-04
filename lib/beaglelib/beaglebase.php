@@ -146,10 +146,9 @@ class beaglebase
 		$db = "";
 		if(!$this->db && $db == '')
 		{
-			
 			if (!$db || !is_resource($db))
 			{
-				if(isset($GLOBALS['DB']) && is_resource($GLOBALS['DB']))
+				if(isset($GLOBALS['DB']))
 				{
 					$db = $GLOBALS['DB'];
 				}
