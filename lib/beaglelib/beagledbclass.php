@@ -55,6 +55,11 @@ class beagleDbClass
 	 */
 	protected function loadDB($db="")
 	{
+		if($this->table == false)
+		{
+			$this->table = get_called_class();
+		}
+		
 		if($this->db == false)
 		{
 			if(is_resource($db))
