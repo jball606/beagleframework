@@ -421,6 +421,41 @@ class beagleDbClass
         }
     }
     
+    /**
+     * Get elements that are in the table 
+     * 
+     * @param array $array
+     * @return mixed (array, false)
+     * @author Jason Ball
+     */
+    public function getTableOnlyElements($array=array())
+    {
+    	$this->loadDb();
+    	
+    	if(isPopArray($array))
+    	{
+    		$SQL = "Select * from ".$this->table." limit 1";
+    		$rows = $this->db->query($SQL)->getColumnNames();
+    		
+    		$tmp = array();
+    		foreach($rows as $i)
+    		{
+    			if(isset($array[$i]))
+    			{
+    				if(is_array($array[$i]))
+    				{
+    					$array[$i] = implode(",",$array[$i]);
+    				}
+    				
+    				$tmp[$i] = $array[$i];
+    			}
+    		}
+    		
+    		return $tmp;
+    	}
+    	
+    	return false;
+    }
 	
 	/**
 	 * Add Data to DB
