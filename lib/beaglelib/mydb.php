@@ -417,6 +417,22 @@ class myresult
 		return $tmp;
 	}
 
+	/**
+	 * If you need field names, then you do this
+	 * @return array 
+	 * @author Jason Ball
+	 */
+	public function getColumnNames()
+	{
+		$x = mysql_num_fields($this->result);
+		$tmp = array();
+		for($a=0;$a<$x;$a++)
+		{
+			$tmp[] = mysql_field_name($this->result,$a);
+		}
+		return $tmp;
+	}
+	
 	public function numRows()
 	{
 		return $count = mysql_num_rows($this->result);

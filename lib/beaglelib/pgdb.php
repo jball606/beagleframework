@@ -103,12 +103,7 @@ class pgdb
 			}
 			
 			
-			$this->dbconn = pg_connect($string);
-			if($this->dbconn == false)
-			{
-				print("Can not connect to server");
-				exit;
-			}	
+			$this->dbconn = pg_connect($string);	
 		}
 	}
 	
@@ -284,10 +279,6 @@ class pgresult
 		return pg_fetch_array($this->result);	
 	}
 	
-	/**
-	 * Return all record in the form of an assocciative array
-	 * 
-	 */
 	public function getAll()
 	{
 		$tmp = array();	
@@ -299,6 +290,21 @@ class pgresult
 		return $tmp;
 	}
 
+/**
+	 * If you need field names, then you do this
+	 * @return array 
+	 * @author Jason Ball
+	 */
+	public function getColumnNames()
+	{
+		$x = pg_num_fields($this->result);
+		$tmp = array();
+		for($a=0;$a<$x;$a++)
+		{
+			$tmp[] = pg_field_name($this->result,$a);
+		}
+		return $tmp;
+	}
 	public function numRows()
 	{
 		return $count = pg_num_rows($this->result);
