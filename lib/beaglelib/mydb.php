@@ -181,6 +181,9 @@ class mydb
 			print("Invalid SQL Statement <br/>\n");
 			printSQL($SQL."<BR>");
 			print $this->cleanBackTrace();
+			
+			writeLog($SQL);
+			writeLog(br2nl($this->cleanBackTrace()));
 			exit;
 		}
 	}
@@ -325,6 +328,7 @@ class mydb
 		{
 			printSQL($SQL);
 		}
+	
 		mysql_query($SQL,$this->dbconn);
 			
 	}

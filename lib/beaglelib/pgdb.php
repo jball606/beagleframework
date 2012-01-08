@@ -124,6 +124,9 @@ class pgdb
 			print("Invalid SQL Statement \n");
 			printSQL($SQL."<BR/>");
 			print $this->cleanBackTrace();
+			
+			writeLog($SQL);
+			writeLog(br2nl($this->cleanBackTrace()));
 			exit;
 		}
 	}
