@@ -461,6 +461,18 @@ class beagleDbClass
     	return false;
     }
 	
+    /**
+     * Get all the column names of a table.  Good for blank arrays
+     * @return Array
+     * @author Jason Ball
+     */
+    public function getTableColumnNames()
+    {
+    	$this->loadDB();
+    	$SQL = "Select * from ".$this->table." limit 1";
+    	return $this->db->query($SQL)->getColumnNames();	
+    }
+    
 	/**
 	 * Add Data to DB
 	 * @param array $array (data)
