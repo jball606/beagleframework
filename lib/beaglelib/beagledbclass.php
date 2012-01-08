@@ -299,6 +299,10 @@ class beagleDbClass
 				{
 					if($i['type'] == "integer" || $i['type'] == 'float' || $i['type'] == "numeric")
 					{
+						if(trim($fields[$k]) == "")
+						{
+							$fields[$k] = $i['default'];
+						}
 						if(!is_numeric($fields[$k]))
 						{
 							$this->error = $k." is a numeric field, you passed invalid data";
@@ -476,9 +480,22 @@ class beagleDbClass
 		
 			if(!$this->validate($array,'add'))
 			{
+				writeLog(print_r($this->error,true));
 				return false;
 			}
 
+			//Take care of defaults
+			foreach($array as $k => $i)
+			{
+				if(trim($i) == "")
+				{
+					if(isset($this->valid_fields[$k]['default']))
+					{
+						$array[$k] = $this->valid_fields[$k]['default'];
+					}
+					
+				}
+			}
 			//Setup Auditing fields
 			foreach($this->auditfields as $k => $i)
 			{
@@ -627,13 +644,13 @@ class beagleDbClass
 	 */
 	public function addOrUpdate($keys,$values)
 	{
-		if(!is_array($keys) || !is_array($keys))
+		if(!is_array($values))
 		{
 			return false;
 		}
 		
 		$test = $this->get($keys);
-		
+	
 		if($test === false)
 		{
 			return $this->add($values);
@@ -749,7 +766,7 @@ class beagleDbClass
 			printSQL($SQL);
 			print("<BR/>");
 		}
-		
+	
 		$result = $this->db->query($SQL);
 		
 		if(!is_array($keys))
