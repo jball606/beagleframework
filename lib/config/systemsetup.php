@@ -31,14 +31,17 @@ define("__MODIFIED__","modified");
 //defined("__LOG_LOCATION__","location for beagle log /tmp for default");
 error_reporting(-1);
 
-if(!isset($killsession))
-{
-	session_start();
-}
-
 include_once("beaglelib/beaglereqfunctions.php");
 include_once("beaglelib/breadcrumbclass.php");
 require_once("db_inc.inc");
+
+if(!isset($killsession))
+{
+	//If you want your sessions in a database, uncomment this line and create the table that is in the class file
+//	new beagledbsessions();
+	session_start();
+}
+
 setGlobalVars();
 
 /* System specific code is below */

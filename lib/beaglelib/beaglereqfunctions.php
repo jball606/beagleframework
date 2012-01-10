@@ -333,7 +333,11 @@ function beagleClasses($class)
 			include_once $root."beagleresultedithtmlclass.php";
 			return true;
 		}
-		
+		case "beagledbsessions":
+		{
+			include_once $root."beagledbsessions.php";
+			return true;		
+		}
 	}
 }
 
