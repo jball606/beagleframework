@@ -55,7 +55,7 @@ class beagledbsessions extends beaglebase
     {
     	$SQL = "SELECT data
 				FROM sessions
-				WHERE id = '".$this->db->escape('$id')."'";
+				WHERE id = '".$this->db->escape($id)."'";
 
     	
     	$record = $this->db->getOne($SQL);
