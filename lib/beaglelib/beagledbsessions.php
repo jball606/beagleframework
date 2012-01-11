@@ -28,6 +28,22 @@ class beagledbsessions extends beaglebase
     		return false;
     	}
     	
+    	$this->loadSystemDB();
+    	
+    	//Make sure the table exist and if not, create it
+    	$resource = $this->db->getOne("show tables like 'sessions'");
+		
+		if($resource == "")
+		{
+			$SQL = " CREATE TABLE sessions (
+					    id varchar(32) NOT NULL,
+					    access int(10) unsigned,
+					    data text,
+					    PRIMARY KEY (id)
+					    );";
+			$this->db->query($SQL);
+		}
+		
         session_set_save_handler(
             					array($this, "open"),
             					array($this, "close"),
@@ -38,7 +54,7 @@ class beagledbsessions extends beaglebase
         						);
 
     	
-		$this->loadSystemDB();
+		
     }
 
     public function open() 
@@ -57,7 +73,6 @@ class beagledbsessions extends beaglebase
 				FROM sessions
 				WHERE id = '".$this->db->escape($id)."'";
 
-    	
     	$record = $this->db->getOne($SQL);
 		return $record;
 	
