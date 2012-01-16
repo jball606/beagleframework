@@ -177,7 +177,23 @@ class beaglebase
 		{
 			return false;
 		}
-		return '<ul class="erroralert"><li>'.$value.'</li></ul>';
+		
+		$tmp = '<ul class="erroralert">';
+		if(isPopArray($value))
+		{
+			foreach($value as $i)
+			{
+				$tmp .= '<li>'.$i."</li>";
+			}
+		}
+		else 
+		{
+			$tmp .= '<li>'.$value.'</li>';
+		}
+		$tmp .= '</ul>';
+		
+		return $tmp;
+		//return '<ul class="erroralert"><li>'.$value.'</li></ul>';
 		
 	}
 	
