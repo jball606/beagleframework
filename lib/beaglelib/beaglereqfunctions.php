@@ -180,7 +180,7 @@ function isSetNum(&$val)
 {
 	if(isset($val))
 	{	
-		if(is_numeric($val))
+		if(is_numeric($val) && $val !== false)
 		{
 			return true;
 		}
