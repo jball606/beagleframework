@@ -781,11 +781,11 @@ class beagleDbClass
 	
 		$result = $this->db->query($SQL);
 		
-		if(!is_array($keys))
-		{
-			$row = $result->fetchRow();
-			return $row;
-		}
+//		if(!is_array($keys))
+//		{
+//			$row = $result->fetchRow();
+//			return $row;
+//		}
 		
 		$final = array();
 		while($row = $result->fetchRow())
