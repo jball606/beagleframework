@@ -508,6 +508,14 @@ class beagleDbClass
 					
 				}
 			}
+			
+			$array = $this->getTableOnlyElements($array);
+
+			if($array == false)
+			{
+				return false;
+			}
+			
 			//Setup Auditing fields
 			foreach($this->auditfields as $k => $i)
 			{
@@ -584,6 +592,15 @@ class beagleDbClass
 			print "Invalid update Values <br/>";
 			print $this->cleanBackTrace();
 			exit;
+			return false;
+		}
+		
+		
+		$keys = $this->getTableOnlyElements($keys);
+		$values = $this->getTableOnlyElements($values);
+		
+		if($keys == false || $values == false)
+		{
 			return false;
 		}
 		
