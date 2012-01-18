@@ -543,31 +543,8 @@ class beagleDbClass
 		
 		if(count($fields)>0 && count($values) >0 && count($fields) == count($values))
 		{
-			$SQL = "insert into ".$this->table." (".implode(",",$fields).") values (".implode(",",$values).") ";
-			if($this->pkey !== false && $this->db->getDbType() == "pgsql")
-			{
-				$SQL .= $this->db->getInsertId($this->pkey);
-			}
 			
-			$result = $this->db->query($SQL);
-			
-			//Postgres version
-			if($this->pkey !== false)
-			{
-				if($this->db->getDbType() == "pgsql")
-				{
-					$tmp = $result->fetchArray();
-					if(isset($tmp[0]))
-					{
-						return $tmp[0];
-					}
-				}
-				else
-				{
-					return $this->db->getInsertId();
-				}
-				
-			}
+			return $this->db->add($this->table, $fields,$values,$this->pkey);
 			
 			//MySQL version
 			

@@ -260,6 +260,39 @@ class mydb
 		return $tmp;
 	}
 	
+	/**
+	 * 
+	 * Use this method to add records to a table, 
+	 * @param string $table
+	 * @param array $fields
+	 * @param array $values
+	 * @param boolean $has_pkey
+	 * @return integer / void
+	 * @author Jason Ball
+	 */
+	public function add($table,$fields,$values,$has_pkey=false)
+	{
+		foreach ($fields as $k => $i)
+		{
+			if($this->checkKeyWord($i))
+			{
+				$fields[$k] = $table.".".$i;
+			}	
+			
+		}
+		
+		$SQL = "insert into ".$table." (".implode(",",$fields).") values (".implode(",",$values).") ";	
+		
+		$result = $this->query($SQL);
+		
+		if($has_pkey == true)
+		{
+			return $this->getInsertId();
+		}
+		
+		return true;
+	}
+	
 	public function update($table,$values,$keys,$printsql=false)
 	{
 		$SQL = " update ".$table." set ";

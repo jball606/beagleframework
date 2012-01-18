@@ -203,6 +203,43 @@ class pgdb
 		return " !~'[A-Z]'  ";
 	}
 	
+	/**
+	 * 
+	 * Use this method to add records to a table, 
+	 * @param string $table
+	 * @param array $fields
+	 * @param array $values
+	 * @param string/boolen $has_pkey
+	 * @return integer / void
+	 * @author Jason Ball
+	 */
+	public function add($table,$fields,$values,$has_pkey=false)
+	{
+		foreach ($fields as $k => $i)
+		{
+			if($this->checkKeyWord($k))
+			{
+				$fields[$k] = $table.".".$i;
+			}	
+			
+		}
+		
+		$SQL = "insert into ".$table." (".implode(",",$fields).") values (".implode(",",$values).") ";	
+		if($has_pkey !== false)
+		{
+			$SQL .= $this->getInsertId($has_pkey);
+		}
+		
+		$result = $this->query($SQL);
+		$tmp = $result->fetchArray();
+		if(isset($tmp[0]))
+		{
+			return $tmp[0];
+		}
+		
+		return true;
+	}
+	
 	public function update($table,$values,$keys)
 	{
 		pg_update($this->dbconn,$table,$values,$keys);
