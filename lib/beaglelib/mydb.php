@@ -247,9 +247,9 @@ class mydb
 		
 		if($SQL != "")
 		{
+			$result = $this->query($SQL);
 			
-			$result = mysql_query($SQL,$this->dbconn);
-			while($row = mysql_fetch_assoc($result))
+			while($row = $result->fetchRow())
 			{
 				$tmp[] = $row;
 			}

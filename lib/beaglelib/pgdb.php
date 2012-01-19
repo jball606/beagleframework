@@ -183,8 +183,9 @@ class pgdb
 		if($SQL != "")
 		{
 			
-			$result = pg_query($this->dbconn,$SQL);
-			while($row = pg_fetch_assoc($result))
+			$result = $this->query($SQL);
+			
+			while($row = $result->fetchRow())
 			{
 				$tmp[] = $row;
 			}
