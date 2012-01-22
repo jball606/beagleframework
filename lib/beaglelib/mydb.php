@@ -293,6 +293,15 @@ class mydb
 		return true;
 	}
 	
+	/**
+	 * 
+	 * Used for updating, now this should not be used since the model DB system does the SQL statment
+	 * @param string $table
+	 * @param array $values
+	 * @param array $keys
+	 * @param boolean $printsql
+	 * @deprecated
+	 */
 	public function update($table,$values,$keys,$printsql=false)
 	{
 		$SQL = " update ".$table." set ";
@@ -317,6 +326,11 @@ class mydb
 						$tmp[] = $k." = ".$i['database_field_name']." ";
 					}
 				}
+				elseif(strpos($i,'(') !== false && strpos($i,')') !== false)
+				{
+					$tmp[] = $k." = ".$i;
+				}
+				
 				else 
 				{
 					$tmp[] = $k." = '".$this->escape($i)."'";

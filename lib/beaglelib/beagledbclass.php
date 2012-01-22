@@ -444,7 +444,7 @@ class beagleDbClass
     		$tmp = array();
     		foreach($rows as $i)
     		{
-    			if(isset($array[$i]))
+    			if(array_key_exists($i, $array))
     			{
     				if(is_array($array[$i]))
     				{
@@ -637,8 +637,25 @@ class beagleDbClass
 			$this->dataLog($keys,$values,$action="update");
 		}
 		
-		$this->db->update($this->table,$values,$keys,$printsql);
+		$keys = $this->getWhere($keys);
+		$values = $this->getWhere($values);
+		//Because is null won't work in update
+		foreach($values as $k => $i)
+		{
+			if(strpos($i,'is null')!==false)
+			{
+				$values[$k] = str_replace('is null', '= null',$i);
+			}
+		}
 		
+		$SQL = "update ".$this->table." set ".implode(", ",$values)." where ".implode(" and ",$keys).";";
+		
+		if($printsql == true)
+		{
+			printSQL($SQL);
+		}
+		
+		return $this->db->query($SQL);	
 		
 		
 	}
@@ -935,6 +952,10 @@ class beagleDbClass
 						{
 							$tmp[] = $k." is null";
 						}
+					}
+					elseif(strpos($i,'(') !== false && strpos($i,')') !== false)
+					{
+						$tmp[] = $k." = ".$i;
 					}
 					else 
 					{
