@@ -933,7 +933,7 @@ class beagleDbClass
 				
 				$tmp[] = "(".implode(" or ",$oftmp).")";
 			}
-			elseif(!is_array($i) && trim(strtolower($i)) == "null")
+			elseif(!is_array($i) && trim(strtolower($i)) == "null" || $i === null)
 			{
 				$tmp[] = $k." is null";
 			}
@@ -944,9 +944,9 @@ class beagleDbClass
 			else 
 			{
 				$j = $this->escapeChar($i);
-				if($j != false)
+				if($j !== false)
 				{
-					if($j == 'null')
+					if(trim(strtolower($j)) == "null" || $j === null)
 					{
 						if(strpos($k,"!")!==false)
 						{
