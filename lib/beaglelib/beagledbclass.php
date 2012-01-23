@@ -513,6 +513,8 @@ class beagleDbClass
 
 			if($array == false)
 			{
+				$this->error = "No valid array was passed";
+				writeLog($this->error);
 				return false;
 			}
 			
@@ -652,6 +654,7 @@ class beagleDbClass
 		
 		if($printsql == true)
 		{
+			writeLog($SQL);
 			printSQL($SQL);
 		}
 		
@@ -786,6 +789,7 @@ class beagleDbClass
 		
 		if($ops['printsql'])
 		{
+			writeLog($SQL);
 			printSQL($SQL);
 			print("<BR/>");
 		}
