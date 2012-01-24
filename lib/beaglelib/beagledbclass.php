@@ -603,6 +603,8 @@ class beagleDbClass
 		
 		if($keys == false || $values == false)
 		{
+			$this->error = "No valid keys or fields were passed";
+			writeLog($this->error);
 			return false;
 		}
 		
@@ -946,11 +948,12 @@ class beagleDbClass
 				$j = $this->escapeChar($i);
 				if($j !== false)
 				{
-					if(trim(strtolower($j)) == "null" || $j === null)
+					if(!is_array($j) && strpos(strtolower($j),"null") !== false || $j === null)
 					{
-						if(strpos($k,"!")!==false)
+						
+						if(strpos($j,"!")!==false)
 						{
-							$tmp[] = str_replace("!", '', $k)." is not null ";
+							$tmp[] = $k." is not null"; 
 						}
 						else 
 						{
@@ -963,7 +966,14 @@ class beagleDbClass
 						{
 							if(isset($j['database_field_name']))
 							{
-								$tmp[] = $k." = ".$j['database_field_name']." ";
+								if(strpos($j['database_field_name'],'!=')!==false && strpos($j['database_field_name'],'!=') === 0)
+								{
+									$tmp[] = $k." != ".str_replace('!=', '', $j['database_field_name']);
+								}
+								else 
+								{
+									$tmp[] = $k." = ".$j['database_field_name']." ";
+								}
 							}
 							else 
 							{
@@ -976,9 +986,35 @@ class beagleDbClass
 						}
 						else 
 						{	
-							if(strpos($k,"!") !== false)
+							if(strpos($j,"!=") !== false && strpos($j,'!=') === 1)
 							{
-								$tmp[] = $k."= ".$j;
+								$j = trim(str_replace('!= ','',$j));
+								$j = trim(str_replace('!=','',$j));
+								$tmp[] = $k." != ".$j;
+							}
+							elseif(strpos($j,'<=') !== false && (strpos($j,'<=') === 1 || strpos($j,'<=') === 0))
+							{
+								$j = trim(str_replace('<= ','',$j));
+								$j = trim(str_replace('<=','',$j));
+								$tmp[] = $k." <= ".$j;
+							}
+							elseif(strpos($j,'>=') !== false && (strpos($j,'>=') === 1 || strpos($j,'>=') === 0))
+							{
+								$j = trim(str_replace('>= ','',$j));
+								$j = trim(str_replace('>=','',$j));
+								$tmp[] = $k." >= ".$j;
+							}
+							elseif(strpos($j,'<') !== false && (strpos($j,'<') === 1 || strpos($j,'<') === 0) && strpos($j,'>') === false)
+							{
+								$j = trim(str_replace('< ','',$j));
+								$j = trim(str_replace('<','',$j));
+								$tmp[] = $k." < ".$j;
+							}
+							elseif(strpos($j,'>') !== false && (strpos($j,'>') === 1 || strpos($j,'>') === 0))
+							{
+								$j = trim(str_replace('> ','',$j));
+								$j = trim(str_replace('>','',$j));
+								$tmp[] = $k." > ".$j;
 							}
 							else 
 							{						
@@ -1007,6 +1043,10 @@ class beagleDbClass
 		elseif(trim($data) == "")
 		{
 			return 'null';
+		}
+		elseif($this->db->checkDBFunctions($data))
+		{
+			return $data;	
 		}
 		else 
 		{

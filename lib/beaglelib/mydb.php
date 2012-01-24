@@ -15,6 +15,23 @@ class mydb
 	const dbtype = "mysql";
 	private $keywords = array('table'=>'table','action'=>'action','key'=>'key','archive'=>'archive','default'=>'default');
 	private $transaction = false;
+	private $functions = array(
+	//Math
+	'ABS','ACOS','ACOS','ASIN','ATAN2','ATAN','CEIL','CEILING','CONV','COS','COT','CRC32','DEGREES','DIV','EXP','FLOOR','LN','LOG10','LOG2','LOG',
+	'MOD','OCT','PI','POW','POWER','RADIANS','RAND','ROUND','SIGN','SIN','SQRT','TAN','TRUNCATE',
+	//string
+	'ASCII','BIN','BIT_LENGTH','CHAR_LENGTH','CHAR','CHARACTER_LENGTH','CONCAT_WS','CONCAT','ELT','EXPORT_SET',
+	'FIELD','FIND_IN_SET','FORMAT','HEX','INSERT','INSTR','LCASE','LEFT','LENGTH','LOAD_FILE','LOCATE',
+	'LOWER','LPAD','LTRIM','MAKE_SET','MATCH','MID','OCTET_LENGTH','ORD','POSITION','QUOTE','REPEAT','REPLACE',
+	'REVERSE','RIGHT','RPAD','RTRIM','SOUNDEX','SPACE','STRCMP','SUBSTR','SUBSTRING_INDEX,SUBSTRING','TRIM','UCASE','UNHEX','UPPER',
+	//Date
+	'ADDDATE','ADDTIME','CONVERT_TZ','CURDATE','CURRENT_DATE','CURRENT_TIME','CURRENT_TIMESTAMP','CURTIME','DATE_ADD',
+	'DATE_FORMAT','DATE_SUB','DATE','DATEDIFF','DAY','DAYNAME','DAYOFMONTH','DAYOFWEEK','DAYOFYEAR','EXTRACT','FROM_DAYS', 
+	'FROM_UNIXTIME','GET_FORMAT','HOUR','LOCALTIME','LOCALTIMESTAMP','MAKEDATE','MAKETIME','MICROSECOND','MINUTE', 
+	'MONTH','MONTHNAME','NOW','PERIOD_ADD','PERIOD_DIFF','QUARTER','SEC_TO_TIME','SECOND','STR_TO_DATE','SUBDATE',
+	'SUBTIME','SYSDATE','TIME_FORMAT','TIME_TO_SEC','TIME','TIMEDIFF','TIMESTAMP','TIMESTAMPADD','TIMESTAMPDIFF','TO_DAYS',
+	'UNIX_TIMESTAMP','UTC_DATE','UTC_TIME','UTC_TIMESTAMP','WEEK','WEEKDAY','WEEKOFYEAR','YEAR','YEARWEEK'
+	);
 	 
 	public function __construct($in_args = array())
 	{
@@ -59,6 +76,20 @@ class mydb
 			return true;
 		}
 	}
+	
+	public function checkFunction($word="")
+	{
+		foreach($this->functions as $k => $i)
+		{
+			if(strpos(strtoupper($word),$i."(")!== false)
+			{
+				return true;
+			}
+		}	
+		
+		return false;
+	}
+	
 	/**
 	 * This function is needed because each DB does this differently
 	 * @param integer $limit

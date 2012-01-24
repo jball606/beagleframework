@@ -14,7 +14,17 @@ class pgdb
 	private $conn = array();
 	private $keywords = array('table'=>'table','action'=>'action','key'=>'key','default'=>'default');
 	const dbtype = "pgsql";
-	 
+	private $functions = array(
+	//String	
+	'SUBSTRING','TRIM','UPPER','LOWER','UPPER','STRPOS','SUBSTR','RTRIM','CONCAT','ENCODE','DECODE',
+	
+	//MATH
+	'ACOS','ASIN','ATAN','ATAN2','COS','COT','SIN','TAN','ROUND','PI','POWER','RANDOM','FLOOR','CEIL','EXP','LOG','ABS','MOD',
+	
+	//TIME
+	'AGE','CURRENT_DATE','CURRENT_TIME','CURRENT_TIMESTAMP','DATE_PART','DATE_TRUNC','EXTRACT','ISFINITE','JUSTIFY_HOURS','LOCALTIME','NOW',
+	'LOCALTIMESTAMP','TIMEOFDAY',
+	);
 	public function __construct($in_args = array())
 	{
 		$args = $this->defaultArgs($in_args, array('host'=>'localhost',
@@ -57,6 +67,26 @@ class pgdb
 		{
 			return true;
 		}
+	}
+
+	/**
+	 * Is the DB string have a mysql function in it?  If so don't escape it
+	 * 
+	 * @param string $word
+	 * @return boolean
+	 * @author Jason Ball
+	 */
+	public function checkDBFunctions($word="")
+	{
+		foreach($this->functions as $k => $i)
+		{
+			if(strpos(strtoupper($word),$i."(")!== false)
+			{
+				return true;
+			}
+		}	
+		
+		return false;
 	}
 	
 	/**
