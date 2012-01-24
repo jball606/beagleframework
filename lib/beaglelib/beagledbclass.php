@@ -957,10 +957,6 @@ class beagleDbClass
 							$tmp[] = $k." is null";
 						}
 					}
-					elseif(strpos($i,'(') !== false && strpos($i,')') !== false)
-					{
-						$tmp[] = $k." = ".$i;
-					}
 					else 
 					{
 						if(is_array($j))
