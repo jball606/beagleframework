@@ -77,7 +77,7 @@ class mydb
 		}
 	}
 	
-	public function checkFunction($word="")
+	public function checkDBFunctions($word="")
 	{
 		foreach($this->functions as $k => $i)
 		{
