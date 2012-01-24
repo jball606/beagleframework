@@ -975,7 +975,7 @@ class beagleDbClass
 									$tmp[] = $k." = ".$j['database_field_name']." ";
 								}
 							}
-							else 
+							elseif(isPopArray($j))
 							{
 								$tmp[] = $k." in ('".implode("','",$j)."')";
 							}
