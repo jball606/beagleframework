@@ -43,7 +43,7 @@ class beaglebase
 		$tmp = array();
 		foreach($args as $k => $i)
 		{
-			if($i)
+			if($i !== false)
 			{
 				$tmp[$k] = $i;
 			}
