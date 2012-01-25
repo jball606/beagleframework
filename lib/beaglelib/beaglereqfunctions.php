@@ -681,7 +681,13 @@ function isValidPopDate(&$date)
  */
 function defaultArgs($in_args, $defs) 
 {
-	if (!is_array($in_args)) print 'argDefaults called with non-array args';
+	if (!is_array($in_args))
+	{
+		writeLog('argDefaults called with non-array args');
+		writeLog(cleanBackTrace());
+		return array();
+	}
+	
 	if (!is_array($defs)) print 'argDefaults called with non-array defs';
 
 	$out_args = array();
