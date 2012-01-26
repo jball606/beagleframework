@@ -249,7 +249,6 @@ class beagleDbClass
 	*/
 	public function validate($fields,$type="edit")
 	{
-		$this->error = false;
 		//Nothing To validate
 		if(!is_array($this->valid_fields) || count($this->valid_fields) == 0)
 		{
@@ -259,7 +258,7 @@ class beagleDbClass
 		//Not passed the right stuff
 		if(!is_array($fields))
 		{
-			$this->error = "Field list must be an array";
+			$this->storeError("Field list must be an array");
 			return false;
 		}
 		
@@ -275,7 +274,7 @@ class beagleDbClass
 					{
 						if(!isset($fields[$k]) || trim($fields[$k]) == "")
 						{
-							$this->error = $k." is a required field, you did not pass it";
+							$this->storeError($k." is a required field, you did not pass it");
 							return false;
 						}
 					}
@@ -287,7 +286,7 @@ class beagleDbClass
 				{
 					if(isset($fields[$k]) && trim($fields[$k]) == "")
 					{
-						$this->error = $k." is a required field, you did not pass it";
+						$this->storeError($k." is a required field, you did not pass it");
 						return false;
 					}
 				}
@@ -305,7 +304,7 @@ class beagleDbClass
 						}
 						if(!is_numeric($fields[$k]))
 						{
-							$this->error = $k." is a numeric field, you passed invalid data";
+							$this->storeError($k." is a numeric field, you passed invalid data");
 							return false;
 						}
 					}
@@ -316,7 +315,7 @@ class beagleDbClass
 						{
 							if(!is_numeric(strtotime($fields[$k])))
 							{
-								$this->error = $k." is a date field, you passed invalid data";
+								$this->storeError($k." is a date field, you passed invalid data");
 								return false;
 							}
 						}
@@ -325,7 +324,7 @@ class beagleDbClass
 					{
 						if(trim($fields[$k]) != "" && !$this->isValidEmail($fields[$k]))
 						{
-							$this->error = $k." is an email field, you passed invalid data in the form of ".$fields[$k];
+							$this->storeError($k." is an email field, you passed invalid data in the form of ".$fields[$k]);
 							return false;
 						}
 					}
@@ -336,7 +335,7 @@ class beagleDbClass
 				{
 					if(strlen($fields[$k])>$i['size'])
 					{
-						$this->error = $k."is of size ".$i['size'].", you passed invalid data";
+						$this->storeError($k."is of size ".$i['size'].", you passed invalid data");
 						return false;
 					}
 				}
@@ -492,7 +491,7 @@ class beagleDbClass
 		
 			if(!$this->validate($array,'add'))
 			{
-				writeLog(print_r($this->error,true));
+				$this->storeError("Field was not valid");
 				return false;
 			}
 
@@ -513,8 +512,7 @@ class beagleDbClass
 
 			if($array == false)
 			{
-				$this->error = "No valid array was passed";
-				writeLog($this->error);
+				$this->storeError("No valid array was passed");
 				return false;
 			}
 			
@@ -603,8 +601,7 @@ class beagleDbClass
 		
 		if($keys == false || $values == false)
 		{
-			$this->error = "No valid keys or fields were passed";
-			writeLog($this->error);
+			$this->storeError("No valid keys or fields were passed");
 			return false;
 		}
 		

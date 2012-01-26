@@ -7,7 +7,7 @@
  */
 class beaglebase
 {
-	protected $error = false;
+	protected $error = array();
 	protected $db = false;
 
 	
@@ -53,6 +53,49 @@ class beaglebase
 	}
 	
 	/**
+	 * Store a sting into the error system to return to the user
+	 * 
+	 * @param string/array $error
+	 * @return void
+	 * @author Jason Ball
+	 */
+	protected  function storeError($error)
+	{
+		if(array($this->error))
+		{
+			if(isPopArray($error))
+			{
+				foreach($error as $i)
+				{
+					$this->error[] = $i;
+				}
+			}
+			else 
+			{
+				$this->error[] = $error;
+			}
+		}
+		else 
+		{
+			$this->error = $error;
+		}
+		
+		if(isPopArray($error))
+		{
+			foreach($error as $i)
+			{
+				writeLog("USER ERROR = ".$i);
+			}
+		}
+		else 
+		{	
+			writeLog("USER ERROR = ".$error);
+		}
+		
+		writeLog(br2nl(cleanBackTrace()));
+	}
+	
+	/**
 	 * Unset the database settings in case you need to serialize the class
 	 * 
 	 * @param void
@@ -95,9 +138,9 @@ class beaglebase
 	 */
 	protected function getClassData($array, $item,$allowall = true)
 	{
-		if($this->error)
+		if($this->getError())
 		{
-			return $this->error;
+			return $this->getError();
 		}
 		
 		if(is_array($item))
@@ -205,10 +248,10 @@ class beaglebase
 	 */
 	public function showTemplate($filename,$result=false)
 	{
-		if($this->error)
+		if($this->getError())
 		{
 			
-			return $this->prettyFail($this->error);
+			return $this->prettyFail($this->getError());
 		}
 		
 		
@@ -219,13 +262,38 @@ class beaglebase
 	}
 	
 	/**
+	 * Because I have a lot of store error then right after that return error
+	 * 
+	 * @param string/array $error
+	 * @return string/array/boolean
+	 * @author Jason Ball
+	 */
+	public function storeAndGetError($error="")
+	{
+		$this->storeError($error);
+		return $this->getError($error);	
+	}
+	
+	/**
 	 * Simple method to see if an error already exist.
 	 * @param void
 	 * @return mixed (false or string)
 	 */
 	public function getError()
 	{
-		return $this->error;
+		if(isPopArray($this->error) || (!is_array($this->error) && strlen(trim($this->error)) != 0))
+		{
+			if(count($this->error) == 1)
+			{
+				return $this->error[0];
+			}
+			else 
+			{
+				return $this->error;
+			}
+		}
+		
+		return false;
 	}
 	
 	

@@ -689,7 +689,7 @@ function defaultArgs($in_args, $defs)
 		writeLog(cleanBackTrace());
 		return $defs;
 	}
-	
+
 	$out_args = array();
 
 	foreach ($defs as $k => $v)

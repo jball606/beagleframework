@@ -105,7 +105,7 @@ class beagleResultEditHtmlClass extends beaglebase
 			}
 			else 
 			{
-				$this->error = "Invalid ID";
+				$this->storeError("Invalid ID");
 			}
 		}
 
