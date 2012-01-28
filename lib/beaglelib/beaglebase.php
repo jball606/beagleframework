@@ -283,7 +283,11 @@ class beaglebase
 	{
 		if(isPopArray($this->error) || (!is_array($this->error) && strlen(trim($this->error)) != 0))
 		{
-			if(count($this->error) == 1)
+			if(!is_array($this->error))
+			{
+				return $this->error;
+			}
+			elseif(is_array($this->error) && count($this->error) == 1)
 			{
 				return $this->error[0];
 			}
