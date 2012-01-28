@@ -889,6 +889,24 @@ function arrayToNode($array)
 	return $xml;
 }
 
+/**
+ * This method returns the 3 letter extention of a file
+ *
+ * @param string $name
+ * @return string or null
+ * @author Jason Ball
+ */
+function getFileType($name)
+{
+	$type = substr($name,strlen($name)-4,4);
+	if(strpos($type,".")!==false)
+	{
+		return substr($type,1,3);
+	}
+	return false;	
+		
+}
+
 function br2nl($string)
 {
 	return preg_replace('#<br\s*?/?>#i', "\n", $string);

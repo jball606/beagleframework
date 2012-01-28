@@ -111,19 +111,21 @@ class beaglebase
 	
 	/**
 	 * This method returns the 3 letter extention of a file
-	 * 
+	 * Use the core function getFileType instead
 	 * @param string $name
 	 * @return string or null
 	 * @author Jason Ball
+	 * @deprecated
 	 */
 	protected function getFileType($name)
 	{
 		$type = substr($name,strlen($name)-4,4);
 		if(strpos($type,".")!==false)
 		{
-			return $type;
+			
+			return substr($type,1,3);
 		}
-		return "";	
+		return false;	
 		
 	}
 	
