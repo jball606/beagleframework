@@ -3,7 +3,7 @@
 .up_arrow
 {
 	display:block;
-	background-image: url(/img/icons/arrow_090.png);
+	background-image: url(/img/icons/up_arrow_16.png);
 	width:16px;
 	height:16px;
 }
@@ -11,7 +11,7 @@
 .down_arrow
 {
 	display:block;
-	background-image: url(/img/icons/arrow_270.png);
+	background-image: url(/img/icons/down_arrow_16.png);
 	width:16px;
 	height:16px;
 }
