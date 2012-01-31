@@ -743,7 +743,7 @@ class beagleDbClass
 			$fields = implode(",",$ops['fields']);
 		}
 		
-		$SQL = "Select $fields from ".$this->table;
+		$SQL = "SELECT $fields FROM ".$this->table;
 		
 		$join = array();
 		if(isPopArray($this->join))
@@ -772,18 +772,18 @@ class beagleDbClass
 		
 		if(isPopArray($junk))
 		{
-			$SQL .= " where ".implode(" and \n ",$junk);
+			$SQL .= " WHERE ".implode(" and \n ",$junk);
 		}
 		
 		
 		if($ops['orderby'])
 		{
-			$SQL .= " order by ".$ops['orderby'];	
+			$SQL .= " ORDER BY ".$ops['orderby'];	
 		}
 		
 		if(isSetNum($ops['limit']))
 		{
-			$SQL .= " limit ".$ops['limit'];
+			$SQL .= " LIMIT ".$ops['limit'];
 		}
 		
 		if($ops['printsql'])
@@ -977,9 +977,22 @@ class beagleDbClass
 								$tmp[] = $k." in ('".implode("','",$j)."')";
 							}
 						}
-						else if(strpos($j,"%")!==false)
+						else if(strpos($j,"LIKE")!==false && (strpos($j,'LIKE') === 1 || strpos($j,'LIKE') === 0) && strpos($j,'%') !== false)
 						{
-							$tmp[] = $k ." like ".$j;
+							if(strpos($j,"'LIKE") !== false)
+							{
+								$j = "'".trim(substr($j,5,strlen($j)));
+							}
+							elseif(strpos($j,'"LIKE') !== false)
+							{
+								$j = "'".trim(substr($j,5,strlen($j)));
+							}
+							elseif(strpos($j,"LIKE") !== false)
+							{
+								$j = trim(substr($j,4,strlen($j)));
+							}
+							
+							$tmp[] = $k ." LIKE ".$j;
 						}
 						else 
 						{	
