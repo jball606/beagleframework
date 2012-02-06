@@ -12,7 +12,7 @@ class pgdb
 	private $dbconn = false;
 	private $error = false;
 	private $conn = array();
-	private $keywords = array('table'=>'table','action'=>'action','key'=>'key','default'=>'default');
+	private $keywords = array('table'=>'table','action'=>'action','key'=>'key','default'=>'default','value'=>'value');
 	const dbtype = "pgsql";
 	private $functions = array(
 	//String	
