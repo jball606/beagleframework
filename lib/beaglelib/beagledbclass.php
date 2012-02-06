@@ -4,7 +4,7 @@
  * It is influnced by the Media Net Link db class but I don't use MBD2 so I had to do a complete re-write to use the base DB functons
  * You must create a model class that extends off this that will pass the proper variables
  * @author Jason Ball
- * @package Beagleframework
+ \* @package Beagleframework
  * 
  */
 class beagleDbClass
@@ -544,19 +544,20 @@ class beagleDbClass
 		}
 		
 		
-		if(method_exists($this, 'dataLog'))
-		{
-			$this->dataLog(array(),$array,$action="add");
-		}
 		
 		if(count($fields)>0 && count($values) >0 && count($fields) == count($values))
 		{
 			
-			return $this->db->add($this->table, $fields,$values,$this->pkey);
+			$value = $this->db->add($this->table, $fields,$values,$this->pkey);
 			
+			if(is_numeric($value) && method_exists($this, 'dataLog'))
+			{
+				$arr[$this->pkey] = $value;
+				$this->dataLog($arr,$array,$action="add");
+			}
 			//MySQL version
 			
-			
+			return $value;
 			return true;
 		}
 		return false;
@@ -772,18 +773,18 @@ class beagleDbClass
 		
 		if(isPopArray($junk))
 		{
-			$SQL .= " WHERE ".implode(" and \n ",$junk);
+			$SQL .= " where ".implode(" and \n ",$junk);
 		}
 		
 		
 		if($ops['orderby'])
 		{
-			$SQL .= " ORDER BY ".$ops['orderby'];	
+			$SQL .= " order by ".$ops['orderby'];	
 		}
 		
 		if(isSetNum($ops['limit']))
 		{
-			$SQL .= " LIMIT ".$ops['limit'];
+			$SQL .= " limit ".$ops['limit'];
 		}
 		
 		if($ops['printsql'])
@@ -908,7 +909,7 @@ class beagleDbClass
 		{
 			if($this->db->checkKeyWord($k))
 			{
-				$k = $this->table.".".$k;
+				$k = $this->db->escapeKeyWordField($k,$this->table);
 			}
 			
 			if($k == 'or')

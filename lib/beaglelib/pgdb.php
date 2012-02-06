@@ -68,6 +68,11 @@ class pgdb
 			return true;
 		}
 	}
+	
+	public function escapeKeyWordField($field,$table)
+	{
+		return '"'.$field.'"';
+	}
 
 	/**
 	 * Is the DB string have a mysql function in it?  If so don't escape it

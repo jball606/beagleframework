@@ -77,6 +77,11 @@ class mydb
 		}
 	}
 	
+	public function escapeKeyWordField($field,$table)
+	{
+		return $table.'.'.$field;
+	}
+	
 	public function checkDBFunctions($word="")
 	{
 		foreach($this->functions as $k => $i)
