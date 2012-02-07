@@ -4,12 +4,12 @@
  * It is influnced by the Media Net Link db class but I don't use MBD2 so I had to do a complete re-write to use the base DB functons
  * You must create a model class that extends off this that will pass the proper variables
  * @author Jason Ball
- \* @package Beagleframework
+ * @package Beagleframework
  * 
  */
-class beagleDbClass
+class beagleDbClass extends beagleerrorbase
 {
-	public $error = false;
+	
 	protected $db = false;
 	protected $auditfields = array();
 	
@@ -383,7 +383,7 @@ class beagleDbClass
 	 */
 	private function isValidEmail($email)
 	{
-		if($this->isValidEmailAddress($email, true))
+		if(!$this->isValidEmailAddress($email, true))
 		{
 			return false;
 		}
@@ -413,10 +413,11 @@ class beagleDbClass
      */
     private function isValidEmailAddress($data, $strict = false)
     {
-        $regex = $strict ? '/^([.0-9a-z_+-]+)@(([0-9a-z-]+\.)+[0-9a-z]{2,})$/i' : '/^([*+!.&#$|\'\\%\/0-9a-z^_`{}=?~:-]+)@(([0-9a-z-]+\.)+[0-9a-z]{2,})$/i';
+    	
+    	$regex = $strict ? '/^([.0-9a-z_+-]+)@(([0-9a-z-]+\.)+[0-9a-z]{2,})$/i' : '/^([*+!.&#$|\'\\%\/0-9a-z^_`{}=?~:-]+)@(([0-9a-z-]+\.)+[0-9a-z]{2,})$/i';
         if (preg_match($regex, trim($data), $matches)) 
         {
-            return array($matches[1], $matches[2]);
+        	return array($matches[1], $matches[2]);
         }
         else 
         {
@@ -491,7 +492,7 @@ class beagleDbClass
 		
 			if(!$this->validate($array,'add'))
 			{
-				$this->storeError("Field was not valid");
+				$this->storeError("Some Fields were not valid");
 				return false;
 			}
 
@@ -1095,5 +1096,6 @@ class beagleDbClass
 		return $error;
 	}
 
+	
 }
 ?>

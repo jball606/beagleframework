@@ -2,12 +2,12 @@
 /**
  * The Beagle Base class is so you don't have to write the same methods over and over again
  * @author Jason Ball
- \* @package Beagleframework
+ * @package Beagleframework
  * 
  */
-class beaglebase
+class beaglebase extends beagleerrorbase
 {
-	protected $error = array();
+	
 	protected $db = false;
 
 	
@@ -52,48 +52,7 @@ class beaglebase
 		return $tmp;
 	}
 	
-	/**
-	 * Store a sting into the error system to return to the user
-	 * 
-	 * @param string/array $error
-	 * @return void
-	 * @author Jason Ball
-	 */
-	protected  function storeError($error)
-	{
-		if(array($this->error))
-		{
-			if(isPopArray($error))
-			{
-				foreach($error as $i)
-				{
-					$this->error[] = $i;
-				}
-			}
-			else 
-			{
-				$this->error[] = $error;
-			}
-		}
-		else 
-		{
-			$this->error = $error;
-		}
-		
-		if(isPopArray($error))
-		{
-			foreach($error as $i)
-			{
-				writeLog("USER ERROR = ".$i);
-			}
-		}
-		else 
-		{	
-			writeLog("USER ERROR = ".$error);
-		}
-		
-		writeLog(br2nl(cleanBackTrace()));
-	}
+	
 	
 	/**
 	 * Unset the database settings in case you need to serialize the class
@@ -111,11 +70,10 @@ class beaglebase
 	
 	/**
 	 * This method returns the 3 letter extention of a file
-	 * Use the core function getFileType instead
+	 * 
 	 * @param string $name
 	 * @return string or null
 	 * @author Jason Ball
-	 * @deprecated
 	 */
 	protected function getFileType($name)
 	{
@@ -210,38 +168,6 @@ class beaglebase
 		
 	}
 	
-	
-	/**
-	 * make the pretty UL fail for good user UI
-	 * @param $value (string, usually $this->error)
-	 * @return html string or false
-	 */
-	protected function prettyFail($value="")
-	{
-		if($value == "")
-		{
-			return false;
-		}
-		
-		$tmp = '<ul class="erroralert">';
-		if(isPopArray($value))
-		{
-			foreach($value as $i)
-			{
-				$tmp .= '<li>'.$i."</li>";
-			}
-		}
-		else 
-		{
-			$tmp .= '<li>'.$value.'</li>';
-		}
-		$tmp .= '</ul>';
-		
-		return $tmp;
-		//return '<ul class="erroralert"><li>'.$value.'</li></ul>';
-		
-	}
-	
 	/**
 	 * This Method is used to render a view page and allow you to pass data or a class to that view page
 	 * @param string $filename
@@ -252,7 +178,6 @@ class beaglebase
 	{
 		if($this->getError())
 		{
-			
 			return $this->prettyFail($this->getError());
 		}
 		
@@ -263,44 +188,7 @@ class beaglebase
 		
 	}
 	
-	/**
-	 * Because I have a lot of store error then right after that return error
-	 * 
-	 * @param string/array $error
-	 * @return string/array/boolean
-	 * @author Jason Ball
-	 */
-	public function storeAndGetError($error="")
-	{
-		$this->storeError($error);
-		return $this->getError($error);	
-	}
 	
-	/**
-	 * Simple method to see if an error already exist.
-	 * @param void
-	 * @return mixed (false or string)
-	 */
-	public function getError()
-	{
-		if(isPopArray($this->error) || (!is_array($this->error) && strlen(trim($this->error)) != 0))
-		{
-			if(!is_array($this->error))
-			{
-				return $this->error;
-			}
-			elseif(is_array($this->error) && count($this->error) == 1)
-			{
-				return $this->error[0];
-			}
-			else 
-			{
-				return $this->error;
-			}
-		}
-		
-		return false;
-	}
 	
 	
 	

@@ -338,6 +338,11 @@ function beagleClasses($class)
 			include_once $root."beagledbsessions.php";
 			return true;		
 		}
+		case "beagleerrorbase":
+		{
+			include_once $root."beagleerrorbase.php";
+			return true;		
+		}
 	}
 }
 
