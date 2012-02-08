@@ -40,7 +40,7 @@ class users_controller extends beagleresultclass
 		
 		return $this->executSearch(array('first'=>$first,
 											'limit'=>$limit,
-											'excel'=>$excel,
+											'return_sql'=>$excel,
 											'SQL_F'=>$SQL_F,
 											'key'=>array('id'=>'users.user_id','name'=>'users.user_id','sqlkey'=>'user_id'),
 											'all'=>$all,

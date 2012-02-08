@@ -44,6 +44,7 @@ abstract class beagleResultClass extends beagleNavigationClass
 	/**
 	 * abstract method that is used to run a search with search criteria needed
 	 * @see beagleSearchClass::executeSearch()
+	 * pass these params $first=0,$limit=20,$excel=false,$all=false
 	 */
 	abstract protected function run_Search();
 	

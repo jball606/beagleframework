@@ -189,7 +189,7 @@ class beagleSearchClass extends beaglebase
 	 * <pre> in_args = array (
 	 * first =>			0,			Begining of the search page
 	 * limit =>			20,			Number of results on the page
-	 * excel =>			FALSE,		Do you want this as an excel item.  Actually just returns the full SQL statement to be used by the excel clas
+	 * return sql =>	false,		returns the full SQL statement to be used by the excel clas
 	 * SQL_F =>			false,		The from section of yoru SQL statement
 	 * extrawhere =>	array(),	array of extra where clasues that may not fix the standard array system
 	 * key =>			array()		primary key of search exapmle :('id'=>false,'name'=>false,'sqlkey'=>false)
@@ -202,7 +202,7 @@ class beagleSearchClass extends beaglebase
 		
 		$args = defaultArgs($in_args,array('first'=>0,
 											'limit'=>20,
-											'excel'=>FALSE,
+											'return_sql'=>false,
 											'SQL_F' => false,
 											'extrawhere'=>array(),
 											'key'=>array('id'=>false,'name'=>false,'sqlkey'=>false),
@@ -216,9 +216,14 @@ class beagleSearchClass extends beaglebase
 			return false;
 		}
 		
+		if(!isPopArray($this->viewitems))
+		{
+			$this->viewitems = array('*');
+		}
+		
 		$view = $this->stringClean($this->viewitems);
 		
-		if($args['excel'] == false)
+		if($args['return_sql'] == false)
 		{
 			if(is_array($args['key']) && $args['key']['id'] != false && $args['key']['name'] != false)
 			{
@@ -255,7 +260,15 @@ class beagleSearchClass extends beaglebase
 		}
 		
 		
-		$SQL_G = " group by ".implode(",",$this->getGroupData($view));
+		$group = $this->getGroupData($view);
+		if(isPopArray($group))
+		{
+			$SQL_G = " group by ".implode(",",$group);
+		}
+		else
+		{
+			$SQL_G = '';
+		}
 		
 		$SQL = $SQL_S." \n ".$SQL_F." \n ".$SQL_W." \n ".$SQL_G;
 		
@@ -264,7 +277,7 @@ class beagleSearchClass extends beaglebase
 			$SQL .= " order by ".implode($o,",");
 		}
 		
-		if($args['excel'] == true)
+		if($args['return_sql'] == true)
 		{
 			return $SQL;
 		}
@@ -368,7 +381,17 @@ class beagleSearchClass extends beaglebase
 		{	
 			foreach($array as $k => $i)
 			{
-				$tmp[] = $k;
+				if(is_numeric($k))
+				{
+					if($i != '*')
+					{
+						$tmp[] = $i;
+					}
+				}
+				else 
+				{
+					$tmp[] = $k;
+				}
 			}
 		
 			if(isPopArray($this->order))
