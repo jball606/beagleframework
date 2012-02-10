@@ -475,117 +475,39 @@ class beagleSearchClass extends beaglebase
 	 * @param array $info
 	 * @return array
 	 * 
-	 * <pre>
-	 * !null = 	is not null and != ''
-	 * isnull = is null
-	 * null =	not null
-	 * !(item)	!= item
-	 * </pre> 
+	 *  
 	 */
 	private function getWhere($info)
 	{
-		$clause = "";
-		foreach($info as $table => $i)
+		$BDB = new beagleDbClass();
+		$final = array();
+		if(isset($info['and']))
 		{
-			if($table == "passthru")
-			{
-				$clause .= $i." and ";
-			}
-			else if($table != "and")
-			{
-				foreach($i as $field => $v)
-				{
-					if(is_array($v) || trim($v) != "")
-					{
-						if(is_array($v))
-						{
-							$loc = "or";
-							$tclause = " (";
-							foreach($v as $key => $vi)
-							{
-								if(is_array($vi))
-								{
-									$loc = $key;
-									//Add or logic where[table][field][and/or][]	
-									foreach($vi as $data)
-									{
-										if($data != "")
-										{
-											$tclause .= $table.".".$field." = ".$data." ".$loc." "; 	
-										}
-									}
-								}
-								else
-								{
-									if(trim($vi) != "")
-									{
-										$tclause .= $table.".".$field." = '".$vi."' or ";
-									}
-								}
-							}
-							if(strlen($tclause)>strlen($loc))
-							{
-								$clause .= substr($tclause,0,strlen($tclause)-(strlen($loc)+2));
-								$clause .= ") and ";
-							}
-						}
-						
-						elseif(strpos($v,"!null") !== false)
-						{
-							$clause .= "(".$table.".".$field." != '' and ".$table.".".$field." is not null) and ";
-						} 
-						elseif(strpos($v,"!")!==false)
-						{
-							$clause .= "(".$table.".".$field." ".$v." or ".$table.".".$field." is null) and ";
-							
-						}
-						elseif(strpos($v,"null")!== false)
-						{
-							if($v == "isnull")
-							{
-								$clause .= $table.".".$field." is null and ";
-							}
-							else
-							{
-								$clause .= $table.".".$field." is not null and ";
-							}
-						}
-						elseif(strpos($field,"__")!==false)
-						{
-							$tmp = preg_split("/__/",$field);
-							$v = str_replace("%",'',$v);
-							if($tmp[0] == "date_s")
-							{
-								$d = strtotime($v);
-								$clause .= $table.".".$tmp[1]." >= '".date("Y-m-d",$d)."' and ";
-							}
-							if($tmp[0] == "date_e")
-							{
-								$d = strtotime($v)+86000;
-								$clause .= $table.".".$tmp[1]." <= '".date("Y-m-d",$d)."' and ";
-							}
-	
-						}
-						else
-						{
-							
-							$clause .= $this->db->getDbWhere($table,$field,$v);
-								
-							
-						}
-						
-					}
-				}
-			}
+			$tmp = $BDB->getSearchWhere($info['and']);
+			$final[] = implode(" and ",$tmp);
+			unset($info['and']);
 		}
-		if(strlen($clause)>0)
+		
+		if(isset($info['or']))
 		{
-			return substr($clause,0,strlen($clause)-5);
+			$tmp = $BDB->getSearchWhere($info['or']);
+			$final[] = implode(" or ",$tmp);
+			unset($info['or']);
 		}
-		else
+		
+		if(isPopArray($info))
 		{
-			return false;
+			$tmp = $BDB->getSearchWhere($info);
+			$final[] = implode(" and ",$tmp);
+		} 
+		
+		
+		if(isPopArray($final))
+		{
+			return implode(" and ",$final);
 		}
+		
+		return false;
 	}
 
 	protected function getRList($table,$key)

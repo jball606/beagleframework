@@ -893,6 +893,36 @@ class beagleDbClass extends beagleerrorbase
 	}
 	
 	/**
+	 * 
+	 * This version of get where requires you to pass an array of  [table][field]=>value
+	 * @param array $array
+	 * @return array
+	 * @author Jason Ball
+	 */
+	public function getSearchWhere($array)
+	{
+		$this->loadDB();
+		
+		foreach($array as $table => $fields)
+		{	
+			$prewhere[$table] = $this->getWhere($fields);
+			
+		}
+		
+		
+		$tmp = array();
+		foreach($prewhere as $k => $i)
+		{
+			foreach($i as $v)
+			{	
+				$tmp[] = $k.".".$v;
+			}
+		}
+		
+		return $tmp;
+	}
+	
+	/**
 	 * This method tries to create the where clause based on your array
 	 * 
 	 * @param array $array
@@ -973,6 +1003,25 @@ class beagleDbClass extends beagleerrorbase
 								{
 									$tmp[] = $k." = ".$j['database_field_name']." ";
 								}
+							}
+							elseif(isset($j['start']) || isset($j['end']))
+							{
+								$rangefields = array();
+								if(isset($j['start']))
+								{
+									$rangefields[][$k] = $j['start'];
+								}
+								if(isset($j['end']))
+								{
+									$rangefields[][$k] = $j['end'];
+								}
+								
+								foreach($rangefields as $i)
+								{
+									$line = $this->getWhere($i);
+									$tmp[] = $line[0];
+								}
+
 							}
 							elseif(isPopArray($j))
 							{
