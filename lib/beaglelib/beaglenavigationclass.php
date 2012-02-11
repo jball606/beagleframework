@@ -233,5 +233,47 @@ class beagleNavigationClass extends beagleSearchClass
 		$this->checkdir = true;
 		$this->check = array();
 	}
-	
+
+	/**
+	 * 
+	 * Use this method to process the order array from the result list to order you list
+	 * @param array $in_args (orderby, orderdir)
+	 * @return void
+	 * @author Jason Ball
+	 */
+	public function processOrderNavArray($in_args=array())
+	{
+		$args = defaultArgs($in_args, array(
+											'orderby'=>false,
+											'orderdir'=>false,
+											));
+		
+		if($args['orderby'])
+		{
+			if(isPopArray($args['orderby']) && isPopArray($args['orderdir']))
+			{
+				foreach($args['orderby'] as $k => $i)
+				{
+					$this->order[$i] = $args['orderdir'][$k];
+				}
+			}
+			
+			if(is_numeric($args['orderdir']) && $args['orderdir'] !== false)
+			{
+				if($args['orderdir'] == 1 || $args['orderdir'] == 2)
+				{
+					$this->order[$args['orderby']] = $args['orderdir'];
+				}
+				else 
+				{
+					if(isset($this->order[$args['orderby']]))
+					{
+						unset($this->order[$args['orderby']]);
+					}
+				}
+			}
+		}
+			
+		
+	}
 }

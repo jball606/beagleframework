@@ -107,31 +107,7 @@ abstract class beagleResultClass extends beagleNavigationClass
 											
 											
 											
-		if($args['orderby'])
-		{
-			if(isPopArray($args['orderby']) && isPopArray($args['orderdir']))
-			{
-				foreach($args['orderby'] as $k => $i)
-				{
-					$this->order[$i] = $args['orderdir'][$k];
-				}
-			}
-			
-			if(is_numeric($args['orderdir']) && $args['orderdir'] !== false)
-			{
-				if($args['orderdir'] == 1 || $args['orderdir'] == 2)
-				{
-					$this->order[$args['orderby']] = $args['orderdir'];
-				}
-				else 
-				{
-					if(isset($this->order[$args['orderby']]))
-					{
-						unset($this->order[$args['orderby']]);
-					}
-				}
-			}
-		}
+		$this->processOrderNavArray($args);
 		
 		if(isPopArray($args['hiddencols']))
 		{
