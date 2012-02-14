@@ -362,8 +362,7 @@ function __autoload($orig_classname)
 
 	$rp = __SYSTEM_ROOT__;
 
-	$classname = strtolower($orig_classname);
-
+	
 	//Used to get core classes quickly
 	if(beagleClasses($classname))
 	{
@@ -588,6 +587,12 @@ function findFile($path,$file)
 			}
 		}
 	}
+	
+	if ($file != strtolower($file)) 
+	{
+		return findFile($path,strtolower($file));
+	}
+	
 	return false;
 }
 
