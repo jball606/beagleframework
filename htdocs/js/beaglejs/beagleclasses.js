@@ -6,7 +6,7 @@ function beagleTimer(obj)
 	var width = '48px';
 	var paddingLeft = '10px';
 	var marginLeft = 0;
-	
+	var backgroundimg = '/img/icons/ajax-loader.gif';
 	this.startWait = startWait;
 	this.stopWait = stopWait;
 	this.fullUnmask = fullUnmask;
@@ -29,6 +29,10 @@ function beagleTimer(obj)
 		{
 			marginLeft = obj.marginLeft;
 		}
+		if(isset(obj.backgroundimg))
+		{
+			backgroundimg = obj.backgroundimg;
+		}
 	}
 	
 	function startWait(id,value)
@@ -46,6 +50,7 @@ function beagleTimer(obj)
 		$(".loadmask-msg div").css('width',width);
 		$(".loadmask-msg div").css('padding-left',paddingLeft);
 		$(".loadmask-msg").css('margin-left',marginLeft);
+		$(".loadmask-msg div").css('background-image','url('+backgroundimg+')');
 	}
 
 	function stopWait(id)
@@ -90,5 +95,18 @@ function beagleTimer(obj)
 		}
 		
 		
+	}
+	
+	function isset(obj)
+	{
+		if(obj != undefined)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+			
 	}
 }
