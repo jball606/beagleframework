@@ -3,8 +3,8 @@ function beagleTimer(obj)
 
 	var me = this;
 	var message = 'Loading';
-	var width = '48px';
-	var paddingLeft = '10px';
+	var width = ''; //'48px';
+	var paddingLeft = '' //'10px';
 	var marginLeft = 0;
 	var backgroundimg = '';
 	this.startWait = startWait;
@@ -47,8 +47,15 @@ function beagleTimer(obj)
 		}
 		
 		$("#"+id).mask(value);
-		$(".loadmask-msg div").css('width',width);
-		$(".loadmask-msg div").css('padding-left',paddingLeft);
+		if(width != '')
+		{
+			$(".loadmask-msg div").css('width',width);
+		}
+		if(paddingLeft != '')
+		{
+			$(".loadmask-msg div").css('padding-left',paddingLeft);	
+		}
+		
 		$(".loadmask-msg").css('margin-left',marginLeft);
 		if(backgroundimg != '')
 		{
