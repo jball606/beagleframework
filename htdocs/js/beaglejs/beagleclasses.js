@@ -6,7 +6,7 @@ function beagleTimer(obj)
 	var width = '48px';
 	var paddingLeft = '10px';
 	var marginLeft = 0;
-	var backgroundimg = '/img/icons/ajax-loader.gif';
+	var backgroundimg = '';
 	this.startWait = startWait;
 	this.stopWait = stopWait;
 	this.fullUnmask = fullUnmask;
@@ -50,7 +50,10 @@ function beagleTimer(obj)
 		$(".loadmask-msg div").css('width',width);
 		$(".loadmask-msg div").css('padding-left',paddingLeft);
 		$(".loadmask-msg").css('margin-left',marginLeft);
-		$(".loadmask-msg div").css('background-image','url('+backgroundimg+')');
+		if(backgroundimg != '')
+		{
+			$(".loadmask-msg div").css('background-image','url('+backgroundimg+')');
+		}
 	}
 
 	function stopWait(id)
