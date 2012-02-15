@@ -358,6 +358,7 @@ function __autoload($orig_classname)
 		return false;
 	}
 
+	$classname = $orig_classname;
 	setGlobalVars();
 
 	$rp = __SYSTEM_ROOT__;
