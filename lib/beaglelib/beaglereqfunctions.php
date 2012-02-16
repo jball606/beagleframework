@@ -687,7 +687,6 @@ function isValidPopDate(&$date)
  * will check an array if args are in place and if not it will add the default you add
  * @param array $in_args
  * @param array $defs
- * @author Brad Dutton
  * @return array 
  */
 function defaultArgs($in_args, $defs) 
@@ -707,7 +706,14 @@ function defaultArgs($in_args, $defs)
 	{
 		if(is_array($in_args))
 		{
-			$out_args[$k] = array_key_exists($k, $in_args) ? $in_args[$k] : $defs[$k];
+			if(isPopArray($v) && array_key_exists($k,$in_args))
+			{
+				$out_args[$k] = defaultArgs($in_args[$k],$v);
+			}
+			else 
+			{
+				$out_args[$k] = array_key_exists($k, $in_args) ? $in_args[$k] : $defs[$k];
+			}
 		}
 	}
 
