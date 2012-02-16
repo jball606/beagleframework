@@ -1,7 +1,7 @@
 /*
 new jquery plugin for form validate
 author Jason Ball
-2/28/2011
+2/14/2012
 
 
 */
@@ -17,6 +17,8 @@ jQuery.formValidateSettings = function(s)
 	
 }
 
+
+
 jQuery.formValidate = function(s)
 {	
 	
@@ -26,11 +28,14 @@ jQuery.formValidate = function(s)
 	var text = formValidateSettingParams.text; //'Required Field';
 	var alert = formValidateSettingParams.alert;
 	
+
 	return Validate(s);
 	
 	
 	function Validate(s)
 	{
+		removeAllDynamicErrors();
+		
 		s = jQuery.extend({}, s, {});
 		
 		if(!s.list)
@@ -110,11 +115,10 @@ jQuery.formValidate = function(s)
 	}
 	
 
+	
+	
 	function require(divs,form)
 	{
-		
-		
-		
 		var div = divs.split(";");
 		for(var a =0;a<div.length;a++)
 		{
@@ -144,11 +148,7 @@ jQuery.formValidate = function(s)
 								
 				if($.trim(obj.value) === "" || obj.value == text || obj.value == '&#160;' || obj.value == " ")
 				{ 
-					$("#"+obj.id).css('color',red);
-					obj.value = text;
-					var tobj = getObj(tfield,form,"Y");
-					eval(tobj+".onfocus= function() { if("+tobj+".value == text) { "+tobj+".value = ''; "+tobj+".style.color = '"+black+"'; } } ");
-					eval(tobj+".onkeydown = function() { if("+tobj+".value == text) { "+tobj+".value = ''; "+tobj+".style.color = '"+black+"'; } } "); 
+					$("#"+obj.id).customError(text);
 					if(document.getElementById(tfield+"_title"))
 					{
 						$("#"+tfield+"_title").addClass(alert);
@@ -157,7 +157,6 @@ jQuery.formValidate = function(s)
 				else
 				{ 
 					$("#"+tfield+"_title").removeClass(alert);
-					$("#"+obj.id).css('color',black);
 				}
 			}
 		}
@@ -175,3 +174,57 @@ jQuery.formValidate = function(s)
 	}
 	
 };
+
+
+$.fn.customError = function(message)
+	{
+	
+		var elm = $(this);
+	
+		var bob = elm.parent();
+		if(bob.get(0).tagName == "TD")
+		{
+			var tr = bob.parent();
+			
+			tr.find('td').each(function() {
+				$(this).attr('valign','top');
+			});
+		}
+		
+		$("#"+elm.attr('id')+"_dynamic_error").remove();
+		
+		var list = Array();
+		
+		if($.isArray(message))
+		{
+			var x =0;
+			for(var a = 0;a<message.length;a++)
+			{
+				if(message[a] != "")
+				{
+					list[x] = message[a];
+					x++;
+				}
+			}
+		}
+		else
+		{ 
+			list[0] = message;
+		}
+		
+		var msg = '<ul id="'+elm.attr('id')+'_dynamic_error" class="dynamic_error alert" >';
+		for(var a = 0; a<list.length;a++)
+		{
+			msg += '<li>'+list[a]+'</li>';
+		}
+		msg += '</ul>';
+		
+		elm.after(msg);
+		
+	}
+
+function removeAllDynamicErrors()
+{
+	$(".dynamic_error").remove();
+		
+}
