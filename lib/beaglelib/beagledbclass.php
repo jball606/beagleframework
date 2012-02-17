@@ -684,7 +684,17 @@ class beagleDbClass extends beagleerrorbase
 		}
 		else 
 		{
-			$this->update($keys,$values);
+			if($this->pkey)
+			{
+				foreach($test as $k => $i)
+				{
+					$this->update($i[$this->pkey],$values);
+				}
+			}
+			else 
+			{
+				$this->update($keys,$values);
+			}
 			
 			if($this->pkey && isset($test[0][$this->pkey]))
 			{
