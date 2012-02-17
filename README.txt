@@ -4,7 +4,7 @@ This is still in beta but has a fully functioning CRUD system and an advanced re
 
 You will need to install jQuery to use the advanced features.
 
-This is under the MIT licenses so please use this as you see fit.  If you make imporovements to the
+This is under the MIT licenses so please use this as you see fit.  If you make improvements to the
 base framework, please email me at jball@beagleframework.com with your changes so I am add them to the code
 base.
 
