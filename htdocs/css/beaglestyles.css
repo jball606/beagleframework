@@ -34,10 +34,8 @@ div.dblock_container
 
 .dblock_header
 {
-	background-image:url(/img/datatable.png);
-	background-repeat:repeat-x;
 	padding:3px;
-	background-color:#f15d22;
+	background-color:#2236f1;
 	color:#FFF;
 	font-weight:bold;
 	
