@@ -1014,6 +1014,10 @@ class beagleDbClass extends beagleerrorbase
 									$tmp[] = $k." = ".$j['database_field_name']." ";
 								}
 							}
+							elseif(isset($j['sub_query']))
+							{
+								$tmp[] = $k." ".$j['sub_query'];	
+							}
 							elseif(isset($j['start']) || isset($j['end']))
 							{
 								$rangefields = array();

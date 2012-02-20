@@ -381,7 +381,7 @@ class beagleSearchClass extends beaglebase
 		{	
 			foreach($array as $k => $i)
 			{
-				if(is_numeric($k))
+				if($i != '*' && !is_numeric($i))
 				{
 					if($i != '*')
 					{
@@ -481,16 +481,29 @@ class beagleSearchClass extends beaglebase
 	{
 		$BDB = new beagleDbClass();
 		$final = array();
+
 		if(isset($info['and']))
 		{
-			$tmp = $BDB->getSearchWhere($info['and']);
+			$tmp = array();
+			foreach($info['and'] as $i)
+			{
+				$junk = $BDB->getSearchWhere($i);
+				$tmp[] = $junk[0];
+			}
+			
 			$final[] = implode(" and ",$tmp);
 			unset($info['and']);
 		}
 		
 		if(isset($info['or']))
 		{
-			$tmp = $BDB->getSearchWhere($info['or']);
+			$tmp = array();
+			foreach($info['or'] as $i)
+			{
+				$junk = $BDB->getSearchWhere($info['or']);
+				$tmp[] = $junk[0];
+			}
+			
 			$final[] = implode(" or ",$tmp);
 			unset($info['or']);
 		}
