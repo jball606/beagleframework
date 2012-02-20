@@ -41,7 +41,7 @@ function goToBC(id)
 		if(count($result) != $x)
 		{
 		?>
-		<a href="#" onclick="goToBC(<?=$i['id'];?>); return false;"><?=$i['name'];?></a> 
+		<a href="#" onclick="goToBC(<?=$i['id'];?>); return false;"><?=$i['name'];?></a> &raquo;
 <? 		}
 		else
 		{
