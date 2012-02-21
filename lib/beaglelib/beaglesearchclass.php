@@ -491,7 +491,7 @@ class beagleSearchClass extends beaglebase
 	 * 
 	 *  
 	 */
-	private function getWhere($info)
+	protected function getWhere($info)
 	{
 		$BDB = new beagleDbClass();
 		$final = array();
