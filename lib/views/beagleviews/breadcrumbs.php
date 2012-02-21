@@ -14,13 +14,13 @@ p.breadcrumb a
 }
 </style>
 <script type="text/javascript">
-function goToBC(id)
+function goToBC(id,uber_parent)
 {
 	if(!isNaN(id))
 	{
 		$.ajax({
 				url:"/ajax/breadcrumb_ajax.php",
-				data:{id:'breadcrumb',bcid:id},
+				data:{id:'breadcrumb',bcid:id,uber_parent:uber_parent},
 				success:function(json)
 				{
 					timer.stopWait();
@@ -41,7 +41,7 @@ function goToBC(id)
 		if(count($result) != $x)
 		{
 		?>
-		<a href="#" onclick="goToBC(<?=$i['id'];?>); return false;"><?=$i['name'];?></a> &raquo;
+		<a href="#" onclick="goToBC(<?=$i['id'];?>,<?=$i['uber_parent'];?>); return false;"><?=$i['name'];?></a> &raquo;
 <? 		}
 		else
 		{

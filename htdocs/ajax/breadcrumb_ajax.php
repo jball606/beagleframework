@@ -1,5 +1,5 @@
 <?php
-include_once("config/systemsetup.php");
+include_once("beaglecrminc.php");
 
 if(isset($_GET['id']))
 {
@@ -17,8 +17,8 @@ if(isset($info['id']))
 	{
 		case "breadcrumb":
 		{
-			breadcrumbclass::resetToId($info['bcid']);
-			$BC = breadcrumbclass::getLastBC();
+			breadcrumbclass::resetToId($info['bcid'],$info['uber_parent']);
+			$BC = breadcrumbclass::getLastBC($info['uber_parent']);
 			print json_encode(array('url'=>$BC->getBcUrl()));
 			break;
 			

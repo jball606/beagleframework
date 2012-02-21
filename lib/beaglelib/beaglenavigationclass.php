@@ -72,9 +72,9 @@ class beagleNavigationClass extends beagleSearchClass
 	{
 		$tmpSQL = trim(substr($SQL,strpos($SQL,"from "),strlen($SQL)));
 		
-		if(strpos($tmpSQL,"group by")!== false)
+		if(strpos(strtolower($tmpSQL),"group by")!== false)
 		{
-			$junk = trim(substr($tmpSQL,0,strrpos($tmpSQL,"group by")));
+			$junk = trim(substr($tmpSQL,0,strrpos(strtolower($tmpSQL),"group by")));
 		}
 		else 
 		{

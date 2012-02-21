@@ -103,6 +103,7 @@ abstract class beagleResultClass extends beagleNavigationClass
 											'allowsort'=>true, //Allow the user to sort a row
 											'hiddencols'=>array(),	
 											'edit'=>false, //this flag is for telling the system that it should try to use the edit results system
+											'return_result_array'=>false, //In case I want to only get the array and not the view
 										));
 											
 											
@@ -208,7 +209,8 @@ abstract class beagleResultClass extends beagleNavigationClass
 			{
 				if(isset($args['edit_pencil']) && isPopArray($args['edit_pencil']))
 				{
-					$i['edit_pencil'] = '';
+					$q['edit_pencil'] = '';
+					$i = array_merge($q,$i);
 					$args['link']['field'] = 'edit_pencil';
 					$args['link']['key'] = $args['edit_pencil']['key'];
 					
@@ -220,6 +222,10 @@ abstract class beagleResultClass extends beagleNavigationClass
 			$result['records'] = $junk;
 		}
 		
+		if($args['return_result_array'])
+		{
+			return $result;
+		}
 		
 		if($this->page == false)
 		{

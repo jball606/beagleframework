@@ -11,8 +11,13 @@
 			{
 				$order = $result['order'];
 			}
+			if(isset($result['edit_pencil']))
+			{
+				?><th width="35px">edit</th><? 
+			} 
 			foreach($result['headers'] as $k => $i)
 			{
+				
 				
 				$field = substr($k,strpos($k,".")+1,strlen($k));
 				if(strpos($i,$result['editaccess']['field']) === false && !isset($result['hiddencols'][$field]))
@@ -63,10 +68,7 @@
 			}
 		
 		
-		if(isset($result['edit_pencil']))
-		{
-			?><th width="35px">edit</th><? 
-		} 
+		
 		if($result['editaccess'])
 		{
 			?><th width="35px">Access</th><? 

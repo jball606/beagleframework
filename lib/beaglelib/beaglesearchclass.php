@@ -24,6 +24,7 @@ class beagleSearchClass extends beaglebase
 	protected $subwhere = array();
 	protected $letterval = false;  
 	protected $page = false;
+	protected $user_selected_group_by = array();
 	 
 	/**
 	 * Method to get the right DB resorce
@@ -232,7 +233,7 @@ class beagleSearchClass extends beaglebase
 		}
 		
 		
-		$SQL_S = " select ".implode($view,",")." ";
+		$SQL_S = " SELECT ".implode($view,",")." ";
 		
 		$SQL_F = $args['SQL_F'];
 		
@@ -260,10 +261,19 @@ class beagleSearchClass extends beaglebase
 		}
 		
 		
-		$group = $this->getGroupData($view);
+		if(!isPopArray($this->user_selected_group_by))
+		{
+			$group = $this->getGroupData($view);
+		}
+		else 
+		{
+	
+			$group = $this->user_selected_group_by;
+		}
+		
 		if(isPopArray($group))
 		{
-			$SQL_G = " group by ".implode(",",$group);
+			$SQL_G = " GROUP BY ".implode(",",$group);
 		}
 		else
 		{
@@ -287,7 +297,9 @@ class beagleSearchClass extends beaglebase
 		if($args['printsql'])
 		{
 			print("<br/>PRE-SQL <BR>");
+			writeLog("PRE-SQL");
 			printSQL($PRE_SQL);
+			writeLog($PRE_SQL);
 		}
 		$R = $this->db->getOne($PRE_SQL);
 		$result = array();
@@ -305,8 +317,10 @@ class beagleSearchClass extends beaglebase
 		
 		if($args['printsql'])
 		{
+			writeLog("POST SQL");
 			print("<br/>POST SQL<BR>");
 			printSQL($SQL);
+			writeLog($SQL);
 		}
 		
 		$R = $this->db->query($SQL);
