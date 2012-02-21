@@ -10,7 +10,7 @@ include("beaglebase.php");
  * 
  * @author Jason Ball
  * @copyright 05/01/2011
- * @package Beagleframework
+ \* @package Beagleframework
  * 
  *
  */
@@ -22,15 +22,14 @@ class breadcrumbclass extends beaglebase
 	private $name = false;
 	private $parent = false;
 	private $child = false;
-	
+	private $uber_parent = false;
 	
 	public function __construct($name)
 	{
-		$this->url = "http://".$_SERVER['HTTP_HOST']."/".$_SERVER['PHP_SELF'];
+		$this->url = "http://".$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];
 		$this->url = str_replace("/htdocs/", "", $this->url);
 		if(!$this->lastIsNow($name,$this->url))
 		{
-			
 			if($_SERVER['QUERY_STRING'] != "")
 			{
 				$this->url .= "?".$_SERVER['QUERY_STRING'];
@@ -39,9 +38,19 @@ class breadcrumbclass extends beaglebase
 			
 			$this->name = $name;
 			$this->breadcrumb_id = rand(10000,99999);
-			
+
 			$this->getParent();
+			
+		
+
 			$this->storeBC();
+			print('<script type="text/javascript">'."\n var breadcrumbid = ".$this->uber_parent."; \n </script>\n");
+			$_SESSION[$this->getUri()] = $this->uber_parent;
+		}
+		else 
+		{
+			$tab = $this->getLastBC();
+			print('<script type="text/javascript">'."\n var breadcrumbid = ".$tab->getUberParent()."; \n </script>\n");
 		}
 	}
 	
@@ -54,6 +63,7 @@ class breadcrumbclass extends beaglebase
 	{
 		
 	}
+	
 	
 	public function getBcName()
 	{
@@ -80,6 +90,11 @@ class breadcrumbclass extends beaglebase
 		return $this->breadcrumb_id;
 	}
 	
+	public function getUberParent()
+	{
+		return $this->uber_parent;
+	}
+	
 	public function setChild($child)
 	{
 		$this->child = $child;
@@ -103,11 +118,30 @@ class breadcrumbclass extends beaglebase
 		
 	}
 	
-	public static function resetToId($id)
+	public static function resetUberParent($name="", $uber_parent="")
 	{
-		if(is_numeric($id) && isset($_SESSION['breadcrumbs'][$id]))
+		$uber_parent = breadcrumbclass::uberParentFind($uber_parent);
+		
+		if(isset($_SESSION['breadcrumbs'][$uber_parent]))
 		{
-			$bc= $_SESSION['breadcrumbs'];
+			unset($_SESSION['breadcrumbs'][$uber_parent]);
+		}
+		foreach($_SESSION as $k => $i)
+		{
+			if($i == $uber_parent)
+			{
+				unset($_SESSION[$k]);
+			}
+		}
+		//$B = new breadcrumbclass($name);
+	}
+	
+	public static function resetToId($id,$uber_parent)
+	{
+		if(is_numeric($id) && isset($_SESSION['breadcrumbs'][$uber_parent][$id]))
+		{
+			$bc= $_SESSION['breadcrumbs'][$uber_parent];
+		
 			$rev = array_reverse($bc,true);
 			
 			$keep = false;
@@ -126,26 +160,27 @@ class breadcrumbclass extends beaglebase
 			}
 			
 			$final = array_reverse($keepers,true);
-			
-			$_SESSION['breadcrumbs'] = $final;
+			$_SESSION['breadcrumbs'][$uber_parent] = $final;
 		}
 		
 		
 	}
 	
-	public static function showBcChain()
+	public static function showBcChain($uber_parent="")
 	{
-		if(isset($_SESSION['breadcrumbs']))
+	
+		$uber_parent = breadcrumbclass::uberParentFind($uber_parent);
+		if(isset($_SESSION['breadcrumbs'][$uber_parent]))
 		{
-			$tmp = $_SESSION['breadcrumbs'];
+			$tmp = $_SESSION['breadcrumbs'][$uber_parent];
 			$lnk = array();
-			
+		
 			foreach($tmp as $k => $i)
 			{
 				$tab = unserialize($i);
 				if(is_numeric($tab->getBcId()))
 				{
-					$lnk[] = array('id'=>$tab->getBcId(),'name'=>$tab->getBcName());
+					$lnk[] = array('id'=>$tab->getBcId(),'name'=>$tab->getBcName(),'uber_parent'=>$tab->getUberParent());
 				}
 				
 			}
@@ -159,16 +194,51 @@ class breadcrumbclass extends beaglebase
 		}
 		
 	}
-	
-	public static function getLastBC()
+	public static function getUri($withquery = true)
 	{
-		if(!isset($_SESSION['breadcrumbs']))
+	
+		$url = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+		
+		return $url;
+	}
+	
+	public static function uberParentFind($uber_parent="")
+	{
+		if(!isSetNum($uber_parent))
+		{
+			if(trim($uber_parent) == "")
+			{
+				if(isset($_SERVER['HTTP_REFERER']) && isset($_SESSION[$_SERVER['HTTP_REFERER']]))
+				{
+					$uber_parent = $_SESSION[$_SERVER['HTTP_REFERER']];
+				}
+				elseif(isset($_SESSION[breadcrumbclass::getUri()]))
+				{
+					$uber_parent = $_SESSION[breadcrumbclass::getUri()];
+				}
+			}
+			else 
+			{
+			//	print($_SERVER['HTTP_REFERER']); 
+				return false;
+			}
+		}
+		return $uber_parent;
+	}
+	
+	public static function getLastBC($uber_parent="")
+	{
+		$uber_parent = breadcrumbclass::uberParentFind($uber_parent);
+			
+		if(!isset($_SESSION['breadcrumbs']) || !isset($_SESSION['breadcrumbs'][$uber_parent]))
 		{
 			return false;
 		}
-		else if(!is_array($_SESSION['breadcrumbs']))
+		$session = $_SESSION['breadcrumbs'][$uber_parent];
+		
+		if(!is_array($session))
 		{
-			$tmp = $_SESSION['breadcrumbs'];
+			$tmp = $session;
 			$tab = unseraize($tmp);
 			if(is_object($tab))
 			{
@@ -182,13 +252,13 @@ class breadcrumbclass extends beaglebase
 		else 	
 		{
 			
-			$tmp = $_SESSION['breadcrumbs'];
+			$tmp = $session;
 			
 			$i = end($tmp);
 			$tab = unserialize($i);
 			return $tab;
 		}
-			
+		
 		
 	}
 	
@@ -215,14 +285,14 @@ class breadcrumbclass extends beaglebase
 	
 	public static function clearLastBC()
 	{
-		if(isset($_SESSION['breadcrumbs']) && is_array($_SESSION['breadcrumbs']) && count($_SESSION['breadcrumbs'])>0)
+		if(isset($_SESSION['breadcrumbs'][$this->uber_parent]) && is_array($_SESSION['breadcrumbs'][$this->uber_parent]) && count($_SESSION['breadcrumbs'][$this->uber_parent])>0)
 		{
-			$tmp = $_SESSION['breadcrumbs'];
+			$tmp = $_SESSION['breadcrumbs'][$this->uber_parent];
 			$keys = array_keys($tmp);
 			$x = count($keys)-1;
 			
 			unset($tmp[$keys[$x]]);
-			$_SESSION['breadcrumbs'] = $tmp;
+			$_SESSION['breadcrumbs'][$this->uber_parent] = $tmp;
 		}
 	}
 	
@@ -287,30 +357,31 @@ class breadcrumbclass extends beaglebase
 	
 	public function storeBC()
 	{
-		if(!isset($_SESSION['breadcrumbs']))
+		if(!isset($_SESSION['breadcrumbs'][$this->uber_parent]))
 		{
-			$_SESSION['breadcrumbs'][$this->breadcrumb_id] = serialize(clone($this));
+			$_SESSION['breadcrumbs'][$this->uber_parent][$this->breadcrumb_id] = serialize(clone($this));
+	
 		}
-		else if(!is_array($_SESSION['breadcrumbs']))
+		else if(!is_array($_SESSION['breadcrumbs'][$this->uber_parent]))
 		{
-			$tmp = $_SESSION['breadcrumbs'];
+			$tmp = $_SESSION['breadcrumbs'][$this->uber_parent];
 			if(is_object($tmp))
 			{
 				$junk[$tmp->getBcId()] = $tmp;
 			}
 			
 			$junk[$this->breadcrumb_id] = serialize(clone($this));
-			$_SESSION['breadcrumbs'] = $junk;
+			$_SESSION['breadcrumbs'][$this->uber_parent] = $junk;
 		}
 		else 	
 		{
-			$tmp = $_SESSION['breadcrumbs'];
+			$tmp = $_SESSION['breadcrumbs'][$this->uber_parent];
 			
 			
 			$tmp[$this->breadcrumb_id] = serialize(clone($this));
 			
 			
-			$_SESSION['breadcrumbs'] = $tmp;
+			$_SESSION['breadcrumbs'][$this->uber_parent] = $tmp;
 			
 			
 		}
@@ -325,10 +396,13 @@ class breadcrumbclass extends beaglebase
 		if($tab === false)
 		{
 			$this->parent = false;
+			$this->uber_parent = rand(1000,999999999999);
 		}
 		else 
 		{
 			$this->parent = $tab->getBcId();
+			$this->uber_parent = $tab->getUberParent();
+			
 			$tab->setChild($this->breadcrumb_id);
 		}
 	}
