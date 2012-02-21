@@ -28,11 +28,12 @@ class breadcrumbclass extends beaglebase
 	{
 		$this->url = "http://".$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];
 		$this->url = str_replace("/htdocs/", "", $this->url);
+		$this->url = breadcrumbclass::getUri();
 		if(!$this->lastIsNow($name,$this->url))
 		{
 			if($_SERVER['QUERY_STRING'] != "")
 			{
-				$this->url .= "?".$_SERVER['QUERY_STRING'];
+		//		$this->url .= "?".$_SERVER['QUERY_STRING'];
 			}
 			
 			
@@ -72,6 +73,7 @@ class breadcrumbclass extends beaglebase
 	
 	public function getBcURL()
 	{
+		return $this->url;
 		$find = array();
 		$replace = array();
 		
@@ -208,12 +210,16 @@ class breadcrumbclass extends beaglebase
 		{
 			if(trim($uber_parent) == "")
 			{
+				writeLog("SEARCH ");
+				writeLog("REFERR ".$_SERVER['HTTP_REFERER']);
 				if(isset($_SERVER['HTTP_REFERER']) && isset($_SESSION[$_SERVER['HTTP_REFERER']]))
 				{
+					writeLog("REFERR ".$_SERVER['HTTP_REFERER']);
 					$uber_parent = $_SESSION[$_SERVER['HTTP_REFERER']];
 				}
 				elseif(isset($_SESSION[breadcrumbclass::getUri()]))
 				{
+					writeLog("URI ".breadcrumbclass::getUri());
 					$uber_parent = $_SESSION[breadcrumbclass::getUri()];
 				}
 			}
@@ -223,6 +229,7 @@ class breadcrumbclass extends beaglebase
 				return false;
 			}
 		}
+		writeLog("UBER FOUND ".$uber_parent);
 		return $uber_parent;
 	}
 	
