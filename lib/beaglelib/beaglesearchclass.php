@@ -401,7 +401,10 @@ class beagleSearchClass extends beaglebase
 				}
 				else 
 				{
-					$tmp[] = $k;
+					if(!is_numeric($k))
+					{
+						$tmp[] = $k;
+					}
 				}
 			}
 		
