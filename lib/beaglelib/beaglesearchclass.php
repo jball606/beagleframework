@@ -395,7 +395,7 @@ class beagleSearchClass extends beaglebase
 		{	
 			foreach($array as $k => $i)
 			{
-				if($i != '*' && !is_numeric($i) && strpos($i," as ") === false)
+				if($i != '*' && !is_numeric($i) && strpos(strtolower($i)," as ") === false)
 				{
 					$tmp[] = $i;
 				}
