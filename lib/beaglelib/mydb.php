@@ -218,6 +218,7 @@ class mydb
 			printSQL($SQL."<BR>");
 			print $this->cleanBackTrace();
 			
+			writeLog("Invalid SQL Statement \n");
 			writeLog($SQL);
 			writeLog(br2nl($this->cleanBackTrace()));
 			exit;
