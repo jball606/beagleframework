@@ -177,51 +177,58 @@ jQuery.formValidate = function(s)
 
 
 $.fn.customError = function(message)
+{
+	var elm = $(this);
+	var elm_id = elm.attr('id');
+		
+	var bob = elm.parent();
+	if(bob.get(0).tagName == "TD")
 	{
-	
-		var elm = $(this);
-	
-		var bob = elm.parent();
-		if(bob.get(0).tagName == "TD")
-		{
-			var tr = bob.parent();
+		var tr = bob.parent();
 			
-			tr.find('td').each(function() {
-				$(this).attr('valign','top');
-			});
-		}
+		tr.find('td').each(function() {
+			$(this).attr('valign','top');
+		});
+	}
 		
-		$("#"+elm.attr('id')+"_dynamic_error").remove();
-		
-		var list = Array();
-		
-		if($.isArray(message))
-		{
-			var x =0;
-			for(var a = 0;a<message.length;a++)
-			{
-				if(message[a] != "")
-				{
-					list[x] = message[a];
-					x++;
-				}
-			}
-		}
-		else
-		{ 
-			list[0] = message;
-		}
-		
-		var msg = '<ul id="'+elm.attr('id')+'_dynamic_error" class="dynamic_error alert" >';
-		for(var a = 0; a<list.length;a++)
-		{
-			msg += '<li>'+list[a]+'</li>';
-		}
-		msg += '</ul>';
-		
-		elm.after(msg);
+	if(elm.next().attr('class') == 'ui-datepicker-trigger')
+	{
+		var tmp = elm.next();
+		elm = tmp;
 		
 	}
+		
+	$("#"+elm_id+"_dynamic_error").remove();
+		
+	var list = Array();
+		
+	if($.isArray(message))
+	{
+		var x =0;
+		for(var a = 0;a<message.length;a++)
+		{
+			if(message[a] != "")
+			{
+				list[x] = message[a];
+				x++;
+			}
+		}
+	}
+	else
+	{ 
+		list[0] = message;
+	}
+		
+	var msg = '<ul id="'+elm.attr('id')+'_dynamic_error" class="dynamic_error alert" >';
+	for(var a = 0; a<list.length;a++)
+	{
+		msg += '<li>'+list[a]+'</li>';
+	}
+	msg += '</ul>';
+		
+	elm.after(msg);
+		
+}
 
 function removeAllDynamicErrors()
 {
