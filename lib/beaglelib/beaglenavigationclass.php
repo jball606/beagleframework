@@ -70,7 +70,7 @@ class beagleNavigationClass extends beagleSearchClass
 	 */
 	private function stripSQL($SQL)
 	{
-		$tmpSQL = trim(substr($SQL,strpos($SQL,"from "),strlen($SQL)));
+		$tmpSQL = trim(substr($SQL,strpos(strtolower($SQL),"from "),strlen($SQL)));
 		
 		if(strpos(strtolower($tmpSQL),"group by")!== false)
 		{
