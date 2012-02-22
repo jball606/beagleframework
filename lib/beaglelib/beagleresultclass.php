@@ -89,7 +89,7 @@ abstract class beagleResultClass extends beagleNavigationClass
 											'title'=>false, //Title on header bar
 											'dates'=>array(),	//Date fields that need formatting example 'dates'=>array('created_date'=>"m/d/Y"),
 											'link'=>array(), 	//Link Array' exmpale array(0 => array('field'=>'email','key'=>'upid')),
-											'edit_pencil'=>array(),
+											'edit_pencil'=>array(), //example array(name=>'checkbox parent name','key'=>'key field like upid')
 											'bottommenu'=>false, //If you want links at the bottom
 											'lib'=>'search',	//Javascript class name
 											'sel'=>false,	//Do you need select bcxes for the row? false or array(name,key) of box
