@@ -928,3 +928,18 @@ function br2nl($string)
 {
 	return preg_replace('#<br\s*?/?>#i', "\n", $string);
 }
+
+function isHTMLString($string)
+{
+	if(strlen($string) != strlen(strip_tags($string)))
+	{
+  		return true;
+	}
+	elseif(strpos($string,'<?') !== false && strpos($string, '?>') !== false)
+	{
+		return true;
+	}
+	
+	return false;
+} 
+

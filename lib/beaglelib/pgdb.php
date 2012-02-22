@@ -85,7 +85,7 @@ class pgdb
 	{
 		foreach($this->functions as $k => $i)
 		{
-			if(strpos(strtoupper($word),$i."(")!== false)
+			if(strpos(strtoupper($word),$i."(")!== false && isHTMLString($word) == false)
 			{
 				return true;
 			}
