@@ -122,7 +122,7 @@ class breadcrumbclass extends beaglebase
 	
 	public static function resetUberParent($name="", $uber_parent="")
 	{
-		$uber_parent = breadcrumbclass::uberParentFind($uber_parent);
+		$uber_parent = breadcrumbclass::findUberParent($uber_parent);
 		
 		if(isset($_SESSION['breadcrumbs'][$uber_parent]))
 		{
@@ -171,7 +171,7 @@ class breadcrumbclass extends beaglebase
 	public static function showBcChain($uber_parent="")
 	{
 	
-		$uber_parent = breadcrumbclass::uberParentFind($uber_parent);
+		$uber_parent = breadcrumbclass::findUberParent($uber_parent);
 		if(isset($_SESSION['breadcrumbs'][$uber_parent]))
 		{
 			$tmp = $_SESSION['breadcrumbs'][$uber_parent];
@@ -196,6 +196,7 @@ class breadcrumbclass extends beaglebase
 		}
 		
 	}
+	
 	public static function getUri($withquery = true)
 	{
 	
@@ -204,38 +205,33 @@ class breadcrumbclass extends beaglebase
 		return $url;
 	}
 	
-	public static function uberParentFind($uber_parent="")
+	public static function findUberParent($uber_parent="")
 	{
 		if(!isSetNum($uber_parent))
 		{
 			if(trim($uber_parent) == "")
 			{
-				writeLog("SEARCH ");
-				writeLog("REFERR ".$_SERVER['HTTP_REFERER']);
-				if(isset($_SERVER['HTTP_REFERER']) && isset($_SESSION[$_SERVER['HTTP_REFERER']]))
+				if(isset($_SESSION[breadcrumbclass::getUri()]))
 				{
-					writeLog("REFERR ".$_SERVER['HTTP_REFERER']);
-					$uber_parent = $_SESSION[$_SERVER['HTTP_REFERER']];
-				}
-				elseif(isset($_SESSION[breadcrumbclass::getUri()]))
-				{
-					writeLog("URI ".breadcrumbclass::getUri());
 					$uber_parent = $_SESSION[breadcrumbclass::getUri()];
 				}
+				elseif(isset($_SERVER['HTTP_REFERER']) && isset($_SESSION[$_SERVER['HTTP_REFERER']]))
+				{
+					$uber_parent = $_SESSION[$_SERVER['HTTP_REFERER']];
+				}
+				
 			}
 			else 
 			{
-			//	print($_SERVER['HTTP_REFERER']); 
 				return false;
 			}
 		}
-		writeLog("UBER FOUND ".$uber_parent);
 		return $uber_parent;
 	}
 	
 	public static function getLastBC($uber_parent="")
 	{
-		$uber_parent = breadcrumbclass::uberParentFind($uber_parent);
+		$uber_parent = breadcrumbclass::findUberParent($uber_parent);
 			
 		if(!isset($_SESSION['breadcrumbs']) || !isset($_SESSION['breadcrumbs'][$uber_parent]))
 		{
