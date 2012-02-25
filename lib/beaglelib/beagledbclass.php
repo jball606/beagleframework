@@ -48,6 +48,11 @@ class beagleDbClass extends beagleerrorbase
 	 */
 	protected $join = false;
 	
+	public function __construct()
+	{
+		$this->loadDB();
+	}
+	
 	/**
 	 * This Method is Used to load DB variables
 	 * @param resouce DB

@@ -10,7 +10,7 @@ include("beaglebase.php");
  * 
  * @author Jason Ball
  * @copyright 05/01/2011
- \* @package Beagleframework
+ * @package Beagleframework
  * 
  *
  */
@@ -26,17 +26,9 @@ class breadcrumbclass extends beaglebase
 	
 	public function __construct($name)
 	{
-		$this->url = "http://".$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];
-		$this->url = str_replace("/htdocs/", "", $this->url);
 		$this->url = breadcrumbclass::getUri();
 		if(!$this->lastIsNow($name,$this->url))
 		{
-			if($_SERVER['QUERY_STRING'] != "")
-			{
-		//		$this->url .= "?".$_SERVER['QUERY_STRING'];
-			}
-			
-			
 			$this->name = $name;
 			$this->breadcrumb_id = rand(10000,99999);
 
@@ -215,7 +207,7 @@ class breadcrumbclass extends beaglebase
 				{
 					$uber_parent = $_SESSION[breadcrumbclass::getUri()];
 				}
-				elseif(isset($_SERVER['HTTP_REFERER']) && isset($_SESSION[$_SERVER['HTTP_REFERER']]))
+				if(isset($_SERVER['HTTP_REFERER']) && isset($_SESSION[$_SERVER['HTTP_REFERER']]))
 				{
 					$uber_parent = $_SESSION[$_SERVER['HTTP_REFERER']];
 				}
