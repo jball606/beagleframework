@@ -24,9 +24,11 @@ class breadcrumbclass extends beaglebase
 	private $child = false;
 	private $uber_parent = false;
 	
-	public function __construct($name)
+	public function __construct($name="")
 	{
-		$this->url = breadcrumbclass::getUri();
+		$this->url = self::getUrl();
+		$name = $this->getPageName($name);
+		
 		if(!$this->lastIsNow($name,$this->url))
 		{
 			$this->name = $name;
@@ -38,7 +40,7 @@ class breadcrumbclass extends beaglebase
 
 			$this->storeBC();
 			print('<script type="text/javascript">'."\n var breadcrumbid = ".$this->uber_parent."; \n </script>\n");
-			$_SESSION[$this->getUri()] = $this->uber_parent;
+			$_SESSION[$this->getUrl()] = $this->uber_parent;
 		}
 		else 
 		{
@@ -49,167 +51,144 @@ class breadcrumbclass extends beaglebase
 	
 	public function __sleep()
 	{
-		return array_keys(get_object_vars($this));
-	}
-	
-	public function __wakeup()
-	{
+		if(isset($this))
+		{
+			$up = $this->uber_parent;
+		}
+		else
+		{
+			$up = self::findUberParent();
+		}
 		
-	}
-	
-	
-	public function getBcName()
-	{
-		return $this->name;
-	}
-	
-	public function getBcURL()
-	{
-		return $this->url;
-		$find = array();
-		$replace = array();
-		
-		$find[] = "pcrumb=1&";
-		$replace[] = "";
-		$find[] = "pcrumb=1";
-		$replace = "";
-		
-		$tmp = str_replace($find,$replace,$this->url);
-		
-		return $tmp;
-	}
-	
-	public function getBcId()
-	{
-		return $this->breadcrumb_id;
-	}
-	
-	public function getUberParent()
-	{
-		return $this->uber_parent;
-	}
-	
-	public function setChild($child)
-	{
-		$this->child = $child;
+		$_SESSION['breadcrumb_'.$up."_TTL"] = time();
+		return parent::__sleep();
 	}
 	
 	/**
-	 * Store classes that you will use for this page
-	 * @param string $search = array element
-	 * @param object $session = class you want to save
-	 * 
-	 * @author Jason Ball 
+	 * This method is used to clear out all the breadcrumbs for a particular window if you have the reset key in your url
+	 * @param string $pagename
+	 * @return void
+	 * @author Jason Ball
 	 */
-	public static function storeBCSession($search, $session)
+	public static function cleanupBreadCrumbs($pagename="")
 	{
-		$tab = breadcrumbclass::getLastBC();
-		if($tab !== false)
+		$pagename = self::getPageName($pagename);
+		if(isset($_GET['pcrumb']) && !isset($_GET['frombc']))
 		{
-			$tab->saveSession($search, clone($session));
-		}
-		
-		
-	}
-	
-	public static function resetUberParent($name="", $uber_parent="")
-	{
-		$uber_parent = breadcrumbclass::findUberParent($uber_parent);
-		
-		if(isset($_SESSION['breadcrumbs'][$uber_parent]))
-		{
-			unset($_SESSION['breadcrumbs'][$uber_parent]);
-		}
-		foreach($_SESSION as $k => $i)
-		{
-			if($i == $uber_parent)
-			{
-				unset($_SESSION[$k]);
-			}
-		}
-		//$B = new breadcrumbclass($name);
-	}
-	
-	public static function resetToId($id,$uber_parent)
-	{
-		if(is_numeric($id) && isset($_SESSION['breadcrumbs'][$uber_parent][$id]))
-		{
-			$bc= $_SESSION['breadcrumbs'][$uber_parent];
-		
-			$rev = array_reverse($bc,true);
+			self::resetUberParent($pagename);
 			
-			$keep = false;
-			$keepers = array();
-			foreach($rev as $k => $i)
-			{	
-				if($k == $id)
-				{
-					$keep = true;
-				}
-				
-				if($keep == true)
-				{
-					$keepers[$k] = $i;
-				}
-			}
-			
-			$final = array_reverse($keepers,true);
-			$_SESSION['breadcrumbs'][$uber_parent] = $final;
-		}
-		
-		
-	}
-	
-	public static function showBcChain($uber_parent="")
-	{
-	
-		$uber_parent = breadcrumbclass::findUberParent($uber_parent);
-		if(isset($_SESSION['breadcrumbs'][$uber_parent]))
-		{
-			$tmp = $_SESSION['breadcrumbs'][$uber_parent];
-			$lnk = array();
-		
-			foreach($tmp as $k => $i)
+			$old = self::getOldBreadCrumbs();
+			if(isPopArray($old))
 			{
-				$tab = unserialize($i);
-				if(is_numeric($tab->getBcId()))
-				{
-					$lnk[] = array('id'=>$tab->getBcId(),'name'=>$tab->getBcName(),'uber_parent'=>$tab->getUberParent());
+				foreach($old as $i)
+				{	
+					if(isset($_SESSION['breadcrumbs'][$i]))
+					{
+						unset($_SESSION['breadcrumbs'][$i]);
+					}
+					unset($_SESSION['breadcrumb_'.$i.'_TTL']);
+					foreach($_SESSION as $k => $v)
+					{
+						if($v == $i)
+						{
+							unset($_SESSION[$k]);
+						}
+					}
+					
 				}
-				
 			}
-		
-			$B = new beaglebase();
-			print $B->showTemplate(getView('breadcrumbs.php','beagleviews'),$lnk);
-		}
-		else 
-		{
-			print("Breadcrumbs are broken");
 		}
 		
 	}
 	
-	public static function getUri($withquery = true)
+	/**
+	 * This method will clear out the last breadcrumb in a string of breadcrumbs no matter where you are at in the chain
+	 * @author Jason Ball
+	 */
+	public static function clearLastBC()
 	{
+		if(isset($_SESSION['breadcrumbs'][$this->uber_parent]) && is_array($_SESSION['breadcrumbs'][$this->uber_parent]) && count($_SESSION['breadcrumbs'][$this->uber_parent])>0)
+		{
+			$tmp = $_SESSION['breadcrumbs'][$this->uber_parent];
+			$keys = array_keys($tmp);
+			$x = count($keys)-1;
+			
+			unset($tmp[$keys[$x]]);
+			$_SESSION['breadcrumbs'][$this->uber_parent] = $tmp;
+		}
+	}
 	
-		$url = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
-		
+	/**
+	 * This Method is used to make sure any breadcrumb tags we use are removed for normal operations
+	 * 
+	 * @param string $url
+	 * @return string
+	 * @author Jason Ball
+	 */
+	private static function cleanUrl($url)
+	{
+		if(strpos($url,'frombc=true') !== false)
+		{
+			$url = str_replace("&frombc=true","",$url);
+		}	
 		return $url;
 	}
 	
-	public static function findUberParent($uber_parent="")
+	/**
+	 * Sometimes you need to use a different url then what you started with
+	 * Enter description here ...
+	 * @param unknown_type $newurl
+	 */
+	public function convertUrl($newurl)
+	{
+		$this->url = $newurl;
+		
+		$this->storeBC();
+		$newuberparent = $this->generateUberParent();
+		if(isPopArray($_SESSION['breadcrumbs'][$this->uber_parent]))
+		{
+			$newbc = array();
+			$tmp = $_SESSION['breadcrumbs'][$this->uber_parent];
+		
+			foreach($tmp as $k => $i)
+			{
+				$b = unserialize($i);
+				$b->storeUberParent($newuberparent);
+				$newbc[$k] = serialize($b);
+			}
+			
+			$_SESSION['breadcrumbs'][$newuberparent] = $newbc;
+		}
+		$GLOBALS['CONVERT_UBER'] = $newuberparent;
+		$_SESSION[$this->cleanUrl($this->url)] = $this->uber_parent;
+		
+	}
+	
+	/**
+	 * This method helps us to find the uber parent.  The uber parent allows us to keep track of what window a user is in
+	 * 
+	 * @param string $uber_parent
+	 * @return string/boolean
+	 * @author Jason Ball
+	 */
+	private static function findUberParent($uber_parent="")
 	{
 		if(!isSetNum($uber_parent))
 		{
 			if(trim($uber_parent) == "")
 			{
-				if(isset($_SESSION[breadcrumbclass::getUri()]))
+				global $CONVERT_UBER;
+				if(isSetNum($CONVERT_UBER))
 				{
-					$uber_parent = $_SESSION[breadcrumbclass::getUri()];
+					$uber_parent = $CONVERT_UBER;
 				}
-				if(isset($_SERVER['HTTP_REFERER']) && isset($_SESSION[$_SERVER['HTTP_REFERER']]))
+				elseif(isset($_SESSION[self::getUrl()]))
 				{
-					$uber_parent = $_SESSION[$_SERVER['HTTP_REFERER']];
+					$uber_parent = $_SESSION[self::getUrl()];
+				}
+				elseif(isset($_SERVER['HTTP_REFERER']) && isset($_SESSION[self::cleanUrl($_SERVER['HTTP_REFERER'])]))
+				{
+					$uber_parent = $_SESSION[self::cleanUrl($_SERVER['HTTP_REFERER'])];
 				}
 				
 			}
@@ -221,10 +200,58 @@ class breadcrumbclass extends beaglebase
 		return $uber_parent;
 	}
 	
+	private function generateUberParent()
+	{
+		return  rand(1000,999999999999);
+		
+	}
+	
+	/**
+	 * get Breadcrumb id
+	 * @param void
+	 * @return integer
+	 * @author Jason Ball
+	 */
+	public function getBcId()
+	{
+		return $this->breadcrumb_id;
+	}
+	
+	/**
+	 * get breadcrumb name
+	 * @param void
+	 * @return string
+	 * @author Jason Ball
+	 */
+	private function getBcName()
+	{
+		return $this->name;
+	}
+	
+	public function getBcSession($search)
+	{
+		if(!isset($this->session[$search]))
+		{
+			return false;
+		}
+		
+		return $this->session[$search];
+	}
+	
+	public function getBcURL($urlcheck = false)
+	{
+		if(strpos($this->url,'pcrumb') !== false && $urlcheck == false)
+		{
+			return $this->url."&frombc=true";
+		}
+		
+		return $this->url;
+	}
+	
 	public static function getLastBC($uber_parent="")
 	{
-		$uber_parent = breadcrumbclass::findUberParent($uber_parent);
-			
+		$uber_parent = self::findUberParent($uber_parent);
+
 		if(!isset($_SESSION['breadcrumbs']) || !isset($_SESSION['breadcrumbs'][$uber_parent]))
 		{
 			return false;
@@ -256,6 +283,89 @@ class breadcrumbclass extends beaglebase
 		
 		
 	}
+
+	public static function getLastBCSession($search)
+	{
+		$tmp = breadcrumbclass::getLastBC();
+		if($tmp !== false)
+		{
+			return $tmp->getBcSession($search);
+		}
+
+		return false;
+	}
+	
+	private static function getOldBreadCrumbs()
+	{
+		$oldcrumbs = array();
+		foreach($_SESSION as $k => $i)
+		{
+			if(strpos($k,'breadcrumb') !== false && strpos($k,'TTL')!==false)
+			{
+				if($i < time() - 300)
+				{
+					$tmp = explode("_",$k);
+					$oldcrumbs[] = $tmp[1];
+				}
+				
+			}
+			
+		}
+		
+		return $oldcrumbs;
+	}
+	
+	private static function getPageName($name="")
+	{
+		if($name == "")
+		{
+			$name = self::getUrl();
+		}
+		return $name;
+	}
+	
+	private function getParent()
+	{
+		$tab = $this->getLastBC();
+		
+		if($tab === false)
+		{
+			$this->parent = false;
+			$this->uber_parent = $this->generateUberParent();
+		}
+		else 
+		{
+			$this->parent = $tab->getBcId();
+			$this->uber_parent = $tab->getUberParent();
+			
+			$tab->setChild($this->breadcrumb_id);
+		}
+	}
+	
+	public function getUberParent()
+	{
+		return $this->uber_parent;
+	}
+	
+	private static function getUrl($withquery = true)
+	{
+	
+		$url = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+		
+		$url = self::cleanUrl($url);
+		
+		return $url;
+	}
+
+	public function hasSession()
+	{
+		if($this->session !== false)
+		{
+			return true;
+		}
+		
+		return false;
+	}
 	
 	private function lastIsNow($name,$url)
 	{
@@ -265,32 +375,75 @@ class breadcrumbclass extends beaglebase
 		{
 			return false;
 		}
-		
 		$n = $tab->getBcName();
-		$u = $this->getBcURL();
+		$u = $this->getBcURL(true);
+
 		if($n == $name && $u == $url)
 		{
 			return true;
 		}
-		
 		return false;
 				
 		
 	}
 	
-	public static function clearLastBC()
+	public static function resetToId($id,$uber_parent)
 	{
-		if(isset($_SESSION['breadcrumbs'][$this->uber_parent]) && is_array($_SESSION['breadcrumbs'][$this->uber_parent]) && count($_SESSION['breadcrumbs'][$this->uber_parent])>0)
+		if(is_numeric($id) && isset($_SESSION['breadcrumbs'][$uber_parent][$id]))
 		{
-			$tmp = $_SESSION['breadcrumbs'][$this->uber_parent];
-			$keys = array_keys($tmp);
-			$x = count($keys)-1;
+			$bc= $_SESSION['breadcrumbs'][$uber_parent];
+		
+			$rev = array_reverse($bc,true);
+			$keys = array_keys($bc);
+			$keep = false;
+			$keepers = array();
+			foreach($rev as $k => $i)
+			{	
+				if($k == $id)
+				{
+					$keep = true;
+				}
+				
+				if($keep == true)
+				{
+					$keepers[$k] = $i;
+				}
+			}
 			
-			unset($tmp[$keys[$x]]);
-			$_SESSION['breadcrumbs'][$this->uber_parent] = $tmp;
+			$final = array_reverse($keepers,true);
+			$keys = array_keys($final);
+		
+			$_SESSION['breadcrumbs'][$uber_parent] = $final;
 		}
+		
+		
 	}
 	
+	private static function resetUberParent($name="", $uber_parent="")
+	{
+		$uber_parent = self::findUberParent($uber_parent);
+		if(isset($_SESSION['breadcrumbs'][$uber_parent]))
+		{
+			unset($_SESSION['breadcrumbs'][$uber_parent]);
+		}
+		foreach($_SESSION as $k => $i)
+		{
+			
+			if($i == $uber_parent)
+			{
+				unset($_SESSION[$k]);
+			}
+		}
+		
+	}
+	
+	/**
+	 * This mehtod allows us to restore any session class that was stored inside the breadcrumb
+	 * 
+	 * @param string $search
+	 * @return object/false
+	 * @author Jason Ball
+	 */
 	public static function restoreBCSession($search="")
 	{
 		$tmp = breadcrumbclass::getLastBC();
@@ -303,53 +456,52 @@ class breadcrumbclass extends beaglebase
 		
 	}
 	
-	public function getBcSession($search)
+	/**
+	 * This method allow you to store a session into the breadcrumb so you can keep it for later
+	 * 
+	 * @param string $obj_name
+	 * @param object $obj
+	 */
+	public function saveSession($obj_name, $obj)
 	{
-		if(!isset($this->session[$search]))
-		{
-			return false;
-		}
-		
-		return $this->session[$search];
-	}
-	
-	public static function getLastBCSession($search)
-	{
-		$tmp = breadcrumbclass::getLastBC();
-		if($tmp !== false)
-		{
-			return $tmp->getBcSession($search);
-		}
-
-		return false;
-	}
-
-	public function saveSession($search, $session)
-	{
-		$this->session[$search] = $session;
+		$this->session[$obj_name] = $obj;
 		$this->storeBC();	
 	}
 	
-	/** 
-	 * For Testing
-	 * @param unknown_type $integer
-	 */
-	public function setBcId($id)
+	public function setChild($child)
 	{
-		$this->breadcrumb_id = $id;
-		
+		$this->child = $child;
 	}
 	
-	public function hasSession()
+	public static function showBcChain($uber_parent="")
 	{
-		if($this->session !== false)
+	
+		$uber_parent = self::findUberParent($uber_parent);
+		if(isset($_SESSION['breadcrumbs'][$uber_parent]))
 		{
-			return true;
+			$tmp = $_SESSION['breadcrumbs'][$uber_parent];
+			$lnk = array();
+	
+			foreach($tmp as $k => $i)
+			{
+				$tab = unserialize($i);
+				if(is_numeric($tab->getBcId()))
+				{
+					$lnk[] = array('id'=>$tab->getBcId(),'name'=>$tab->getBcName(),'uber_parent'=>$tab->getUberParent());
+				}
+				
+			}
+	
+			$B = new beaglebase();
+			print $B->showTemplate(getView('breadcrumbs.php','beagleviews'),$lnk);
+		}
+		else 
+		{
+			print("Breadcrumbs are broken");
 		}
 		
-		return false;
 	}
-	
+
 	public function storeBC()
 	{
 		if(!isset($_SESSION['breadcrumbs'][$this->uber_parent]))
@@ -370,6 +522,7 @@ class breadcrumbclass extends beaglebase
 		}
 		else 	
 		{
+			
 			$tmp = $_SESSION['breadcrumbs'][$this->uber_parent];
 			
 			
@@ -383,23 +536,29 @@ class breadcrumbclass extends beaglebase
 		
 	}
 	
-	
-	private function getParent()
+	/**
+	 * Store classes that you will use for this page
+	 * @param string $search = array element
+	 * @param object $session = class you want to save
+	 * 
+	 * @author Jason Ball 
+	 */
+	public static function storeBCSession($search, $session)
 	{
-		$tab = $this->getLastBC();
+		$tab = breadcrumbclass::getLastBC();
+		if($tab !== false)
+		{
+			$tab->saveSession($search, clone($session));
+		}
 		
-		if($tab === false)
-		{
-			$this->parent = false;
-			$this->uber_parent = rand(1000,999999999999);
-		}
-		else 
-		{
-			$this->parent = $tab->getBcId();
-			$this->uber_parent = $tab->getUberParent();
-			
-			$tab->setChild($this->breadcrumb_id);
-		}
+		
 	}
+	
+	public function storeUberParent($uber_parent)
+	{
+		$this->uber_parent = $uber_parent;	
+		
+	}
+	
 }
 ?>
