@@ -307,7 +307,7 @@ class breadcrumbclass extends beaglebase
 		{
 			if(strpos($k,'breadcrumb') !== false && strpos($k,'TTL')!==false)
 			{
-				if($i < time() - 300)
+				if($i < time() - 600)
 				{
 					$tmp = explode("_",$k);
 					$oldcrumbs[] = $tmp[1];

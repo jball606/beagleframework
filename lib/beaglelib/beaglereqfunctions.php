@@ -753,6 +753,7 @@ function removeEmptyElements($array,$type="")
 	}
 	
 }
+
 /**
  * Quick way to show money format
  * @param float number
@@ -929,6 +930,15 @@ function br2nl($string)
 	return preg_replace('#<br\s*?/?>#i', "\n", $string);
 }
 
+/**
+ * This function is to figure out if the string is and HTML string.
+ * Used primarily to make sure a php function is not assumed to be a DB fuction
+ * 
+ * @param string $string
+ * @return Boolean
+ * @author Jason Ball
+ * @copyright 2012-02-23
+ */
 function isHTMLString($string)
 {
 	if(strlen($string) != strlen(strip_tags($string)))
@@ -943,6 +953,15 @@ function isHTMLString($string)
 	return false;
 } 
 
+/**
+ * 
+ * For use of figuring out what is in an array without printing out the whole thing
+ * @param array $array
+ * @param boolean $write (print to screen (default) or write to beagle.log)
+ * @return boolean
+ * @author Jason Ball
+ * @copyright 2012-02-26
+ */
 function printArrayKeys($array,$write=false)
 {
 	if(isPopArray($array))
