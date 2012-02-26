@@ -298,6 +298,11 @@ class breadcrumbclass extends beaglebase
 	private static function getOldBreadCrumbs()
 	{
 		$oldcrumbs = array();
+		if(isPopArray($_SESSION['breadcrumb']) && count($_SESSION['breadcrumb']) == 1)
+		{
+			return $oldcrumbs;
+		}
+		
 		foreach($_SESSION as $k => $i)
 		{
 			if(strpos($k,'breadcrumb') !== false && strpos($k,'TTL')!==false)

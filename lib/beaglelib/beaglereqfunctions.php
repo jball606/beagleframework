@@ -943,3 +943,26 @@ function isHTMLString($string)
 	return false;
 } 
 
+function printArrayKeys($array,$write=false)
+{
+	if(isPopArray($array))
+	{
+		$keys = array_keys($array);
+		if(isPopArray($keys))
+		{
+			if($write == false)
+			{	
+				print_r2($keys);
+				return true;
+			}
+			else 
+			{
+				writeLog($keys);
+				return true;
+			}
+		}
+	}
+	return false;
+	
+	
+}
