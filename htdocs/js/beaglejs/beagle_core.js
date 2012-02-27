@@ -223,3 +223,16 @@ function showError(elist,id,subid)
 		}
 	}
 }
+
+function clearBreadCrumbData(url)
+{
+	url = url.replace("&pcrumb=1","");
+	url = url.replace("?pcrumb=1","");
+
+	if(url.indexOf("&") != -1 && url.indexOf("?") == -1)
+	{
+		url = url.replace("&","?");
+	}
+	
+	return url;
+}

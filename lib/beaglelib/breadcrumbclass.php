@@ -553,7 +553,14 @@ class breadcrumbclass extends beaglebase
 		$tab = breadcrumbclass::getLastBC();
 		if($tab !== false)
 		{
-			$tab->saveSession($search, clone($session));
+			if(is_object($session))
+			{
+				$tab->saveSession($search, clone($session));
+			}
+			else 
+			{
+				$tab->saveSession($search,$session);
+			}
 		}
 		
 		

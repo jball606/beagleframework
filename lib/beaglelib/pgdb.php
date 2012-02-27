@@ -156,7 +156,7 @@ class pgdb
 			{
 				return new pgresult($res);
 			}
-			print("Invalid SQL Statement \n");
+			print("Invalid SQL Statement <BR/>");
 			printSQL($SQL."<BR/>");
 			print $this->cleanBackTrace();
 			
