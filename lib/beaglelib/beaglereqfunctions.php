@@ -223,7 +223,7 @@ function writeLog($item,$location="")
  */
 function printSQL($SQL)
 {
-	if(is_cli())
+	if(!is_cli())
 	{
 		print(nl2br($SQL));
 	}
