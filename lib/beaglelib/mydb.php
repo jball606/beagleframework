@@ -461,6 +461,12 @@ class mydb
 	
 		return $error;
 	}
+
+	public function getConnectionCriteria()
+	{
+		return $this->conn;
+		
+	}
 }
 
 class myresult

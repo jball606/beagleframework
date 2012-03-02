@@ -326,6 +326,12 @@ class pgdb
 	
 		return $error;
 	}
+
+	public function getConnectionCriteria()
+	{
+		return $this->conn;
+		
+	}
 }
 
 class pgresult
