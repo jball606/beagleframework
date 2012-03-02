@@ -467,6 +467,21 @@ class mydb
 		return $this->conn;
 		
 	}
+	
+	public function importSQLFile($filename)
+	{
+		$cmd = "mysql -h".$this->conn['host']." -u".$this->conn['user']." -p".$this->conn['password']." ".$this->conn['dbname'];
+		$cmd .= " < ".$filename;
+		exec($cmd,$output);
+		if(isPopArray($output))
+		{
+			print_r2($output);
+			writeLog($output);
+			return false;
+		}
+
+		return true;
+	}
 }
 
 class myresult

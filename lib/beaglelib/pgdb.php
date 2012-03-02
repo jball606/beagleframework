@@ -332,6 +332,23 @@ class pgdb
 		return $this->conn;
 		
 	}
+	
+	public function importSQLFile($filename)
+	{
+		print("Not setup for postgres yet");
+		return false;
+		$cmd = "mysql -h".$this->conn['host']." -u".$this->conn['user']." -p".$this->conn['password']." ".$this->conn['dbname'];
+		$cmd .= " < ".$filename;
+		exec($cmd,$output);
+		if(isPopArray($output))
+		{
+			print_r2($output);
+			writeLog($output);
+			return false;
+		}
+
+		return true;
+	}
 }
 
 class pgresult
