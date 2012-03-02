@@ -1116,10 +1116,12 @@ class beagleDbClass extends beagleerrorbase
 		{
 			return $data;
 		}
+		/*
 		if(is_numeric($data))
 		{
 			return $data;
 		}
+		*/
 		elseif(trim($data) == "")
 		{
 			return 'null';
