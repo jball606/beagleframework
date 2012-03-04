@@ -188,6 +188,16 @@ class pgdb
 		return $out_args;
 	}
 
+	/**
+	 * Query Wrapper
+	 * 
+	 * @param string $SQL
+	 */
+	public function execute($SQL="")
+	{
+		return $this->query($SQL);
+	}
+	
 	public function getOne($SQL)
 	{
 		$row = pg_fetch_row(pg_query($this->dbconn, $SQL));
@@ -338,19 +348,22 @@ class pgdb
 	
 	public function importSQLFile($filename)
 	{
-		print("Not setup for postgres yet");
-		return false;
-		$cmd = "mysql -h".$this->conn['host']." -u".$this->conn['user']." -p".$this->conn['password']." ".$this->conn['dbname'];
+		$cmd = "PGPASSWORD=".$this->conn['password']." psql -U".$this->conn['user']." -h".$this->conn['host']." ".$this->conn['dbname'];
 		$cmd .= " < ".$filename;
 		exec($cmd,$output);
 		if(isPopArray($output))
 		{
 			print_r2($output);
 			writeLog($output);
-			return false;
+			return true;
 		}
 
 		return true;
+	}
+
+	public function doesTableExist($table)
+	{
+		return $this->getOne("select table_name from information_schema.tables where table_name='".$table."' and table_catalog = '".$this->conn['dbname']."';");
 	}
 }
 

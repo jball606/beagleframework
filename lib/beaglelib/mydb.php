@@ -485,6 +485,11 @@ class mydb
 
 		return true;
 	}
+
+	public function doesTableExist($table)
+	{
+		return $this->getOne("show tables like '".$table."';");
+	}
 }
 
 class myresult
