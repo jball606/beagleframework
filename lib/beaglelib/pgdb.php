@@ -147,7 +147,7 @@ class pgdb
 	 * @param string $SQL
 	 * @return result class
 	 */
-	public function query($SQL="")
+	public function query($SQL="",$continue_on_failure=false)
 	{
 		if(trim($SQL) != "")
 		{
@@ -159,11 +159,14 @@ class pgdb
 			print("Invalid SQL Statement <BR/>");
 			printSQL($SQL."<BR/>");
 			print $this->cleanBackTrace();
-			
+				
 			writeLog("Invalid SQL Statement \n");
 			writeLog($SQL);
 			writeLog(br2nl($this->cleanBackTrace()));
-			exit;
+			if($continue_on_failure == false)
+			{
+				exit;
+			}
 		}
 	}
 	

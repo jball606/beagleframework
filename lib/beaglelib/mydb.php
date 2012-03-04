@@ -195,7 +195,7 @@ class mydb
 	 * @param string $SQL
 	 * @return result class
 	 */
-	public function query($SQL="")
+	public function query($SQL="",$continue_on_failure=false)
 	{
 		if(trim($SQL) != "")
 		{
@@ -221,7 +221,10 @@ class mydb
 			writeLog("Invalid SQL Statement \n");
 			writeLog($SQL);
 			writeLog(br2nl($this->cleanBackTrace()));
-			exit;
+			if($continue_on_failure == false)
+			{
+				exit;
+			}
 		}
 	}
 	
