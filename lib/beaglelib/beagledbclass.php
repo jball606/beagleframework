@@ -914,7 +914,7 @@ class beagleDbClass extends beagleerrorbase
 	 * @return array
 	 * @author Jason Ball
 	 */
-	public function getSearchWhere($array)
+	public function getSearchWhere($array,$fieldonly=false)
 	{
 		$this->loadDB();
 		
@@ -930,7 +930,14 @@ class beagleDbClass extends beagleerrorbase
 		{
 			foreach($i as $v)
 			{	
-				$tmp[] = $k.".".$v;
+				if($fieldonly == true)
+				{
+					$tmp[] = $v;
+				}
+				else 
+				{
+					$tmp[] = $k.".".$v;
+				}
 			}
 		}
 		
