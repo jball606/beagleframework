@@ -689,7 +689,7 @@ function isValidPopDate(&$date)
  * @param array $defs
  * @return array 
  */
-function defaultArgs($in_args, $defs) 
+function defaultArgs($in_args, $defs,$allreq=false) 
 {
 	if (!is_array($defs)) print 'argDefaults called with non-array defs';
 
@@ -700,6 +700,11 @@ function defaultArgs($in_args, $defs)
 		return $defs;
 	}
 
+	if($allreq)
+	{
+		$req = $defs;	
+	}
+	
 	$out_args = array();
 
 	foreach ($defs as $k => $v)
@@ -717,6 +722,21 @@ function defaultArgs($in_args, $defs)
 		}
 	}
 
+	if($allreq)
+	{
+		$errors = array();
+		foreach($req as $k => $i)
+		{
+			if($out_args[$k] === false || $out_args[$k] === null)
+			{
+				$errors[] = $k." is a required field";
+			}	
+		}
+		if(isPopArray($errors))
+		{
+			$out_args['errors'] = $errors;
+		}
+	}
 	return $out_args;
 }
 
