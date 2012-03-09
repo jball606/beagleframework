@@ -298,14 +298,14 @@ class breadcrumbclass extends beaglebase
 	private static function getOldBreadCrumbs()
 	{
 		$oldcrumbs = array();
-		if(isPopArray($_SESSION['breadcrumb']) && count($_SESSION['breadcrumb']) == 1)
+		if(isPopArray($_SESSION['breadcrumbs']) && count($_SESSION['breadcrumbs']) == 1)
 		{
 			return $oldcrumbs;
 		}
 		
 		foreach($_SESSION as $k => $i)
 		{
-			if(strpos($k,'breadcrumb') !== false && strpos($k,'TTL')!==false)
+			if(strpos($k,'breadcrumbs') !== false && strpos($k,'TTL')!==false)
 			{
 				if($i < time() - 600)
 				{
@@ -426,7 +426,18 @@ class breadcrumbclass extends beaglebase
 	
 	private static function resetUberParent($name="", $uber_parent="")
 	{
-		$uber_parent = self::findUberParent($uber_parent);
+	
+		self::clearUberSession(self::findUberParent($uber_parent));
+		
+		
+		if(isset($_SERVER['HTTP_REFERER']) && isset($_SESSION[self::cleanUrl($_SERVER['HTTP_REFERER'])]))
+		{
+			self::clearUberSession($_SESSION[self::cleanUrl($_SERVER['HTTP_REFERER'])]);
+		}
+	}
+	
+	private static function clearUberSession($uber_parent)
+	{
 		if(isset($_SESSION['breadcrumbs'][$uber_parent]))
 		{
 			unset($_SESSION['breadcrumbs'][$uber_parent]);
@@ -441,7 +452,6 @@ class breadcrumbclass extends beaglebase
 		}
 		
 	}
-	
 	/**
 	 * This mehtod allows us to restore any session class that was stored inside the breadcrumb
 	 * 
@@ -482,6 +492,7 @@ class breadcrumbclass extends beaglebase
 	{
 	
 		$uber_parent = self::findUberParent($uber_parent);
+	
 		if(isset($_SESSION['breadcrumbs'][$uber_parent]))
 		{
 			$tmp = $_SESSION['breadcrumbs'][$uber_parent];
