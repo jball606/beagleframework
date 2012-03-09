@@ -78,6 +78,7 @@ class breadcrumbclass extends beaglebase
 			self::resetUberParent($pagename);
 			
 			$old = self::getOldBreadCrumbs();
+		
 			if(isPopArray($old))
 			{
 				foreach($old as $i)
