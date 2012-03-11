@@ -282,7 +282,7 @@ class beagleSearchClass extends beaglebase
 		
 		$SQL = $SQL_S." \n ".$SQL_F." \n ".$SQL_W." \n ".$SQL_G;
 		
-		if($o = $this->createOrder())
+		if($o = $this->createOrder($this->order))
 		{
 			$SQL .= " order by ".implode($o,",");
 		}
@@ -345,10 +345,10 @@ class beagleSearchClass extends beaglebase
 	/**
 	 * Method to create order clause of search statemnt
 	 */
-	private function createOrder()
+	protected function createOrder($order)
 	{
 		$tmp = array();
-		foreach($this->order as $k => $i)
+		foreach($order as $k => $i)
 		{
 			if($i == 1)
 			{
