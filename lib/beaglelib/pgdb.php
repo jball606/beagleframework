@@ -421,6 +421,7 @@ class pgresult
 		}
 		return $tmp;
 	}
+	
 	public function numRows()
 	{
 		return $count = pg_num_rows($this->result);
