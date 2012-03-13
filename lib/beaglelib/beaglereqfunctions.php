@@ -378,11 +378,11 @@ function __autoload($orig_classname)
 		}
 	}
 	
-	if(strpos($classname,"class")!==false)
+	if(strpos(strtoupper($classname),strtoupper("class"))!==false)
 	{
 		$root = $rp."/lib/classes";
 	}
-	elseif(strpos($classname,"controller") != false)
+	elseif(strpos(strtoupper($classname),strtoupper("controller")) != false)
 	{
 		$root = $rp."/lib/controllers";
 	}
