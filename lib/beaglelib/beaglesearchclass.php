@@ -294,7 +294,14 @@ class beagleSearchClass extends beaglebase
 	
 		//May be the most correct but slower $PRE_SQL = "select sum(c) from (select count(*) as c ".$SQL_F." ".$SQL_W." ".$SQL_G.") as foo";
 		
-		$PRE_SQL = "select count(*) from (select count(*) as c ".$SQL_F." ".$SQL_W." ".$SQL_G.") as foo;";
+		if(strpos($SQL_G,"GROUP BY")!== false)
+		{
+			$PRE_SQL = "select count(*) from (select count(*) as c ".$SQL_F." ".$SQL_W." ".$SQL_G.") as foo;";
+		}
+		else 
+		{
+			$PRE_SQL = "select count(*) as c ".$SQL_F." ".$SQL_W;
+		}
 		
 		if($args['printsql'])
 		{
