@@ -293,7 +293,9 @@ class beagleSearchClass extends beaglebase
 		}
 	
 		//May be the most correct but slower $PRE_SQL = "select sum(c) from (select count(*) as c ".$SQL_F." ".$SQL_W." ".$SQL_G.") as foo";
-		$PRE_SQL = "select count(*) as c ".$SQL_F." ".$SQL_W;
+		
+		$PRE_SQL = "select count(*) from (select count(*) as c ".$SQL_F." ".$SQL_W." ".$SQL_G.") as foo;";
+		
 		if($args['printsql'])
 		{
 			print("<br/>PRE-SQL <BR>");
@@ -322,7 +324,7 @@ class beagleSearchClass extends beaglebase
 			printSQL($SQL);
 			writeLog($SQL);
 		}
-		
+	
 		$R = $this->db->query($SQL);
 		$tmp = array();
 		while($row = $R->fetchRow())
