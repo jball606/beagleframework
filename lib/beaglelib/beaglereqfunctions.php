@@ -1005,3 +1005,16 @@ function printArrayKeys($array,$write=false)
 	
 	
 }
+
+/**
+ * This function is useful for swaping two variables
+ * 
+ * @param anything $A
+ * @param anything $B
+ * @return overwrites original var
+ * @author Jason Ball (taken from Optimus Pete blog)
+ */
+function varSwap(&$A, &$B)
+{
+	list($A,$B) = array($B,$A);
+}
