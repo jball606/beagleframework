@@ -1014,7 +1014,7 @@ function printArrayKeys($array,$write=false)
  * @return overwrites original var
  * @author Jason Ball (taken from Optimus Pete blog)
  */
-function varSwap(&$A, &$B)
+function swapVar(&$A, &$B)
 {
 	list($A,$B) = array($B,$A);
 }
