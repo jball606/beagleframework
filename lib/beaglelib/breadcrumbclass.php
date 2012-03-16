@@ -128,9 +128,9 @@ class breadcrumbclass extends beaglebase
 	 */
 	private static function cleanUrl($url)
 	{
-		if(strpos($url,'frombc=true') !== false)
+		if(strpos($url,'frombc/true') !== false)
 		{
-			$url = str_replace("&frombc=true","",$url);
+			$url = str_replace("/frombc/true","",$url);
 		}	
 		return $url;
 	}
@@ -243,7 +243,7 @@ class breadcrumbclass extends beaglebase
 	{
 		if(strpos($this->url,'pcrumb') !== false && $urlcheck == false)
 		{
-			return $this->url."&frombc=true";
+			return $this->url."/frombc/true";
 		}
 		
 		return $this->url;
@@ -357,7 +357,6 @@ class breadcrumbclass extends beaglebase
 	{
 	
 		$url = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
-		
 		$url = self::cleanUrl($url);
 		
 		return $url;

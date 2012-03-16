@@ -17,7 +17,18 @@ Options +FollowSymLinks
 #	RewriteEngine on
 #	RewriteBase /
 #	RewriteCond %{REQUEST_URI} !^/htdocs/
-#	RewriteRule ^(.*)$	/htdocs/$1 
+#	RewriteRule ^(.*)$	/htdocs/$1
+ 
+#RewriteCond %{REQUEST_URI} !^/urlcop.php
+#RewriteCond %{REQUEST_URI} !/img/
+#RewriteCond %{REQUEST_URI} !/css/
+#RewriteCond %{REQUEST_URI} !/js/
+##RewriteCond %{REQUEST_URI} !/viewwebassets/
+#RewriteCond %{REQUEST_URI} !^/ajax
+
+#	RewriteRule ^(.*)$	/htdocs/$1
+  
+RewriteRule ^(.*)$ /urlcop.php  
 #</IfModule>
 
 ######For development
