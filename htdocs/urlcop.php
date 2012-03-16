@@ -5,11 +5,26 @@ if(strpos($_SERVER['REQUEST_URI'],".php") !== false)
 {
 	$tmp = explode("?", $_SERVER['REQUEST_URI']);
 	include_once(__SYSTEM_ROOT__."/htdocs/".$tmp[0]);
+	exit;
 }
+
 
 $var = explode("/",$_SERVER['REQUEST_URI']);
 
+foreach($var as $k => $i)
+{
+	if(trim($i) == "")
+	{
+		unset($var[$k]);
+	}
+}
 
+
+if(count($var) == 0)
+{
+	include(__SYSTEM_ROOT__."/htdocs/index.php");
+	exit;
+}
 
 	unset($var[0]);
 	$parts = array();
@@ -20,6 +35,7 @@ $var = explode("/",$_SERVER['REQUEST_URI']);
 	
 	
 	$page = "";
+	$junk = array();
 	$page_index = getPageIndex($parts,__SYSTEM_ROOT__."/htdocs/");
 	$query = array();
 	if($page_index !== false)
@@ -43,8 +59,15 @@ $var = explode("/",$_SERVER['REQUEST_URI']);
 			$junk[] = $parts[$a]."=".$parts[$a+1];
 			$a++;
 		}
-	
-		$url .= ".php?".implode("&",$junk);
+		
+		if(count($junk)>0)
+		{
+			$url .= ".php?".implode("&",$junk);
+		}
+		else 
+		{
+			$url .= ".php";
+		}
 
 		include_once(__SYSTEM_ROOT__."/htdocs/".$page.".php");
 	}
