@@ -36,7 +36,21 @@ if(count($var) == 0)
 	
 	$page = "";
 	$junk = array();
+	
 	$page_index = getPageIndex($parts,__SYSTEM_ROOT__."/htdocs/");
+	if($page_index === false )
+	{
+		$newparts = findTheIndex($parts);
+		if(isPopArray($newparts))
+		{
+			$parts = $newparts['parts'];
+			$page_index = $newparts['page_index'];
+		}
+		else 
+		{
+			goto404();
+		}
+	}
 	$query = array();
 	if($page_index !== false)
 	{
@@ -73,8 +87,46 @@ if(count($var) == 0)
 	}
 
 
+function findTheIndex($array)
+{
+	$start = __SYSTEM_ROOT__."/htdocs";
+	$ni = 0;
+	foreach($array as $k => $i)
+	{
+		$start .= "/".$i;
+		
+		$x = getPageIndex(array('index'), $start);
+		if(isSetNum($x))
+		{
+			$ni++;	
+			$tmp = array();
+			foreach($array as $vk => $v)
+			{
+				if($vk < $ni || $vk > $ni)
+				{
+					$tmp[] =$v;
+				}
+				else 
+				{
+					$tmp[] = "index";
+					$tmp[] = $v;
+				}
+			} 
+			
+			return array('parts'=>$tmp,'page_index'=>$ni);
+		}
+		$ni++;
+	}
+	
+	return false;
+}
 
-
+function goto404()
+{
+	print("You hit the 404 message, whoops");
+	exit;	
+	
+}
 function getPageIndex($array,$start)
 {
 	foreach($array as $k => $i)
