@@ -19,7 +19,6 @@ foreach($var as $k => $i)
 	}
 }
 
-
 if(count($var) == 0)
 {
 	include(__SYSTEM_ROOT__."/htdocs/index.php");
@@ -33,11 +32,11 @@ if(count($var) == 0)
 		$parts[] = $i;
 	}
 	
-	
 	$page = "";
 	$junk = array();
 	
 	$page_index = getPageIndex($parts,__SYSTEM_ROOT__."/htdocs/");
+	
 	if($page_index === false )
 	{
 		$newparts = findTheIndex($parts);
@@ -112,7 +111,10 @@ function findTheIndex($array)
 					$tmp[] = $v;
 				}
 			} 
-			
+			if(count($tmp) == $ni)
+			{
+				$tmp[] = 'index';
+			}
 			return array('parts'=>$tmp,'page_index'=>$ni);
 		}
 		$ni++;
