@@ -923,8 +923,26 @@ class beagleDbClass extends beagleerrorbase
 			$prewhere[$table] = $this->getWhere($fields);
 			
 		}
-		
-		
+		if(isset($fields['or']))
+		{
+			if(is_array($fields['or']))
+			{
+				$keys = array_keys($fields['or']);
+				if(isPopArray($keys))
+				{
+					foreach($keys as $i)
+					{
+						foreach($prewhere as $ke => $v)
+						{
+							$prewhere[$ke] = str_replace($i, $ke.".".$i, $v);
+						}
+					}
+				}
+					
+			}
+			$fieldonly = true;
+		}
+
 		$tmp = array();
 		foreach($prewhere as $k => $i)
 		{
@@ -936,6 +954,7 @@ class beagleDbClass extends beagleerrorbase
 				}
 				else 
 				{
+					
 					$tmp[] = $k.".".$v;
 				}
 			}
