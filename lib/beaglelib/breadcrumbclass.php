@@ -27,6 +27,8 @@ class breadcrumbclass extends beaglebase
 	public function __construct($name="")
 	{
 		$this->url = self::getUrl();
+		writeLog("URI = ".$this->url);
+		
 		$name = $this->getPageName($name);
 		
 		if(!$this->lastIsNow($name,$this->url))
@@ -73,10 +75,30 @@ class breadcrumbclass extends beaglebase
 	public static function cleanupBreadCrumbs($pagename="")
 	{
 		$pagename = self::getPageName($pagename);
+		$uber_parent = self::findUberParent();
 		if(isset($_GET['pcrumb']) && !isset($_GET['frombc']))
 		{
-			self::resetUberParent($pagename);
-			
+			if($_GET['pcrumb'] == 1 )
+			{
+				self::resetUberParent($pagename);
+			}
+			else if(count($_SESSION['breadcrumbs'][$uber_parent]) >= $_GET['pcrumb'])
+			{
+				
+				$tmp = array();
+				$a=1;
+				
+				foreach($_SESSION['breadcrumbs'][$uber_parent] as $k => $i)
+				{
+					if($a < $_GET['pcrumb'])
+					{
+						$tmp[$k] = $i;
+					}
+					$a++;
+				}
+				$_SESSION['breadcrumbs'][$uber_parent] = $tmp;	
+				
+			}
 			$old = self::getOldBreadCrumbs();
 		
 			if(isPopArray($old))
@@ -131,6 +153,7 @@ class breadcrumbclass extends beaglebase
 		if(strpos($url,'frombc/true') !== false)
 		{
 			$url = str_replace("/frombc/true","",$url);
+			writelog($url);
 		}	
 		return $url;
 	}

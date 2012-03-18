@@ -21,9 +21,11 @@ Options +FollowSymLinks
  
 #RewriteCond %{REQUEST_URI} !^/urlcop.php
 #RewriteCond %{REQUEST_URI} !/img/
-#RewriteCond %{REQUEST_URI} !/css/
-#RewriteCond %{REQUEST_URI} !/js/
-##RewriteCond %{REQUEST_URI} !/viewwebassets/
+#RewriteCond %{REQUEST_URI} !.css
+#RewriteCond %{REQUEST_URI} !.js
+#RewriteCond %{REQUEST_URI} !.png
+#RewriteCond %{REQUEST_URI} !.jpg
+#RewriteCond %{REQUEST_URI} !.gif
 #RewriteCond %{REQUEST_URI} !^/ajax
 
 #	RewriteRule ^(.*)$	/htdocs/$1

@@ -44,12 +44,33 @@ if(count($var) == 0)
 		{
 			$parts = $newparts['parts'];
 			$page_index = $newparts['page_index'];
+			
 		}
 		else 
 		{
 			goto404();
 		}
 	}
+	
+	$var = array();
+	for($a=$page_index+1;$a<count($parts);$a++)
+	{
+		if(!isset($parts[$a+1]))
+		{
+			$var[$parts[$a]] = "";
+		}
+		else 
+		{
+			$var[$parts[$a]] = $parts[$a+1];
+		}
+		$a++;
+	}
+	
+	if(count($parts) % 2 && $page_index != (count($parts)-1))
+	{
+		$parts[] = "";
+	}
+	
 	$query = array();
 	if($page_index !== false)
 	{
@@ -65,12 +86,9 @@ if(count($var) == 0)
 			}
 		}
 	
-		
-		for($a=($page_index+1);$a<count($parts);$a++)
+		if(isPopArray($var))
 		{
-			$_GET[$parts[$a]] = $parts[$a+1];
-			$junk[] = $parts[$a]."=".$parts[$a+1];
-			$a++;
+			$_GET = $var;
 		}
 		
 		if(count($junk)>0)
