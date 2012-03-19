@@ -27,7 +27,6 @@ class breadcrumbclass extends beaglebase
 	public function __construct($name="")
 	{
 		$this->url = self::getUrl();
-		writeLog("URI = ".$this->url);
 		
 		$name = $this->getPageName($name);
 		
@@ -153,7 +152,6 @@ class breadcrumbclass extends beaglebase
 		if(strpos($url,'frombc/true') !== false)
 		{
 			$url = str_replace("/frombc/true","",$url);
-			writelog($url);
 		}	
 		return $url;
 	}

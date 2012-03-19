@@ -36,6 +36,31 @@ abstract class beagleResultClass extends beagleNavigationClass
 	abstract protected function cleanName($name);
 	
 	/**
+	 * This follows some generic rules to make the global clean name
+	 * @param string $name
+	 * @return String
+	 * @author Jason Ball
+	 */
+	protected function globalCleanName($name)
+	{
+		$junk = $name;
+		if(strpos($junk,".") !== false)
+		{
+			$junk = substr($junk, strpos($junk,".")+1,strlen($junk));
+		}
+		$tmp = explode("_",$junk);
+		$string = "";
+		foreach($tmp as $k => $i)
+		{
+			$tmp[$k] = ucfirst($i);
+		}
+		
+		$string = implode(" ",$tmp);
+		
+		return $string;
+	}
+	
+	/**
 	 * abstract method needed by each controller to pass seetings to runResultPage
 	 * @see beagleResultClass::runResultPage()
 	 */
