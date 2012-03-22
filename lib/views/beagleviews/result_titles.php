@@ -18,8 +18,14 @@
 			foreach($result['headers'] as $k => $i)
 			{
 				
-				
-				$field = substr($k,strpos($k,".")+1,strlen($k));
+				if(strpos($k,".")!==false)
+				{
+					$field = substr($k,strpos($k,".")+1,strlen($k));
+				}
+				else 
+				{
+					$field = $k;
+				}
 				if(strpos($i,$result['editaccess']['field']) === false && !isset($result['hiddencols'][$field]))
 				{
 					?>
