@@ -1,7 +1,7 @@
 /*
 new jquery plugin for form validate
 author Jason Ball
-2/14/2012
+2/28/2011
 
 
 */
@@ -40,31 +40,34 @@ jQuery.formValidate = function(s)
 		
 		if(!s.list)
 		{
+			return true;
 			fvdebug("No Valid List");
 			return false;
 		}
 		
 		
 		var div = s.list.split(";");
+		var field = Array();
 		for(var a =0;a<div.length;a++)
 		{
+			/*
 			if(document.getElementById(div[a]) == null)
 			{
 				fvdebug(div[a]+" "+a+" does not exist!"); 
 				return false;
 			}
-			
+			*/
 						
 			var test = document.getElementById(div[a]);
-			if(test.tagName == 'DIV')
+			if(test != null && test.tagName == 'DIV')
 			{
 				var list = $("#"+div[a]).html();
 				var field = list.split(";");
 			}
 			else
 			{
-				var field = Array();
-				field[0] = div[a];
+				
+				field[field.length] = div[a];
 			}
 			for(var b = 0;b<field.length;b++)
 			{
