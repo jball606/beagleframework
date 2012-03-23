@@ -200,7 +200,8 @@ $.fn.customError = function(message)
 		elm = tmp;
 		
 	}
-		
+	
+	
 	$("#"+elm_id+"_dynamic_error").remove();
 		
 	var list = Array();
@@ -221,7 +222,14 @@ $.fn.customError = function(message)
 	{ 
 		list[0] = message;
 	}
-		
+	
+	if($("#"+elm.attr('id')+'_title'))
+	{
+		var ti = "#"+elm.attr('id')+'_title';
+		$(ti).addClass('dynamic_error');
+		$(ti).addClass('alert');
+	}
+	
 	var msg = '<ul id="'+elm.attr('id')+'_dynamic_error" class="dynamic_error alert" >';
 	for(var a = 0; a<list.length;a++)
 	{
@@ -235,6 +243,20 @@ $.fn.customError = function(message)
 
 function removeAllDynamicErrors()
 {
-	$(".dynamic_error").remove();
+	$(".dynamic_error").each(
+			function()
+			{
+				var id = $(this).attr(id);
+				if(isset(id) && id.indexOf('_title') == -1)
+				{
+					$(this).remove();
+				}
+				else
+				{
+					$(this).removeClass('alert');
+					$(this).removeClass('dynamic_error');
+				}
+			}
+			); 
 		
 }
