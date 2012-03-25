@@ -246,9 +246,11 @@ function removeAllDynamicErrors()
 	$(".dynamic_error").each(
 			function()
 			{
-				var id = $(this).attr(id);
+				var id = $(this).attr('id');
+				
 				if(isset(id) && id.indexOf('_title') == -1)
 				{
+					
 					$(this).remove();
 				}
 				else

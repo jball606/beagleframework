@@ -1051,7 +1051,21 @@ class beagleDbClass extends beagleerrorbase
 							}
 							elseif(isPopArray($j))
 							{
-								$tmp[] = $k." in ('".implode("','",$j)."')";
+								if(isPopArray($j['not in']))
+								{
+									$tmp[] = $k." not in ('".cleanImplode("','", $j['not in'])."')";
+								}
+								else 
+								{
+									if(isPopArray($j['in']))
+									{
+										$tmp[] = $k." in ('".cleanImplode("','",$j['in'])."')";
+									}
+									else 
+									{
+										$tmp[] = $k." in ('".cleanImplode("','", $j)."')";
+									}
+								}
 							}
 						}
 						else if(strpos($j,"LIKE")!==false && (strpos($j,'LIKE') === 1 || strpos($j,'LIKE') === 0) && strpos($j,'%') !== false)
