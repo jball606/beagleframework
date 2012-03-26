@@ -335,5 +335,20 @@ class beagleListTools extends beaglebase
 				
 	}
 	
+	protected function getCommaLimitList($item)
+	{
+		if((!is_array($item) && $item !== false) || isPopArray($item))
+		{
+			if(isPopArray($item))
+			{
+				return cleanImplode(",",$item);
+			}
+			
+			return $item;
+		}
+		
+		return false;
+		
+	}
 }	
 ?>
