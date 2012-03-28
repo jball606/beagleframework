@@ -1,18 +1,7 @@
 <?php
-/**
- * This page is for the result search page
- * 
- * This Page deals with all the result page fixes, including sorting,
- * records per page, and letter menu .  All projects will use this page if 
- * they use the beagleResults.js file
- * 
- * @author Jason Ball
- * @copyright 05/01/2011
- * 
- */
 $ajax_page="Y";
 
-include_once("config/systemsetup.php");
+include_once("beaglecrminc.php");
 
 if(isset($_GET['id']))
 {
@@ -44,23 +33,6 @@ if(isset($info['id']))
 			}
 			break;		
 		}
-		case "selectedoptions":
-		{
-			if($S = breadcrumbclass::restoreBcSession($search))
-			{	
-				$sel = $S->getSelected();
-				if($sel == false)
-				{
-					print json_encode(array('count'=>0));
-				}
-				else 
-				{
-					print json_encode(array('count'=>1));
-				}
-				//breadcrumbclass::storeBcSession($search,$S);
-			}
-			break;		
-		}
 		case "allcheck":
 		{
 			if($S = breadcrumbclass::restoreBcSession($search))
@@ -86,12 +58,18 @@ if(isset($info['id']))
 					$S->loadSubWhere($info['specialwhere']);
 				}
 				
-				print $S->showResultsPage(array('first'=>$info['first'],
+				$arg = array('first'=>$info['first'],
 												'limit'=>$info['limit'],
 												'orderby'=>$info['orderby'],
 												'orderdir'=>$info['orderdir'],
 												'lib'=>$search,
-												));
+							);
+				if(isset($info['div']))
+				{
+					$arg['div'] = $info['div'];
+				}
+				
+				print $S->showResultsPage($arg);
 				
 				
 				

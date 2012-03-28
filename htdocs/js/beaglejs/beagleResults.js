@@ -204,7 +204,7 @@ function beagleResults(obj)
 		
 		lastfirst = first;
 		
-		var line = "&orderby="+field+"&orderdir="+orderdir+"&excel=N&first="+first+"&limit="+limit+"&specialwhere="+encodeURIComponent(specialwhere);
+		var line = "&orderby="+field+"&orderdir="+orderdir+"&excel=N&first="+first+"&limit="+limit+"&specialwhere="+encodeURIComponent(specialwhere)+"&div="+resultdiv;
 		
 		return line;
 	}
