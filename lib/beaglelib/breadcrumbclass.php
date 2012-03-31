@@ -81,7 +81,7 @@ class breadcrumbclass extends beaglebase
 			{
 				self::resetUberParent($pagename);
 			}
-			else if(count($_SESSION['breadcrumbs'][$uber_parent]) >= $_GET['pcrumb'])
+			else if(isset($_SESSION['breadcrumbs'][$uber_parent]) && count($_SESSION['breadcrumbs'][$uber_parent]) >= $_GET['pcrumb'])
 			{
 				
 				$tmp = array();
@@ -129,14 +129,16 @@ class breadcrumbclass extends beaglebase
 	 */
 	public static function clearLastBC()
 	{
-		if(isset($_SESSION['breadcrumbs'][$this->uber_parent]) && is_array($_SESSION['breadcrumbs'][$this->uber_parent]) && count($_SESSION['breadcrumbs'][$this->uber_parent])>0)
+		$uberparent = self::findUberParent();
+		
+		if(isset($_SESSION['breadcrumbs'][$uberparent]) && is_array($_SESSION['breadcrumbs'][$uberparent]) && count($_SESSION['breadcrumbs'][$uberparent])>0)
 		{
-			$tmp = $_SESSION['breadcrumbs'][$this->uber_parent];
+			$tmp = $_SESSION['breadcrumbs'][$uberparent];
 			$keys = array_keys($tmp);
 			$x = count($keys)-1;
 			
 			unset($tmp[$keys[$x]]);
-			$_SESSION['breadcrumbs'][$this->uber_parent] = $tmp;
+			$_SESSION['breadcrumbs'][$uberparent] = $tmp;
 		}
 	}
 	
