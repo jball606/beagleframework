@@ -41,11 +41,13 @@ class beagleerrorbase
 		{
 			foreach($error as $i)
 			{
+				writeLog(date("Y-m-d G:i:s"));
 				writeLog("USER ERROR = ".$i);
 			}
 		}
 		else 
 		{	
+			writeLog(date("Y-m-d G:i:s"));
 			writeLog("USER ERROR = ".$error);
 		}
 		
