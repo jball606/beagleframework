@@ -26,11 +26,11 @@ Options +FollowSymLinks
 #RewriteCond %{REQUEST_URI} !.png
 #RewriteCond %{REQUEST_URI} !.jpg
 #RewriteCond %{REQUEST_URI} !.gif
-#RewriteCond %{REQUEST_URI} !^/ajax
+#RewriteCond %{REQUEST_URI} !.ico
 
 #	RewriteRule ^(.*)$	/htdocs/$1
   
-RewriteRule ^(.*)$ /urlcop.php  
+#RewriteRule ^(.*)$ /urlcop.php  
 #</IfModule>
 
 ######For development
