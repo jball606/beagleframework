@@ -211,6 +211,7 @@ function writeLog($item,$location="")
 		$h = fopen($location."\beagle.log","a");
 	}
 	
+	fwrite($h,"\n".date("Y-m-d G:i:s \n"));
 	fwrite($h,print_r($item,true)."\n");
 	fclose($h);
 }
