@@ -697,7 +697,7 @@ function defaultArgs($in_args, $defs,$allreq=false)
 	if (!is_array($in_args))
 	{
 		writeLog('argDefaults called with non-array args');
-		writeLog(cleanBackTrace());
+		writeLog(br2nl(cleanBackTrace()));
 		return $defs;
 	}
 
