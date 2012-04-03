@@ -650,14 +650,14 @@ class beagleDbClass extends beagleerrorbase
 		//Because is null won't work in update
 		foreach($values as $k => $i)
 		{
-			if(strpos($i,'is null')!==false)
+			if(strpos(substr($i,0,50),'is null')!==false)
 			{
 				$values[$k] = str_replace('is null', '= null',$i);
 			}
 		}
 		
 		$SQL = "update ".$this->table." set ".implode(", ",$values)." where ".implode(" and ",$keys).";";
-		
+	
 		if($printsql == true)
 		{
 			writeLog($SQL);
@@ -1006,11 +1006,11 @@ class beagleDbClass extends beagleerrorbase
 				
 				$tmp[] = "(".implode(" or ",$oftmp).")";
 			}
-			elseif(!is_array($i) && trim(strtolower($i)) == "null" || $i === null)
+			elseif(!is_array($i) && trim(strtolower(substr($i,0,25))) == "null" || $i === null)
 			{
 				$tmp[] = $k." is null";
 			}
-			elseif(!is_array($i) && trim(strtolower($i)) == "is not null")
+			elseif(!is_array($i) && trim(strtolower(substr($i,0,25))) == "is not null")
 			{
 				$tmp[] = $k." is not null";
 			}
@@ -1019,7 +1019,7 @@ class beagleDbClass extends beagleerrorbase
 				$j = $this->escapeChar($i);
 				if($j !== false)
 				{
-					if(!is_array($j) && strpos(strtolower($j),"null") !== false || $j === null)
+					if(!is_array($j) && strpos(strtolower(substr($j,0,25)),"null") !== false || $j === null)
 					{
 						
 						if(strpos($j,"!")!==false)
