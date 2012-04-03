@@ -718,6 +718,7 @@ class beagleDbClass extends beagleerrorbase
 	 * pringsql => 	false		debugging, will print out SQL
 	 * fields => 	array		fields you want
 	 * limit =>		integer		limit result
+	 * groupby => 	string		is for grouping your array
 	 * </pre>
 	 * @return array
 	 */
@@ -729,6 +730,7 @@ class beagleDbClass extends beagleerrorbase
 											'printsql'=>false,
 											'fields'=>false,
 											'limit'=>false,
+											'groupby'=>false,
 											'join'=>false,
 										));
 		
@@ -792,10 +794,28 @@ class beagleDbClass extends beagleerrorbase
 			$SQL .= " where ".implode(" and \n ",$junk);
 		}
 		
+		if($ops['groupby'])
+		{
+			if(isPopArray($ops['groupby']))
+			{
+				$SQL .= " group by ".cleanImplode(",", $ops['groupby']);
+			}
+			else 
+			{
+				$SQL .= " group by ".$ops['groupby'];
+			}
+		}
 		
 		if($ops['orderby'])
 		{
-			$SQL .= " order by ".$ops['orderby'];	
+			if(isPopArray($ops['orderby']))
+			{
+				$SQL .= " order by ".cleanImplode(',',$ops['orderby']);
+			}
+			else 
+			{
+				$SQL .= " order by ".$ops['orderby'];
+			}	
 		}
 		
 		if(isSetNum($ops['limit']))

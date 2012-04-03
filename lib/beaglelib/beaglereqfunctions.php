@@ -1026,7 +1026,7 @@ function swapVar(&$A, &$B)
  * @param array $array
  * @author Jason Ball
  */
-function cleanImplode($delimiter=",", $array)
+function cleanImplode($delimiter=',', $array)
 {
 	$tmp = array();
 	if(isPopArray($array))
