@@ -1049,3 +1049,32 @@ function cleanImplode($delimiter=',', $array)
 	
 	
 }
+
+function callWeb($url,$post=array(),$get=array())
+{
+	$defaults = array(
+			        CURLOPT_POST => true,
+			     //   CURLOPT_HEADER => true,
+			     	CURLOPT_URL=>$url,
+			        CURLOPT_FOLLOWLOCATION => true,
+			        CURLOPT_MAXREDIRS => 5,
+			        CURLOPT_RETURNTRANSFER => 1,
+			        CURLOPT_TIMEOUT => 120,
+			        CURLOPT_ENCODING => "",
+			        CURLOPT_COOKIEFILE => '/tmp/cookie.txt', 
+			        CURLOPT_SSL_VERIFYPEER => false,
+			        CURLOPT_SSL_VERIFYHOST => 2,
+			        CURLOPT_COOKIEJAR => '/tmp/cookie.txt',
+			        CURLOPT_USERAGENT => "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.3) Gecko/20070309 Firefox/2.0.0.3",
+			        CURLOPT_AUTOREFERER => true,
+			        CURLOPT_CONNECTTIMEOUT => 120,
+			        CURLOPT_POSTFIELDS => http_build_query($post)
+			    ); 
+
+	$ch = curl_init();
+	curl_setopt_array($ch, ($defaults)); 
+	$page = curl_exec($ch);
+					
+	$header = curl_getinfo($ch,CURLINFO_EFFECTIVE_URL);
+	return $page;
+}
