@@ -54,6 +54,20 @@ class beagleDbClass extends beagleerrorbase
 	}
 	
 	/**
+	 * 
+	 * For those times you have to use this manually
+	 * @param string $table
+	 * @param string $pkey
+	 * @return void
+	 */
+	public function storeManualDB($table,$pkey="")
+	{
+		$this->table = $table;
+		$this->pkey = $pkey;	
+		
+	}
+	
+	/**
 	 * This Method is Used to load DB variables
 	 * @param resouce DB
 	 * @return void
@@ -650,14 +664,14 @@ class beagleDbClass extends beagleerrorbase
 		//Because is null won't work in update
 		foreach($values as $k => $i)
 		{
-			if(strpos(substr($i,0,50),'is null')!==false)
+			if(strpos($i,'is null')!==false)
 			{
 				$values[$k] = str_replace('is null', '= null',$i);
 			}
 		}
 		
 		$SQL = "update ".$this->table." set ".implode(", ",$values)." where ".implode(" and ",$keys).";";
-	
+		
 		if($printsql == true)
 		{
 			writeLog($SQL);
@@ -718,7 +732,6 @@ class beagleDbClass extends beagleerrorbase
 	 * pringsql => 	false		debugging, will print out SQL
 	 * fields => 	array		fields you want
 	 * limit =>		integer		limit result
-	 * groupby => 	string		is for grouping your array
 	 * </pre>
 	 * @return array
 	 */
@@ -730,7 +743,6 @@ class beagleDbClass extends beagleerrorbase
 											'printsql'=>false,
 											'fields'=>false,
 											'limit'=>false,
-											'groupby'=>false,
 											'join'=>false,
 										));
 		
@@ -794,28 +806,10 @@ class beagleDbClass extends beagleerrorbase
 			$SQL .= " where ".implode(" and \n ",$junk);
 		}
 		
-		if($ops['groupby'])
-		{
-			if(isPopArray($ops['groupby']))
-			{
-				$SQL .= " group by ".cleanImplode(",", $ops['groupby']);
-			}
-			else 
-			{
-				$SQL .= " group by ".$ops['groupby'];
-			}
-		}
 		
 		if($ops['orderby'])
 		{
-			if(isPopArray($ops['orderby']))
-			{
-				$SQL .= " order by ".cleanImplode(',',$ops['orderby']);
-			}
-			else 
-			{
-				$SQL .= " order by ".$ops['orderby'];
-			}	
+			$SQL .= " order by ".$ops['orderby'];	
 		}
 		
 		if(isSetNum($ops['limit']))
@@ -1006,11 +1000,11 @@ class beagleDbClass extends beagleerrorbase
 				
 				$tmp[] = "(".implode(" or ",$oftmp).")";
 			}
-			elseif(!is_array($i) && trim(strtolower(substr($i,0,25))) == "null" || $i === null)
+			elseif(!is_array($i) && trim(strtolower($i)) == "null" || $i === null)
 			{
 				$tmp[] = $k." is null";
 			}
-			elseif(!is_array($i) && trim(strtolower(substr($i,0,25))) == "is not null")
+			elseif(!is_array($i) && trim(strtolower($i)) == "is not null")
 			{
 				$tmp[] = $k." is not null";
 			}
@@ -1019,7 +1013,7 @@ class beagleDbClass extends beagleerrorbase
 				$j = $this->escapeChar($i);
 				if($j !== false)
 				{
-					if(!is_array($j) && strpos(strtolower(substr($j,0,25)),"null") !== false || $j === null)
+					if(!is_array($j) && strpos(strtolower($j),"null") !== false || $j === null)
 					{
 						
 						if(strpos($j,"!")!==false)
