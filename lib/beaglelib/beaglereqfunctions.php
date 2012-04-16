@@ -196,7 +196,7 @@ function isSetNum(&$val)
   * @author Jason Ball
   * @copyright 2011-07-19
  */
-function writeLog($item,$location="")
+function writeLog($item,$backtrace=false,$location="")
 {
 	if(defined("__LOG_LOCATION__"))
 	{
@@ -213,6 +213,11 @@ function writeLog($item,$location="")
 	
 	fwrite($h,"\n".date("Y-m-d G:i:s \n"));
 	fwrite($h,print_r($item,true)."\n");
+	if($backtrace == true)
+	{
+		fwrite($h,br2nl(cleanBackTrace()));
+	}
+	
 	fclose($h);
 }
 
