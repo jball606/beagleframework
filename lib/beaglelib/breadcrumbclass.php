@@ -168,6 +168,7 @@ class breadcrumbclass extends beaglebase
 		$this->url = $newurl;
 		
 		$this->storeBC();
+		/*
 		$newuberparent = $this->generateUberParent();
 		if(isPopArray($_SESSION['breadcrumbs'][$this->uber_parent]))
 		{
@@ -184,8 +185,8 @@ class breadcrumbclass extends beaglebase
 			$_SESSION['breadcrumbs'][$newuberparent] = $newbc;
 		}
 		$GLOBALS['CONVERT_UBER'] = $newuberparent;
-		$_SESSION[$this->cleanUrl($this->url)] = $this->uber_parent;
-		
+		$_SESSION[$this->cleanUrl($this->url)] = $newuberparent;
+		*/
 	}
 	
 	/**
