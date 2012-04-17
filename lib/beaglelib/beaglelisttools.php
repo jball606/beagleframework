@@ -341,7 +341,15 @@ class beagleListTools extends beaglebase
 		{
 			if(isPopArray($item))
 			{
-				return cleanImplode(",",$item);
+				$k = array_keys($item);
+				if(isSetNum($item[$k[0]]))
+				{
+					return cleanImplode(",",$item);
+				}
+				else 
+				{
+					return cleanImplode("','",$item);
+				}
 			}
 			
 			return $item;
