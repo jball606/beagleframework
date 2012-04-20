@@ -1056,11 +1056,12 @@ function cleanImplode($delimiter=',', $array)
 	
 }
 
-function callWeb($url,$post=array(),$get=array())
+function callWeb($url,$post=array(),$get=array(),$header=array())
 {
 	$defaults = array(
 			        CURLOPT_POST => true,
 			     //   CURLOPT_HEADER => true,
+			     	
 			     	CURLOPT_URL=>$url,
 			        CURLOPT_FOLLOWLOCATION => true,
 			        CURLOPT_MAXREDIRS => 5,
@@ -1077,6 +1078,11 @@ function callWeb($url,$post=array(),$get=array())
 			        CURLOPT_POSTFIELDS => http_build_query($post)
 			    ); 
 
+	if(isPopArray($header))
+	{
+		$defaults[CURLOPT_HTTPHEADER] = $header;
+	}
+	
 	$ch = curl_init();
 	curl_setopt_array($ch, ($defaults)); 
 	$page = curl_exec($ch);
