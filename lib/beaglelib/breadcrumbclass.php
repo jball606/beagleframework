@@ -227,7 +227,7 @@ class breadcrumbclass extends beaglebase
 	
 	private function generateUberParent()
 	{
-		return  rand(1000,999999999999);
+		return  rand(1000,999999999);
 		
 	}
 	

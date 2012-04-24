@@ -187,11 +187,10 @@ class beagleDbClass extends beagleerrorbase
 		{
 			return $data;
 		}
+		$tmp = array();
 		
 		if(is_array($data) && count($data)>0)
 		{
-			$tmp = array();
-			
 			foreach($data as $k => $i)
 			{
 				if(isset($this->valid_fields[$k]))

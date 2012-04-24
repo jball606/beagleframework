@@ -1090,3 +1090,20 @@ function callWeb($url,$post=array(),$get=array(),$header=array())
 	$header = curl_getinfo($ch,CURLINFO_EFFECTIVE_URL);
 	return $page;
 }
+
+/**
+ * Clean way to get last URL based on breadcrumb system
+ * return string
+ */
+function getLastBCUrl()
+{
+	breadcrumbclass::clearLastBC();
+	$BC = breadcrumbclass::getLastBC();
+	if(is_object($BC))
+	{
+		breadcrumbclass::resetToId($BC->getBcId(), $BC->getUberParent());
+		return $BC->getBcUrl();
+	}
+	
+	return "/index";
+}
