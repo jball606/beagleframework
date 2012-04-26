@@ -29,7 +29,7 @@
 				if(strpos($i,$result['editaccess']['field']) === false && !isset($result['hiddencols'][$field]))
 				{
 					?>
-					<th id="<?=$k;?>" class="ac">
+					<th id="th_<?=$k;?>" class="ac">
 					<? 
 						$o = 1;
 						if(isset($order[$k]))
