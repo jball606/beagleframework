@@ -37,14 +37,13 @@ jQuery.formValidate = function(s)
 		removeAllDynamicErrors();
 		
 		s = jQuery.extend({}, s, {});
-		
+
 		if(!s.list)
 		{
 			return true;
 			fvdebug("No Valid List");
 			return false;
 		}
-		
 		
 		var div = s.list.split(";");
 		var field = Array();
@@ -69,23 +68,28 @@ jQuery.formValidate = function(s)
 				
 				field[field.length] = div[a];
 			}
+			
 			for(var b = 0;b<field.length;b++)
 			{
 				var tfield = $.trim(field[b].substr(field[b].indexOf(".")+1,field[b].length));
-								
-				$("#"+tfield+"_title").removeClass(alert);
-				
-				var obj = getObj(tfield);
-
-			 
-				require(s.list);
-				if($.trim(obj.value) == '' || obj.value == '' || obj.value == text)
-				{		
-					return false;
-				}	 
-
+			
+				if($("#"+tfield).length > 0)
+				{
+			
+					$("#"+tfield+"_title").removeClass(alert);
+					
+					var obj = getObj(tfield);
+	
+				 
+					require(s.list);
+					if($.trim(obj.value) == '' || obj.value == '' || obj.value == text)
+					{	
+						return false;
+					}	 
+				}
 			}
 		}
+
 		return true;
 		
 	};
@@ -125,8 +129,10 @@ jQuery.formValidate = function(s)
 		var div = divs.split(";");
 		for(var a =0;a<div.length;a++)
 		{
+			
 			if(document.getElementById(div[a]) == null)
 			{
+		
 				return false; 
 			}
 						
@@ -145,21 +151,24 @@ jQuery.formValidate = function(s)
 			for(var b=0;b<field.length;b++)
 			{
 				var tfield = $.trim(field[b].substr(field[b].indexOf(".")+1,field[b].length));
-								
-								
-				var obj = getObj(tfield,form);
-								
-				if($.trim(obj.value) === "" || obj.value == text || obj.value == '&#160;' || obj.value == " ")
-				{ 
-					$("#"+obj.id).customError(text);
-					if(document.getElementById(tfield+"_title"))
-					{
-						$("#"+tfield+"_title").addClass(alert);
+						
+				if($("#"+tfield).length > 0)
+				{
+			
+					var obj = getObj(tfield,form);
+									
+					if($.trim(obj.value) === "" || obj.value == text || obj.value == '&#160;' || obj.value == " ")
+					{ 
+						$("#"+obj.id).customError(text);
+						if(document.getElementById(tfield+"_title"))
+						{
+							$("#"+tfield+"_title").addClass(alert);
+						}
 					}
-				}
-				else
-				{ 
-					$("#"+tfield+"_title").removeClass(alert);
+					else
+					{ 
+						$("#"+tfield+"_title").removeClass(alert);
+					}
 				}
 			}
 		}

@@ -497,11 +497,36 @@ function arrayToJSObject($array,$ignore=array())
 			{
 				if(is_array($v))
 				{
-					$tmp[] = $vk.":{".join(",",arrayToObject($v,$ignore))."}";	
+					$tmp[] = "'".$vk."':{".join(",",arrayToObject($v,$ignore))."}";	
 				}
 				else
 				{
 					$tmp[] = $vk.":'".escapeJs($v)."'";
+				}
+				
+			}
+		}
+	}
+	
+	return $tmp;
+}
+
+function arrayToObject($array,$ignore=array())
+{
+	$tmp = array();
+	if(is_array($array))
+	{
+		foreach($array as $vk => $v)
+		{
+			if(!ignoreItem($vk,$ignore))
+			{
+				if(is_array($v))
+				{
+					$tmp[] = $vk.":{".join(",",arrayToObject($v,$ignore))."}";	
+				}
+				else
+				{
+					$tmp[] = "'".$vk."':'".escapeJs($v)."'";
 				}
 				
 			}
