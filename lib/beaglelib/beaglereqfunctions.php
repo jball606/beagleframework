@@ -1075,8 +1075,17 @@ function callWeb($url,$post=array(),$get=array(),$header=array())
 			        CURLOPT_USERAGENT => "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.3) Gecko/20070309 Firefox/2.0.0.3",
 			        CURLOPT_AUTOREFERER => true,
 			        CURLOPT_CONNECTTIMEOUT => 120,
-			        CURLOPT_POSTFIELDS => http_build_query($post)
+			        
 			    ); 
+			    
+	if(!is_array($post))
+	{
+		$defaults[CURLOPT_POSTFIELDS] = $post;		        	
+	}
+	else 
+	{
+		$defaults[CURLOPT_POSTFIELDS] = http_build_query($post);
+	}
 
 	if(isPopArray($header))
 	{
