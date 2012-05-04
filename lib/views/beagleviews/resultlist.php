@@ -106,11 +106,11 @@ if(isset($result['edit_pencil']))
 					<? 
 						if($i[$result['editaccess']['field']] != "")
 						{
-							?><div class="link lock" onclick="<?=$result['lib'];?>.accessFunction(<?= $result['orgdata'][$row][$result['editaccess']['key']];?>); return false;"></div><? 
+							?><div class="link lock" onclick="<?=$result['lib'];?>.accessFunction('<?= $result['orgdata'][$row][$result['editaccess']['key']];?>'); return false;"></div><? 
 						}
 						else 
 						{
-							?><div class="link unlock" onclick="<?=$result['lib'];?>.accessFunction(<?= $result['orgdata'][$row][$result['editaccess']['key']];?>); return false;"></div><? 
+							?><div class="link unlock" onclick="<?=$result['lib'];?>.accessFunction('<?= $result['orgdata'][$row][$result['editaccess']['key']];?>'); return false;"></div><? 
 						}	
 						
 					?>			
