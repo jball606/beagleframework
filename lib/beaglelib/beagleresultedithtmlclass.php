@@ -124,7 +124,7 @@ class beagleResultEditHtmlClass extends beaglebase
 	 */
 	private function getCheckBox($table,$field,$id,$value="")
 	{
-		$string = '<input type="checkbox" name="resultedit['.$table.']['.$id.']['.$field.']" id="'.$table.'_'.$id.'_'.$field.'"';
+		$string = '<input type="checkbox" class="beagle_result_edit_checkbox_field_class" name="resultedit['.$table.']['.$id.']['.$field.']" id="'.$table.'_'.$id.'_'.$field.'"';
 		
 		if(isset($this->settings['check']))
 		{
@@ -151,7 +151,7 @@ class beagleResultEditHtmlClass extends beaglebase
 	 */
 	private function getTextArea($table,$field,$id,$value="")
 	{
-		$ta = '<textarea name="resultedit['.$table.']['.$id.']['.$field.']" id="'.$table.'_'.$id.'_'.$field.'">'.$value."</textarea>\n";
+		$ta = '<textarea class="beagle_result_edit_textarea_field_class" name="resultedit['.$table.']['.$id.']['.$field.']" id="'.$table.'_'.$id.'_'.$field.'">'.$value."</textarea>\n";
 		return $ta;
 	}
 	
@@ -171,7 +171,7 @@ class beagleResultEditHtmlClass extends beaglebase
 	{
 		$l = new beagleListTools();
 		
-		$select = '<select name="resultedit['.$table.']['.$id.']['.$field.']';
+		$select = '<select class="beagle_result_edit_select_field_class" name="resultedit['.$table.']['.$id.']['.$field.']';
 		if($multiple)
 		{
 			$select .= '[] multiple ';
@@ -204,7 +204,7 @@ class beagleResultEditHtmlClass extends beaglebase
 	 */
 	private function getTextField($table,$field,$id,$value="",$size=false)
 	{
-		$text = '<input type="text" name="resultedit['.$table.']['.$id.']['.$field.']" id="'.$table."_".$id."_".$field.'" value="'.$value.'" ';
+		$text = '<input type="text" class="beagle_result_edit_text_field_class" name="resultedit['.$table.']['.$id.']['.$field.']" id="'.$table."_".$id."_".$field.'" value="'.$value.'" ';
 		
 		if($size != false)
 		{
