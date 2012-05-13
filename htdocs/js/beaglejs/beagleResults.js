@@ -97,7 +97,7 @@ function beagleResults(obj)
 					}
 				}
 			
-		})
+		});
 		
 	}
 	

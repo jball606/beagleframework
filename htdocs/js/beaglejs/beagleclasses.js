@@ -4,7 +4,7 @@ function beagleTimer(obj)
 	var me = this;
 	var message = 'Loading';
 	var width = ''; //'48px';
-	var paddingLeft = '' //'10px';
+	var paddingLeft = ''; //'10px';
 	var marginLeft = 0;
 	var backgroundimg = '';
 	this.startWait = startWait;

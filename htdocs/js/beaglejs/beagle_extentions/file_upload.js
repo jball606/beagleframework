@@ -46,7 +46,7 @@ jQuery.extend({
 		
 		var form = $('<form  action="'+url+'" method="POST" target="jUploadFrame'+id+'" name="' + formId + '" id="' + formId + '" enctype="multipart/form-data"></form>');	
 		form.css('display','none');
-		form.appendTo('body')
+		form.appendTo('body');
 		var elm = $('.'+fileFormClass);
 		
 		elm.each(function() 

@@ -15,7 +15,7 @@ jQuery.formValidateSettings = function(s)
 {
 	formValidateSettingParams = jQuery.extend(formValidateSettingParams,s);
 	
-}
+};
 
 
 
