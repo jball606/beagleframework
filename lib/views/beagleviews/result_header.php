@@ -1,5 +1,5 @@
 <tr class="dblock_header"  <? if(getValue($result,'title') == false && getValue($result,'showperpage') == false && getValue($result,'showcount') == false) { ?> style="display:none" <? } ?>>
-	<td colspan = "<?=($hc+$tdextra)?>">
+	<td colspan = "<?=($hc+$tdextra)?>" id="<?=$result['lib'];?>_result_title">
 		 
 	<?=getValue($result,'title');?>
 		

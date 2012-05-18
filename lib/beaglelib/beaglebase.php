@@ -188,8 +188,42 @@ class beaglebase extends beagleerrorbase
 		
 	}
 	
+	/**
+	 * This method will return all public and proteced properties
+	 * @return Array
+	 * @author Jason Ball
+	 */
+	public function getClassProperties()
+	{
+		$tmp = array();
+		foreach($this as $k => $i)
+		{
+			$tmp[$k] = $i;
+			
+		}
+		
+		return $tmp;
+	}
 	
-	
+	/**
+	 * This method will load all public and proteced properties
+	 * 
+	 * @param Array $in_args
+	 * @return void;
+	 * @author Jason Ball
+	 */
+	public function loadClassProperties($in_args=array())
+	{
+		
+		foreach($in_args as $k => $i)
+		{
+			if(isset($this->$k))
+			{
+				$this->$k = $i;
+			}	
+			
+		}
+	}
 	
 	
 }
