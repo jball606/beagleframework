@@ -236,3 +236,26 @@ function clearBreadCrumbData(url)
 	
 	return url;
 }
+
+function onEnter(e,func,actionkey)
+{
+	if(actionkey == undefined)
+	{
+		actionkey = 13; 
+	}
+	
+	var key;
+	if(e.which == undefined)
+	{ 
+		key = window.event.keyCode; 
+	}
+	else
+	{
+		key = e.which; 
+	}
+	
+	if(key==actionkey)
+	{
+		eval(func+"();"); 
+	}
+}
