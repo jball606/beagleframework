@@ -193,13 +193,19 @@ class beaglebase extends beagleerrorbase
 	 * @return Array
 	 * @author Jason Ball
 	 */
-	public function getClassProperties()
+	public function getClassProperties($with_objects=true)
 	{
 		$tmp = array();
 		foreach($this as $k => $i)
 		{
-			$tmp[$k] = $i;
-			
+			if(is_object($i) && $with_objects == true)
+			{
+				$tmp[$k] = clone($i);
+			}
+			else if(!is_object($i))
+			{
+				$tmp[$k] = $i;
+			}
 		}
 		
 		return $tmp;
