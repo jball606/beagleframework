@@ -1,5 +1,5 @@
 <?php
-include("beaglebase.php");
+include_once("beaglebase.php");
 /**
  * The Breadcrumb class saves page specific data
  * 
