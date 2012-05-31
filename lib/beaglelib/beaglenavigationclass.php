@@ -277,3 +277,4 @@ class beagleNavigationClass extends beagleSearchClass
 		
 	}
 }
+?>

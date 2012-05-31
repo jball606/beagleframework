@@ -106,3 +106,4 @@ class systemaccessclass extends beagledbclass
 		
 	}
 }
+?>
