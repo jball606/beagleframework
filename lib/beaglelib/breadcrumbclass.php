@@ -1,5 +1,5 @@
 <?php
-include("beaglebase.php");
+include_once("beaglebase.php");
 /**
  * The Breadcrumb class saves page specific data
  * 
@@ -165,8 +165,8 @@ class breadcrumbclass extends beaglebase
 	 */
 	public function convertUrl($newurl)
 	{
-		$this->url = $newurl;
-		
+		$this->url = self::cleanUrl($newurl);
+		$_SESSION[$this->url] = $this->uber_parent;
 		$this->storeBC();
 		/*
 		$newuberparent = $this->generateUberParent();
