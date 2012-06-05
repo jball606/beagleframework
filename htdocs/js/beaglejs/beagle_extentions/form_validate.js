@@ -248,7 +248,7 @@ $.fn.customError = function(message)
 		
 	elm.after(msg);
 		
-}
+};
 
 function removeAllDynamicErrors()
 {

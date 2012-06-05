@@ -380,18 +380,22 @@ class beagleDbClass extends beagleerrorbase
 		$tmp = $this->get($val,$options);
 		$t2 = array();
 		
-		if($this->pkey)
+		if(isPopArray($tmp))
 		{
-			foreach($tmp as $i)
+			if($this->pkey)
 			{
-				$t2[$i[$this->pkey]] = $i;
+				foreach($tmp as $i)
+				{
+					$t2[$i[$this->pkey]] = $i;
+				}
+				return $t2;
 			}
-			return $t2;
+			else
+			{
+				return $tmp;
+			}
 		}
-		else
-		{
-			return $tmp;
-		}
+		
 		return false;
 	}
 	
