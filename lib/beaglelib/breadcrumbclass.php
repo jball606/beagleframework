@@ -203,6 +203,7 @@ class breadcrumbclass extends beaglebase
 			if(trim($uber_parent) == "")
 			{
 				global $CONVERT_UBER;
+
 				if(isSetNum($CONVERT_UBER))
 				{
 					$uber_parent = $CONVERT_UBER;
@@ -222,6 +223,7 @@ class breadcrumbclass extends beaglebase
 				return false;
 			}
 		}
+		
 		return $uber_parent;
 	}
 	
@@ -379,8 +381,12 @@ class breadcrumbclass extends beaglebase
 	
 	private static function getUrl($withquery = true)
 	{
-	
-		$url = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+		$http = 'http';
+		if(!empty($_SERVER['HTTPS']))
+		{
+			$http = "https";
+		}
+		$url = $http."://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
 		$url = self::cleanUrl($url);
 		
 		return $url;
@@ -486,6 +492,7 @@ class breadcrumbclass extends beaglebase
 	public static function restoreBCSession($search="")
 	{
 		$tmp = breadcrumbclass::getLastBC();
+		
 		if($tmp === false)
 		{
 			return false;
