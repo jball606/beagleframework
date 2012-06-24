@@ -17,8 +17,8 @@ Options +FollowSymLinks
 #	RewriteEngine on
 #	RewriteBase /
 #	RewriteCond %{REQUEST_URI} !^/htdocs/
-#	RewriteRule ^(.*)$	/htdocs/$1
- 
+
+######################For Clean URLs##################### 
 #RewriteCond %{REQUEST_URI} !^/urlcop.php
 #RewriteCond %{REQUEST_URI} !/img/
 #RewriteCond %{REQUEST_URI} !\.css
@@ -30,7 +30,6 @@ Options +FollowSymLinks
 #RewriteCond %{REQUEST_URI} !\.html
 
 
-#	RewriteRule ^(.*)$	/htdocs/$1
   
 #RewriteRule ^(.*)$ /urlcop.php  
 #</IfModule>
