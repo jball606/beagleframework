@@ -46,7 +46,10 @@ class pgdb
 		{
 			unset($this->dbconn);
 		}
-		
+		if(isset($this->db))
+		{
+			unset($this->db);
+		}
 		return array_keys(get_object_vars($this));
 	}
 
@@ -196,6 +199,36 @@ class pgdb
 	public function execute($SQL="")
 	{
 		return $this->query($SQL);
+	}
+	
+	/**
+	 * Used for starting transactions
+	 * 
+	 */
+	public function begin()
+	{
+		$this->query("BEGIN");
+		$this->transaction = true;	
+	}
+	
+	/**
+	 * Used for rolling back transactions
+	 * 
+	 */
+	public function rollback()
+	{
+		$this->query("ROLLBACK");
+		$this->transaction = false;	
+	}
+	
+	/**
+	 * Used to commit transactions
+	 * 
+	 */
+	public function commit()
+	{
+		$this->query("COMMIT");
+		$this->transaction = false;
 	}
 	
 	public function getOne($SQL)

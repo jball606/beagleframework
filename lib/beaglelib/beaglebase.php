@@ -223,7 +223,7 @@ class beaglebase extends beagleerrorbase
 		
 		foreach($in_args as $k => $i)
 		{
-			if(isset($this->$k))
+			if(isset($this->$k) && $k != 'db')
 			{
 				$this->$k = $i;
 			}	
