@@ -31,19 +31,36 @@ class beagledbsessions extends beaglebase
     	$this->loadSystemDB();
     	
     	//Make sure the table exist and if not, create it
-    	$resource = $this->db->getOne("show tables like 'sessions'");
-		
-		if($resource == "")
-		{
-			$SQL = " CREATE TABLE sessions (
-					    id varchar(32) NOT NULL,
-					    access int(10) unsigned,
-					    data text,
-					    PRIMARY KEY (id)
-					    );";
-			$this->db->query($SQL);
-		}
-		
+    	if($this->db->getDBType() == "pgsql")
+    	{
+    		$resource = $this->db->getOne("SELECT relname FROM pg_class WHERE relname='sessions'");	
+    		if($resource == "")
+			{
+					$SQL = 'CREATE TABLE public.sessions (
+			    			id varchar(32) NOT NULL,
+			    			access int4,
+			    			data text,
+			    			PRIMARY KEY (id)
+			    			);';
+				$this->db->query($SQL); 
+			} 
+    	}
+    	else 
+    	{
+	    	$resource = $this->db->getOne("show tables like 'sessions'");
+			
+			if($resource == "")
+			{
+				$SQL = " CREATE TABLE sessions (
+						    id varchar(32) NOT NULL,
+						    access int(10) unsigned,
+						    data text,
+						    PRIMARY KEY (id)
+						    );";
+				$this->db->query($SQL); 
+			} 
+    	}
+    	
         session_set_save_handler(
             					array($this, "open"),
             					array($this, "close"),
@@ -59,7 +76,7 @@ class beagledbsessions extends beaglebase
 
     public function open() 
     {
-      return true;
+    //  return true;
     }
 
     public function close() 
@@ -74,6 +91,7 @@ class beagledbsessions extends beaglebase
 				WHERE id = '".$this->db->escape($id)."'";
 
     	$record = $this->db->getOne($SQL);
+
 		return $record;
 	
 	}
@@ -84,26 +102,37 @@ class beagledbsessions extends beaglebase
     	
       	$id = $this->db->escape($id);
 		$data = $this->db->escape($data);
- 
-		$SQL = "REPLACE
-		INTO sessions
-		VALUES ('$id', '$access', '$data')";
- 
-		return $this->db->query($SQL);
+		if($this->db->getDBType() == "pgsql")
+		{
+			$SQL = "Delete from sessions where id = '".$id."';";
+			$this->db->query($SQL);
+
+			$SQL = "insert into sessions values ('".$id."','".$access."','".$data."');";
+			$this->db->query($SQL);
+		}
+		else 
+		{
+				$SQL = "REPLACE
+				INTO sessions
+				VALUES ('$id', '$access', '$data')";
+		 
+			$this->db->query($SQL);
+		}
 		
     }
 
     public function destroy($id) 
     {
-		$SQL = "DELETE
+    	$SQL = "DELETE
 				FROM sessions
 				WHERE id = '".$this->db->escape($id)."'";
 		
-		return $this->db->query($SQL);
+		$this->db->query($SQL);
     }
 
     public function gc($maxlifetime) 
     {
+    	
 		$old = time() - $maxlifetime;
 		$old = $this->db->escape($old);
  
@@ -111,7 +140,9 @@ class beagledbsessions extends beaglebase
 				FROM sessions
 				WHERE access < '$old'";
  
-		return $this->db->query($SQL);
+		
+		$this->db->query($SQL);
+		
     }
 }
 ?>
