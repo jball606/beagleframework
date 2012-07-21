@@ -1090,7 +1090,7 @@ class beagleDbClass extends beagleerrorbase
 							{
 								if(isset($j['not in']) || isPopArray($j['not in']))
 								{
-									if(isPopArray($j['not_in']))
+									if(isPopArray($j['not in']))
 									{
 										$tmp[] = $k." not in ('".cleanImplode("','", $j['not in'])."')";
 									}
