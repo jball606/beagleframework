@@ -147,7 +147,7 @@ class beaglebase extends beagleerrorbase
 	public function loadSystemDB($db='')
 	{ 
 		$db = "";
-		if(!$this->db && $db == '')
+		if(!isset($this->db) || (!$this->db && $db == ''))
 		{
 			if (!$db || !is_resource($db))
 			{
