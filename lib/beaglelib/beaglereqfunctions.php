@@ -675,7 +675,7 @@ function restorePageClass($name)
  */
  function storeClass($var,$class)
 {
-	
+	$_SESSION['store_class_timer'][$var] = time();
 	$_SESSION[$var] = base64_encode(serialize(clone($class)));	
 }
 
@@ -694,6 +694,32 @@ function restoreClass($var)
 	return false;	
 }
 
+/**
+ * This function is used to clear stored classes so that our session don't get too big
+ * the timer waits 30 min
+ */
+function clearStoredClasses()
+{
+	if(isset($_SESSION['store_class_timer']))
+	{
+		$bob = $_SESSION['store_class_timer'];
+	
+		foreach($bob as $k => $i)
+		{
+			//30 min
+			if($i < time()-1800)
+			{
+				unset($bob[$k]);
+				if(isset($_SESSION[$k]))
+				{
+					unset($_SESSION[$k]);
+				}
+				
+			}
+		}
+		$_SESSION['store_class_timer'] = $bob;
+	}
+}
 /**
  * This function just checks to see if the date pass is a valid date
  * @param string $date
@@ -718,68 +744,58 @@ function isValidPopDate(&$date)
  * will check an array if args are in place and if not it will add the default you add
  * @param array $in_args
  * @param array $defs
- * @param array $allreq
- * @param array $convFalse , if true convert false to the default values
- * @return array
+ * @return array 
  */
-function defaultArgs($in_args, $defs,$allreq=false,$convFalse = false)
+function defaultArgs($in_args, $defs,$allreq=false) 
 {
-    if (!is_array($defs)) print 'argDefaults called with non-array defs';
+	if (!is_array($defs)) print 'argDefaults called with non-array defs';
 
-    if (!is_array($in_args))
-    {
-        writeLog('argDefaults called with non-array args');
-        writeLog(cleanBackTrace());
-        return $defs;
-    }
+	if (!is_array($in_args))
+	{
+		writeLog('argDefaults called with non-array args');
+		writeLog(br2nl(cleanBackTrace()));
+		return $defs;
+	}
 
-    if($allreq)
-    {
-        $req = $defs;   
-    }
-   
-    $out_args = array();
+	if($allreq)
+	{
+		$req = $defs;	
+	}
+	
+	$out_args = array();
 
-    foreach ($defs as $k => $v)
-    {
-        if(is_array($in_args))
-        {
-            if(isPopArray($v) && array_key_exists($k,$in_args))
-            {
-                $out_args[$k] = defaultArgs($in_args[$k],$v);
-            }
-            else
-            {
-                $out_args[$k] = array_key_exists($k, $in_args) ? $in_args[$k] : $defs[$k];
-                if ($convFalse)
-                {
-                    if ($out_args[$k] ===false)
-                    {
-                        $out_args[$k]= $defs[$k];
-                    }
-                }
-            }
-        }
-    }
+	foreach ($defs as $k => $v)
+	{
+		if(is_array($in_args))
+		{
+			if(isPopArray($v) && array_key_exists($k,$in_args))
+			{
+				$out_args[$k] = defaultArgs($in_args[$k],$v);
+			}
+			else 
+			{
+				$out_args[$k] = array_key_exists($k, $in_args) ? $in_args[$k] : $defs[$k];
+			}
+		}
+	}
 
-    if($allreq)
-    {
-        $errors = array();
-        foreach($req as $k => $i)
-        {
-            if($out_args[$k] === false || $out_args[$k] === null)
-            {
-                $errors[] = $k." is a required field";
-            }   
-        }
-        if(isPopArray($errors))
-        {
-            $out_args['errors'] = $errors;
-        }
-    }
-    return $out_args;
+	if($allreq)
+	{
+		$errors = array();
+		foreach($req as $k => $i)
+		{
+			if($out_args[$k] === false || $out_args[$k] === null)
+			{
+				$errors[] = $k." is a required field";
+			}	
+		}
+		if(isPopArray($errors))
+		{
+			$out_args['errors'] = $errors;
+		}
+	}
+	return $out_args;
 }
-
 
 /**
  * This menthod is used to remove empty elements. $type is optional if you want to validate the data as well
