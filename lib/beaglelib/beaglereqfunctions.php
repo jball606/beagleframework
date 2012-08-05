@@ -706,8 +706,8 @@ function clearStoredClasses()
 	
 		foreach($bob as $k => $i)
 		{
-			//30 min
-			if($i < time()-1800)
+			//60 min
+			if($i < time()-3600)
 			{
 				unset($bob[$k]);
 				if(isset($_SESSION[$k]))
