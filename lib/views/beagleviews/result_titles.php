@@ -53,9 +53,9 @@
 								if(isset($order[$k]))
 								{ 
 									if($order[$k] == 1)
-									{ ?><div style="float:right" border="0" class="up_arrow"/> <? }
+									{ ?><div style="float:right" border="0" class="up_arrow"></div> <? }
 									elseif($order[$k] == 2)
-									{ ?><div style="float:right" class="down_arrow"/><? } 
+									{ ?><div style="float:right" class="down_arrow"></div><? } 
 								}
 							}
 								
