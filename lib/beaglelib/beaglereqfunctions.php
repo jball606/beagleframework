@@ -1167,3 +1167,21 @@ function getLastBCUrl()
 	
 	return "/index";
 }
+
+function getIntFromString($string)
+{
+	return preg_replace("/[^0-9]/", '', $string); // ditch anything that is not a number 
+	
+}
+
+function rand_string( $length ) 
+{
+	$chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";	
+	$str = "";
+	$size = strlen( $chars );
+	for( $i = 0; $i < $length; $i++ ) {
+		$str .= $chars[ rand( 0, $size - 1 ) ];
+	}
+
+	return $str;
+}
