@@ -52,7 +52,7 @@ class tablemaker// extends beaglebase
 			$tmp .= '	protected $valid_fields = array('."\n";
 			foreach($this->fields as $k => $i)
 			{
-				if(isset($i['null']))
+				if(isset($i['null']) && $i['name'] != $this->pkey)
 				{
 					$tmp .=	"									'".$i['name']."' => array( \n";
 					$tmp .= "														'type'=>'".$i['type']."',\n";

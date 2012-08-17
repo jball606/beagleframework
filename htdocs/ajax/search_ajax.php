@@ -1,7 +1,7 @@
 <?php
 $ajax_page="Y";
 
-include_once("beaglecrminc.php");
+include_once("config/systemsetup.php");
 
 if(isset($_GET['id']))
 {

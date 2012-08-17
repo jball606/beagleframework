@@ -353,7 +353,7 @@ class beagleDbClass extends beagleerrorbase
 				{
 					if(strlen($fields[$k])>$i['size'])
 					{
-						$this->storeError($k."is of size ".$i['size'].", you passed invalid data");
+						$this->storeError($k." is of size ".$i['size'].", you passed invalid data");
 						return false;
 					}
 				}

@@ -177,6 +177,21 @@ abstract class beagleResultClass extends beagleNavigationClass
 		
 		$result = $this->run_Search($args['first'],$args['limit']);
 
+		if(!isPopArray($this->viewitems) || (isset($this->viewitems[0]) &&  $this->viewitems[0] == '*'))
+		{
+		
+			if(isPopArray($result['records'][0]))
+			{
+				$this->viewitems = array();
+				foreach($result['records'][0] as $k => $i)
+				{
+					$this->viewitems[$k] = $k;
+				}
+			}
+		
+			//$this->viewitems = $th	
+			
+		}
 		$result['title'] = $args['title'];
 		$result['headers'] = $this->getHeaders($this->viewitems);
 		$result['limit'] = $args['limit'];
