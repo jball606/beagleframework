@@ -259,3 +259,29 @@ function onEnter(e,func,actionkey)
 		eval(func+"();"); 
 	}
 }
+
+function removeChildren(main,wmain)
+{
+	if(isset(main))
+	{
+		var child = main.childNodes;
+		if(isset(child))
+		{
+			for(var a = child.length-1;a>= 0; a--)
+			{
+				if(child[a].childNodes.length>0)
+				{
+					removeChildren(child[a]);
+	
+				}
+				main.removeChild(child[a]); 
+				
+			}
+			if(wmain == true)
+			{
+				var parent = main.parentNode;
+				parent.removeChild(main);
+			}
+		}
+	}
+}
