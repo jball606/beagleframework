@@ -40,7 +40,7 @@ class tablemaker// extends beaglebase
 	private function writeModel()
 	{
 		$tmp = '<?php '."\n";
-		$tmp .= "class ".$this->tablename." \n";
+		$tmp .= "class ".$this->tablename." extends beagleDbClass\n";
 		$tmp .= "{ \n";
 		$tmp .= '	protected $table = "'.$this->tablename.'";'."\n";
 		if($this->pkey)
@@ -65,7 +65,7 @@ class tablemaker// extends beaglebase
 					{
 						$tmp .= "														'preset'=>'".$i['preset']."',\n";
 					}
-					$tmp .= "													);\n";
+					$tmp .= "													),\n";
 				}
 			}
 														
