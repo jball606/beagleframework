@@ -44,7 +44,7 @@ class pgdb
 	{
 		if(isset($this->dbconn))
 		{
-			unset($this->dbconn);
+		//	unset($this->dbconn);
 		}
 		if(isset($this->db))
 		{

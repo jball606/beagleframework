@@ -52,7 +52,7 @@ class mydb
 	{
 		if(isset($this->dbconn))
 		{
-			unset($this->dbconn);
+		//	unset($this->dbconn);
 		}
 		
 		return array_keys(get_object_vars($this));
