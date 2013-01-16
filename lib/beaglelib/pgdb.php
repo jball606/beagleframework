@@ -307,6 +307,14 @@ class pgdb
 			
 		}
 		
+		foreach($values as $k => $i)
+		{
+			if(!is_numeric($i) && substr($i,0,1) != "'")
+			{
+				$values[$k] = "'".$i."'";
+			}
+		}
+				
 		$SQL = "insert into ".$table." (".implode(",",$fields).") values (".implode(",",$values).") ";	
 		if($has_pkey !== false)
 		{

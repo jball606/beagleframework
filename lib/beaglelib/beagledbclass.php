@@ -79,7 +79,7 @@ class beagleDbClass extends beagleerrorbase
 			$this->table = get_called_class();
 		}
 		
-		if($this->db == false)
+		if($this->db == false || is_resource($this->db)==false)
 		{
 			if(is_resource($db))
 			{
