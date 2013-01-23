@@ -142,6 +142,7 @@ class pgdb
 			
 			
 			$this->dbconn = pg_connect($string);	
+		
 		}
 	}
 	
@@ -309,12 +310,12 @@ class pgdb
 		
 		foreach($values as $k => $i)
 		{
-			if(!is_numeric($i) && substr($i,0,1) != "'")
+			if(!is_numeric($i) && substr($i,0,1) != "'" && $i != null && $i != 'null')
 			{
 				$values[$k] = "'".$i."'";
 			}
 		}
-				
+		
 		$SQL = "insert into ".$table." (".implode(",",$fields).") values (".implode(",",$values).") ";	
 		if($has_pkey !== false)
 		{
