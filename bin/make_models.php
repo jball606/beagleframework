@@ -2,14 +2,27 @@
 include("setincludepath.php");
 include("config/systemsetup.php");
 
-$SQL = "show tables in ".$dsn['dbname'].";";
+if($DB->getDBType() == "mysql")
+{
+	$SQL = "show tables in ".$dsn['dbname'].";";
+}
+else
+{
+	$SQL = "SELECT table_name FROM information_schema.tables WHERE table_schema = 'public';";
+}
 
 $results = $DB->getAll($SQL);
 
 foreach($results as $row)
 {
-
-	$bob = new tablemaker($row['Tables_in_'.$dsn['dbname']]);
+	if($DB->getDBType() == "pgsql")
+	{
+		$bob = new tablemaker($row['table_name']);
+	}
+	else 
+	{
+		$bob = new tablemaker($row['Tables_in_'.$dsn['dbname']]);
+	}
 	
 	
 	
@@ -32,7 +45,10 @@ class tablemaker// extends beaglebase
 	
 		$this->tablename = $table_name;
 		$this->getPrimaryKey();
-		$this->getFields();
+		if($this->db->getDBType() == "mysql")
+		{
+			$this->getFields();
+		}
 		
 		$this->writeModel();
 	}
@@ -84,14 +100,67 @@ class tablemaker// extends beaglebase
 		file_put_contents(__SYSTEM_ROOT__."/lib/models/".$this->tablename.".php", $tmp);
 		print($tmp);
 	}
+	
 	private function getPrimaryKey()
 	{
-		$SQL = "show index from ".$this->tablename." where Key_name = 'PRIMARY';";
-		$key = $this->db->query($SQL)->fetchRow();
+		if($this->db->getDBType() != "pgsql")
+		{
+			$key = $this->getMySQLPrimaryKey();
+		}
+		else
+		{
+			$key = $this->getPGPrimaryKey();
+		}
+		
 		if(isPopArray($key))
 		{
 			$this->pkey = $key['Column_name'];
 		}
+		
+	}
+	
+	private function getMySQLPrimaryKey()
+	{
+		$SQL = "show index from ".$this->tablename." where Key_name = 'PRIMARY';";
+		$key = $this->db->query($SQL)->fetchRow();
+		return $key;
+	}
+	
+	private function getPGPrimaryKey()
+	{
+		$SQL = "SELECT  t.table_catalog,
+		t.table_schema,
+		t.table_name,
+		kcu.constraint_name,
+		kcu.column_name,
+		kcu.ordinal_position
+		FROM    INFORMATION_SCHEMA.TABLES t
+		LEFT JOIN INFORMATION_SCHEMA.TABLE_CONSTRAINTS tc
+		ON tc.table_catalog = t.table_catalog
+		AND tc.table_schema = t.table_schema
+		AND tc.table_name = t.table_name
+		AND tc.constraint_type = 'PRIMARY KEY'
+				LEFT JOIN INFORMATION_SCHEMA.KEY_COLUMN_USAGE kcu
+				ON kcu.table_catalog = tc.table_catalog
+				AND kcu.table_schema = tc.table_schema
+				AND kcu.table_name = tc.table_name
+				AND kcu.constraint_name = tc.constraint_name
+				WHERE   t.table_schema NOT IN ('pg_catalog', 'information_schema')
+				AND t.table_name = '".$this->tablename."'
+				
+				ORDER BY t.table_catalog,
+				t.table_schema,
+				t.table_name,
+				kcu.constraint_name,
+				kcu.ordinal_position;";
+		
+		$data = $this->db->query($SQL)->fetchRow();
+		if(isset($data['column_name']))
+		{
+			return array('Column_name'=>$data['column_name']);
+		}
+		 
+		return false;
 		
 	}
 	

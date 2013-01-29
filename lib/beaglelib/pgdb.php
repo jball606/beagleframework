@@ -97,6 +97,20 @@ class pgdb
 		return false;
 	}
 	
+	public function copy($array)
+	{
+		if(isPopArray($array))
+		{
+			pg_put_line($this->dbconn,implode("\t",$array)."\n");
+		}
+		
+	}
+	
+	public function endcopy()
+	{
+		pg_end_copy($this->dbconn);
+	}
+	
 	/**
 	 * This function is needed because each DB does this differently
 	 * @param integer $limit
