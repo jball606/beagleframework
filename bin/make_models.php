@@ -45,10 +45,8 @@ class tablemaker// extends beaglebase
 	
 		$this->tablename = $table_name;
 		$this->getPrimaryKey();
-		if($this->db->getDBType() == "mysql")
-		{
-			$this->getFields();
-		}
+		$this->getFields();
+		
 		
 		$this->writeModel();
 	}
@@ -166,25 +164,51 @@ class tablemaker// extends beaglebase
 	
 	private function getFields()
 	{
-		$SQL = "show columns from ".$this->tablename.";";
+		if($this->db->getDBType() == "mysql")
+		{
+			$SQL = "show columns from ".$this->tablename.";";
+		}
+		else 
+		{
+			$SQL = "select column_name as Field, data_type as Type, is_nullable, character_maximum_length
+					from information_schema.columns
+					where table_name = '".$this->tablename."';";
+		}
+		
 		$cols = $this->db->getAll($SQL);
 	
 		foreach($cols as $k => $i)
 		{
+			
+			
+			
 			$tmp = array();
 			
-			$tmp['name'] = $i['Field'];
+			if(isset($i['field']))
+			{
+				$tmp['name'] = $i['field'];
+			}
+			else 
+			{
+				$tmp['name'] = $i['Field'];
+			}
+			
 			if(!empty($i['Default']))
 			{
 				$tmp['preset'] = $i['Default'];
 			}
-			if($i['Null'] == 'NO')
+			if((isset($i['Null']) && $i['Null'] == 'NO') || (isset($i['is_nullable']) && $i['is_nullable'] == "NO"))
 			{
 				$tmp['null'] = false;
 				$this->has_not_null = true;
 			}
 
-			if(strpos(strtolower($i['Type']),"varchar") !== false)
+			if(isset($i['type']))
+			{
+				$i['Type'] = $i['type'];
+			}
+			
+			if(strpos(strtolower($i['Type']),"varchar") !== false || strpos(strtolower($i['type']),"varying") !== false)
 			{
 				$tmp['type'] = "varchar";
 			}
@@ -197,7 +221,11 @@ class tablemaker// extends beaglebase
 				$tmp['type'] = "date";
 			}
 			
-			if($int = getIntFromString($i['Type']))
+			if(issetNum($i['character_maximum_length']))
+			{
+				$tmp['size'] = $i['character_maximum_length'];
+			}
+			elseif($int = getIntFromString($i['Type']))
 			{
 				$tmp['size'] = $int;
 			}
@@ -205,6 +233,7 @@ class tablemaker// extends beaglebase
 			$this->fields[] = $tmp;
 			
 		}
+		
 	}
 }
 
