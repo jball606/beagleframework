@@ -10,6 +10,7 @@ function beagleTimer(obj)
 	this.startWait = startWait;
 	this.stopWait = stopWait;
 	this.fullUnmask = fullUnmask;
+	this.global_container = 'container';
 	
 	if(isset(obj))
 	{
@@ -39,7 +40,7 @@ function beagleTimer(obj)
 	{
 		if(!isset(id))
 		{
-			id="container";
+			id=this.global_container;
 		}
 		if(!isset(value))
 		{
@@ -67,7 +68,7 @@ function beagleTimer(obj)
 	{
 		if(!isset(id))
 		{
-			id="container";
+			id=this.global_container;
 		}
 		
 		
